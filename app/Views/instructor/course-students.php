@@ -14,9 +14,14 @@
                     </a>
                 </p>
             </div>
-            <button type="button" class="btn-add-course" onclick="showEnrollStudentModal()">
-                <i class="bi bi-person-plus"></i> Enroll Student
-            </button>
+            <div style="display: flex; gap: 10px;">
+                <a href="<?= base_url('admin/course/' . $course['id'] . '/upload') ?>" class="btn-add-course" style="text-decoration: none; display: inline-block;">
+                    <i class="bi bi-file-earmark-arrow-up"></i> Upload Materials
+                </a>
+                <button type="button" class="btn-add-course" onclick="showEnrollStudentModal()">
+                    <i class="bi bi-person-plus"></i> Enroll Student
+                </button>
+            </div>
         </div>
 
         <!-- Course Information Card -->

@@ -107,6 +107,9 @@
                                 <td><?= esc(date('M d, Y', strtotime($course['created_at']))) ?></td>
                                 <td>
                                     <div class="action-buttons">
+                                        <a href="<?= base_url('admin/course/' . $course['id'] . '/upload') ?>" class="btn-edit" style="text-decoration: none; display: inline-block; margin-right: 8px;">
+                                            <i class="bi bi-file-earmark-arrow-up"></i> Materials
+                                        </a>
                                         <button type="button" class="btn-edit" onclick="editCourse(<?= esc($course['id']) ?>, '<?= esc(addslashes($course['title'])) ?>', '<?= esc(addslashes($course['description'])) ?>', <?= esc($course['instructor_id']) ?>, '<?= esc($course['semester'] ?? '') ?>', '<?= esc($course['academic_year'] ?? '') ?>', '<?= esc(addslashes($course['schedule_days'] ?? '')) ?>', '<?= esc($course['start_time'] ?? '') ?>', '<?= esc($course['end_time'] ?? '') ?>', '<?= esc($course['status']) ?>')">
                                             <i class="bi bi-pencil"></i> Edit
                                         </button>

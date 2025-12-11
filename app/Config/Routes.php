@@ -44,6 +44,7 @@ $routes->group('admin', function($routes) {
     $routes->get('users', 'Auth::dashboard'); // Placeholder - redirects to dashboard
     $routes->get('courses', 'Auth::adminCourses'); // Admin courses management - GET
     $routes->post('courses', 'Auth::adminCourses'); // Admin courses management - POST (add, edit, delete)
+    $routes->get('materials', 'Auth::viewMaterials'); // Materials management page
     $routes->get('reports', 'Auth::dashboard'); // Placeholder - redirects to dashboard
     $routes->get('settings', 'Auth::dashboard'); // Placeholder - redirects to dashboard
 });
@@ -59,6 +60,7 @@ $routes->group('instructor', function($routes) {
     $routes->get('students', 'Auth::dashboard'); // Placeholder - redirects to dashboard
     $routes->get('grades', 'Auth::dashboard'); // Placeholder - redirects to dashboard
     $routes->get('quizzes', 'Auth::dashboard'); // Placeholder - redirects to dashboard
+    $routes->get('materials', 'Auth::viewMaterials'); // Materials management page
 });
 
 // Student Routes (Auth check is done in controller)
@@ -76,6 +78,14 @@ $routes->get('profile', 'Auth::dashboard'); // Placeholder - redirects to dashbo
 // COURSE ROUTES
 // ============================================
 $routes->post('/course/enroll', 'Course::enroll'); // AJAX enrollment endpoint
+
+// ============================================
+// MATERIALS ROUTES
+// ============================================
+$routes->get('/admin/course/(:num)/upload', 'Materials::upload/$1'); // Upload materials form (GET)
+$routes->post('/admin/course/(:num)/upload', 'Materials::upload/$1'); // Upload materials (POST)
+$routes->get('/materials/delete/(:num)', 'Materials::delete/$1'); // Delete material
+$routes->get('/materials/download/(:num)', 'Materials::download/$1'); // Download material
 
 // ============================================
 // AUTO ROUTING (Enable for development)

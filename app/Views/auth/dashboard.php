@@ -224,6 +224,44 @@ if ($userRole === 'teacher') {
                                             </div>
                                         <?php endif; ?>
                                     </div>
+                                    
+                                    <!-- Course Materials Section (Only for approved/enrolled courses) -->
+                                    <?php 
+                                    $enrollmentStatus = strtolower($enrollment['status'] ?? 'pending');
+                                    if (in_array($enrollmentStatus, ['approved', 'enrolled'])): 
+                                    ?>
+                                        <div class="mt-3 pt-3" style="border-top: 1px solid rgba(255, 102, 0, 0.2);">
+                                            <h6 style="color: #ffffff; font-weight: 600; margin-bottom: 12px;">
+                                                <i class="bi bi-file-earmark"></i> Course Materials
+                                            </h6>
+                                            <?php if (isset($db_data['course_materials'][$enrollment['course_id']]) && !empty($db_data['course_materials'][$enrollment['course_id']])): ?>
+                                                <div class="materials-list" style="display: flex; flex-direction: column; gap: 8px;">
+                                                    <?php foreach ($db_data['course_materials'][$enrollment['course_id']] as $material): ?>
+                                                        <div style="display: flex; justify-content: space-between; align-items: center; padding: 10px; background: rgba(255, 255, 255, 0.05); border-radius: 6px; border: 1px solid rgba(255, 255, 255, 0.1);">
+                                                            <div style="flex: 1;">
+                                                                <span style="color: #e0e0e0; font-size: 0.9rem;">
+                                                                    <i class="bi bi-file-earmark-text"></i> <?= esc($material['file_name']) ?>
+                                                                </span>
+                                                                <br>
+                                                                <small style="color: #888888; font-size: 0.8rem;">
+                                                                    <i class="bi bi-calendar"></i> <?= esc(date('M d, Y', strtotime($material['created_at'] ?? 'now'))) ?>
+                                                                </small>
+                                                            </div>
+                                                            <a href="<?= base_url('materials/download/' . $material['id']) ?>" class="btn btn-sm" style="background: linear-gradient(135deg, #4a9eff 0%, #357abd 100%); color: #ffffff; padding: 6px 12px; border-radius: 6px; text-decoration: none; font-size: 0.85rem; font-weight: 600; transition: all 0.3s ease; border: none; cursor: pointer;" onmouseover="this.style.transform='translateY(-1px)'; this.style.boxShadow='0 2px 8px rgba(74, 158, 255, 0.4)'" onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='none'">
+                                                                <i class="bi bi-download"></i> Download
+                                                            </a>
+                                                        </div>
+                                                    <?php endforeach; ?>
+                                                </div>
+                                            <?php else: ?>
+                                                <div style="padding: 15px; background: rgba(255, 255, 255, 0.03); border-radius: 6px; border: 1px solid rgba(255, 255, 255, 0.1); text-align: center;">
+                                                    <p style="color: #888888; margin: 0; font-size: 0.9rem;">
+                                                        <i class="bi bi-info-circle"></i> No materials uploaded yet for this course.
+                                                    </p>
+                                                </div>
+                                            <?php endif; ?>
+                                        </div>
+                                    <?php endif; ?>
                                 </div>
                             <?php endforeach; ?>
                         </div>

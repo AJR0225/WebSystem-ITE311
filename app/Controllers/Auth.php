@@ -5,6 +5,7 @@ use App\Models\UserModel;
 use App\Models\CourseModel;
 use App\Models\EnrollmentModel;
 use App\Models\NotificationModel;
+use App\Models\MaterialModel;
 use CodeIgniter\Controller;
 
 class Auth extends Controller
@@ -247,12 +248,25 @@ class Auth extends Controller
                     }
                     $databaseData['total_enrolled_courses'] = count($databaseData['enrolled_courses']);
                     
-                    // Fetch available courses (not enrolled)
+                    // Fetch materials for approved/enrolled courses
+                    $materialModel = new MaterialModel();
+                    $databaseData['course_materials'] = [];
                     $enrolledCourseIds = [];
+                    
                     if (!empty($databaseData['enrolled_courses'])) {
                         foreach ($databaseData['enrolled_courses'] as $enrollment) {
                             if (isset($enrollment['course_id']) && !empty($enrollment['course_id'])) {
-                                $enrolledCourseIds[] = (int) $enrollment['course_id'];
+                                $courseId = (int) $enrollment['course_id'];
+                                $enrolledCourseIds[] = $courseId;
+                                
+                                // Only fetch materials for approved/enrolled courses
+                                $enrollmentStatus = strtolower($enrollment['status'] ?? 'pending');
+                                if (in_array($enrollmentStatus, ['approved', 'enrolled'])) {
+                                    $materials = $materialModel->getMaterialsByCourse($courseId);
+                                    if (!empty($materials)) {
+                                        $databaseData['course_materials'][$courseId] = $materials;
+                                    }
+                                }
                             }
                         }
                     }
@@ -1321,5 +1335,79 @@ class Auth extends Controller
                 'message' => 'Failed to enroll student.'
             ]);
         }
+    }
+    
+    public function viewMaterials()
+    {
+        helper(['form']);
+        $session = session();
+        
+        // Authorization: Only admin and instructor can view materials
+        if (!$session->get('is_logged_in')) {
+            $session->setFlashdata('error', 'Please login to access this page.');
+            return redirect()->to('/login');
+        }
+        
+        $userRole = $session->get('user_role') ?? 'student';
+        $userRole = strtolower($userRole);
+        
+        // Normalize "teacher" to "instructor"
+        if ($userRole === 'teacher') {
+            $userRole = 'instructor';
+        }
+        
+        if ($userRole !== 'admin' && $userRole !== 'instructor') {
+            $session->setFlashdata('error', 'Access denied. Admin or Instructor only.');
+            return redirect()->to('/dashboard');
+        }
+        
+        $userId = $session->get('user_id');
+        $courseModel = new CourseModel();
+        $materialModel = new MaterialModel();
+        
+        // Fetch courses based on role
+        if ($userRole === 'admin') {
+            // Admin: Fetch all courses
+            $courses = $courseModel->select('courses.*, users.name as instructor_name')
+                ->join('users', 'users.id = courses.instructor_id', 'left')
+                ->orderBy('courses.created_at', 'DESC')
+                ->findAll();
+        } else {
+            // Instructor: Fetch only their courses
+            $courses = $courseModel->select('courses.*, users.name as instructor_name')
+                ->join('users', 'users.id = courses.instructor_id', 'left')
+                ->where('courses.instructor_id', $userId)
+                ->orderBy('courses.created_at', 'DESC')
+                ->findAll();
+        }
+        
+        // Fetch materials count for each course
+        $coursesWithMaterials = [];
+        foreach ($courses as $course) {
+            $materialsCount = $materialModel->where('course_id', $course['id'])->countAllResults();
+            $course['materials_count'] = $materialsCount;
+            $coursesWithMaterials[] = $course;
+        }
+        
+        // Prepare user data
+        $userData = [
+            'id' => $userId,
+            'name' => $session->get('user_name'),
+            'email' => $session->get('user_email'),
+            'role' => $userRole
+        ];
+        
+        $data = [
+            'title' => 'Materials Management - Learning Management System',
+            'page_title' => 'Materials Management',
+            'body_class' => 'dashboard-page',
+            'hide_header' => false,
+            'hide_footer' => true,
+            'user' => $userData,
+            'user_role' => $userRole,
+            'courses' => $coursesWithMaterials
+        ];
+        
+        echo view('admin/materials', $data);
     }
 }

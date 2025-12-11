@@ -91,6 +91,11 @@ $isDashboardOrAdminPage = ($currentUri == 'dashboard' || strpos($currentUri, 'ad
                                 </a>
                             </li>
                             <li class="role-nav-section">
+                                <a href="<?= base_url('admin/materials') ?>" class="<?= (strpos($currentUri, 'admin/materials') !== false || strpos($currentUri, 'admin/course') !== false && strpos($currentUri, '/upload') !== false) ? 'active' : '' ?>">
+                                    <i class="bi bi-file-earmark-arrow-up"></i> Materials
+                                </a>
+                            </li>
+                            <li class="role-nav-section">
                                 <a href="<?= base_url('logout') ?>" onclick="return confirm('Are you sure you want to log out?');" style="color: #ff4444;">
                                     <i class="bi bi-box-arrow-right"></i> Logout
                                 </a>
@@ -120,6 +125,11 @@ $isDashboardOrAdminPage = ($currentUri == 'dashboard' || strpos($currentUri, 'ad
                             <li class="role-nav-section">
                                 <a href="<?= base_url('instructor/assignments') ?>" class="<?= (strpos($currentUri, 'instructor/assignments') !== false) ? 'active' : '' ?>">
                                     <i class="bi bi-file-earmark-text"></i> Assignments
+                                </a>
+                            </li>
+                            <li class="role-nav-section">
+                                <a href="<?= base_url('instructor/materials') ?>" class="<?= (strpos($currentUri, 'instructor/materials') !== false || strpos($currentUri, 'admin/course') !== false && strpos($currentUri, '/upload') !== false) ? 'active' : '' ?>">
+                                    <i class="bi bi-file-earmark-arrow-up"></i> Materials
                                 </a>
                             </li>
                             <li class="role-nav-section">
