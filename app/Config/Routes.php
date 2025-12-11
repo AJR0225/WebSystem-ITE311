@@ -88,6 +88,12 @@ $routes->get('/materials/delete/(:num)', 'Materials::delete/$1'); // Delete mate
 $routes->get('/materials/download/(:num)', 'Materials::download/$1'); // Download material
 
 // ============================================
+// NOTIFICATIONS ROUTES
+// ============================================
+$routes->get('/notifications', 'Notifications::get'); // Get notifications (AJAX)
+$routes->post('/notifications/mark_read/(:num)', 'Notifications::mark_as_read/$1'); // Mark notification as read
+
+// ============================================
 // AUTO ROUTING (Enable for development)
 // ============================================
 $routes->setAutoRoute(true);

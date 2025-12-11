@@ -371,12 +371,32 @@ class Auth extends Controller
                     if ($userModel->insert($data)) {
                         // Create notification for new account
                         $notificationModel = new NotificationModel();
-                        $notificationModel->insert([
-                            'type' => 'new_account',
-                            'message' => 'New account created: ' . $data['email'] . ' (' . ucfirst($data['role'] === 'instructor' ? 'teacher' : $data['role']) . ')',
-                            'user_id' => $userModel->getInsertID(),
-                            'user_name' => $data['name']
-                        ]);
+                        $newUserId = $userModel->getInsertID();
+                        $roleDisplay = ucfirst($data['role'] === 'instructor' ? 'teacher' : $data['role']);
+                        
+                        // Notify the new user
+                        try {
+                            $notificationModel->insert([
+                                'user_id' => $newUserId,
+                                'message' => 'Your account has been created. Welcome to the Learning Management System!',
+                                'is_read' => 0,
+                                'created_at' => date('Y-m-d H:i:s')
+                            ]);
+                        } catch (\Exception $e) {
+                            log_message('error', 'Failed to create new account notification: ' . $e->getMessage());
+                        }
+                        
+                        // Notify admin
+                        try {
+                            $notificationModel->insert([
+                                'user_id' => $userId,
+                                'message' => 'New account created: ' . $data['email'] . ' (' . $roleDisplay . ')',
+                                'is_read' => 0,
+                                'created_at' => date('Y-m-d H:i:s')
+                            ]);
+                        } catch (\Exception $e) {
+                            log_message('error', 'Failed to create admin notification for new user: ' . $e->getMessage());
+                        }
                         
                         $session->setFlashdata('success', 'User added successfully.');
                     } else {
@@ -452,32 +472,80 @@ class Auth extends Controller
                         
                         // Create notification for name change if name was updated
                         if ($nameChanged) {
-                            $notificationModel->insert([
-                                'type' => 'name_changed',
-                                'message' => 'Name changed for user: ' . $data['email'] . ' (from "' . $oldName . '" to "' . $data['name'] . '")',
-                                'user_id' => $id,
-                                'user_name' => $data['name']
-                            ]);
+                            try {
+                                $notificationModel->insert([
+                                    'user_id' => $id,
+                                    'message' => 'Your name has been changed from "' . $oldName . '" to "' . $data['name'] . '"',
+                                    'is_read' => 0,
+                                    'created_at' => date('Y-m-d H:i:s')
+                                ]);
+                            } catch (\Exception $e) {
+                                log_message('error', 'Failed to create name change notification: ' . $e->getMessage());
+                            }
+                            
+                            // Notify admin
+                            try {
+                                $notificationModel->insert([
+                                    'user_id' => $userId,
+                                    'message' => 'Name changed for user: ' . $data['email'] . ' (from "' . $oldName . '" to "' . $data['name'] . '")',
+                                    'is_read' => 0,
+                                    'created_at' => date('Y-m-d H:i:s')
+                                ]);
+                            } catch (\Exception $e) {
+                                log_message('error', 'Failed to create admin name change notification: ' . $e->getMessage());
+                            }
                         }
                         
                         // Create notification for role change if role was updated
                         if ($roleChanged) {
-                            $notificationModel->insert([
-                                'type' => 'role_changed',
-                                'message' => 'Role changed for user: ' . $data['email'] . ' (from "' . $oldRole . '" to "' . ucfirst($newRole) . '")',
-                                'user_id' => $id,
-                                'user_name' => $data['name']
-                            ]);
+                            try {
+                                $notificationModel->insert([
+                                    'user_id' => $id,
+                                    'message' => 'Your role has been changed from "' . $oldRole . '" to "' . ucfirst($newRole) . '"',
+                                    'is_read' => 0,
+                                    'created_at' => date('Y-m-d H:i:s')
+                                ]);
+                            } catch (\Exception $e) {
+                                log_message('error', 'Failed to create role change notification: ' . $e->getMessage());
+                            }
+                            
+                            // Notify admin
+                            try {
+                                $notificationModel->insert([
+                                    'user_id' => $userId,
+                                    'message' => 'Role changed for user: ' . $data['email'] . ' (from "' . $oldRole . '" to "' . ucfirst($newRole) . '")',
+                                    'is_read' => 0,
+                                    'created_at' => date('Y-m-d H:i:s')
+                                ]);
+                            } catch (\Exception $e) {
+                                log_message('error', 'Failed to create admin role change notification: ' . $e->getMessage());
+                            }
                         }
                         
                         // Create notification for password change if password was updated
                         if ($passwordChanged) {
-                            $notificationModel->insert([
-                                'type' => 'password_changed',
-                                'message' => 'Password changed for user: ' . $data['email'],
-                                'user_id' => $id,
-                                'user_name' => $data['name']
-                            ]);
+                            try {
+                                $notificationModel->insert([
+                                    'user_id' => $id,
+                                    'message' => 'Your password has been changed',
+                                    'is_read' => 0,
+                                    'created_at' => date('Y-m-d H:i:s')
+                                ]);
+                            } catch (\Exception $e) {
+                                log_message('error', 'Failed to create password change notification: ' . $e->getMessage());
+                            }
+                            
+                            // Notify admin
+                            try {
+                                $notificationModel->insert([
+                                    'user_id' => $userId,
+                                    'message' => 'Password changed for user: ' . $data['email'],
+                                    'is_read' => 0,
+                                    'created_at' => date('Y-m-d H:i:s')
+                                ]);
+                            } catch (\Exception $e) {
+                                log_message('error', 'Failed to create admin password change notification: ' . $e->getMessage());
+                            }
                         }
                         
                         $session->setFlashdata('success', 'User updated successfully.');
@@ -507,12 +575,31 @@ class Auth extends Controller
                             // Create notification for account deletion
                             if ($userToDelete) {
                                 $notificationModel = new NotificationModel();
-                                $notificationModel->insert([
-                                    'type' => 'account_deleted',
-                                    'message' => 'User account deleted: ' . $userToDelete['email'] . ' (' . ucfirst($userToDelete['role'] === 'instructor' ? 'teacher' : $userToDelete['role']) . ')',
-                                    'user_id' => $id,
-                                    'user_name' => $userToDelete['name']
-                                ]);
+                                $roleDisplay = ucfirst($userToDelete['role'] === 'instructor' ? 'teacher' : $userToDelete['role']);
+                                
+                                // Notify the deleted user
+                                try {
+                                    $notificationModel->insert([
+                                        'user_id' => $id,
+                                        'message' => 'Your account has been deleted',
+                                        'is_read' => 0,
+                                        'created_at' => date('Y-m-d H:i:s')
+                                    ]);
+                                } catch (\Exception $e) {
+                                    log_message('error', 'Failed to create account deletion notification: ' . $e->getMessage());
+                                }
+                                
+                                // Notify admin
+                                try {
+                                    $notificationModel->insert([
+                                        'user_id' => $userId,
+                                        'message' => 'User account deleted: ' . $userToDelete['email'] . ' (' . $roleDisplay . ')',
+                                        'is_read' => 0,
+                                        'created_at' => date('Y-m-d H:i:s')
+                                    ]);
+                                } catch (\Exception $e) {
+                                    log_message('error', 'Failed to create admin account deletion notification: ' . $e->getMessage());
+                                }
                             }
                             
                             $session->setFlashdata('success', 'User deleted successfully. You can restore it anytime.');
@@ -640,14 +727,33 @@ class Auth extends Controller
                 }
                 
                 if ($userModel->insert($data)) {
-                    // Create notification for new account
+                    // Create notification for new account (to the created user)
                     $notificationModel = new NotificationModel();
-                    $notificationModel->insert([
-                        'type' => 'new_account',
-                        'message' => 'New account created: ' . $data['email'] . ' (' . ucfirst($data['role'] === 'instructor' ? 'teacher' : $data['role']) . ')',
-                        'user_id' => $userModel->getInsertID(),
-                        'user_name' => $data['name']
-                    ]);
+                    $newUserId = $userModel->getInsertID();
+                    $roleDisplay = ucfirst($data['role'] === 'instructor' ? 'teacher' : $data['role']);
+                    
+                    try {
+                        $notificationModel->insert([
+                            'user_id' => $newUserId,
+                            'message' => 'Your account has been created. Welcome to the Learning Management System!',
+                            'is_read' => 0,
+                            'created_at' => date('Y-m-d H:i:s')
+                        ]);
+                    } catch (\Exception $e) {
+                        log_message('error', 'Failed to create new account notification: ' . $e->getMessage());
+                    }
+                    
+                    // Also notify admin about the new user creation
+                    try {
+                        $notificationModel->insert([
+                            'user_id' => $userId,
+                            'message' => 'New account created: ' . $data['email'] . ' (' . $roleDisplay . ')',
+                            'is_read' => 0,
+                            'created_at' => date('Y-m-d H:i:s')
+                        ]);
+                    } catch (\Exception $e) {
+                        log_message('error', 'Failed to create admin notification for new user: ' . $e->getMessage());
+                    }
                     
                     $session->setFlashdata('success', 'User created successfully.');
                     return redirect()->to('/admin/manage-user');
@@ -829,6 +935,21 @@ class Auth extends Controller
                     $startTime = $this->request->getPost('start_time');
                     $endTime = $this->request->getPost('end_time');
                     
+                    // Check for duplicate course (same title, instructor, semester, and academic year)
+                    $title = trim($this->request->getPost('title'));
+                    $semester = $this->request->getPost('semester');
+                    $academicYear = $this->request->getPost('academic_year');
+                    $existingCourse = $courseModel->where('title', $title)
+                        ->where('instructor_id', $instructorId)
+                        ->where('semester', $semester)
+                        ->where('academic_year', $academicYear)
+                        ->first();
+                    
+                    if ($existingCourse) {
+                        $session->setFlashdata('error', 'A course with the same title, instructor, semester, and academic year already exists. Please use a different title or modify the existing course.');
+                        return redirect()->to('/admin/courses');
+                    }
+                    
                     // Check for schedule conflicts
                     $conflict = $courseModel->checkScheduleConflict($instructorId, $scheduleDays, $startTime, $endTime);
                     if ($conflict !== false) {
@@ -837,18 +958,49 @@ class Auth extends Controller
                     }
                     
                     $data = [
-                        'title' => $this->request->getPost('title'),
+                        'title' => $title,
                         'description' => $this->request->getPost('description'),
                         'instructor_id' => $instructorId,
                         'status' => $this->request->getPost('status'),
-                        'semester' => $this->request->getPost('semester'),
-                        'academic_year' => $this->request->getPost('academic_year'),
+                        'semester' => $semester,
+                        'academic_year' => $academicYear,
                         'schedule_days' => $scheduleDays,
                         'start_time' => $startTime,
                         'end_time' => $endTime
                     ];
                     
                     if ($courseModel->insert($data)) {
+                        // Create notification for admin
+                        $notificationModel = new NotificationModel();
+                        $adminName = $session->get('user_name') ?? 'Admin';
+                        $instructorName = $instructor['name'] ?? 'N/A';
+                        $notificationMessage = "Course \"" . $title . "\" created and assigned to " . $instructorName;
+                        
+                        try {
+                            $notificationModel->insert([
+                                'user_id' => $userId,
+                                'message' => $notificationMessage,
+                                'is_read' => 0,
+                                'created_at' => date('Y-m-d H:i:s')
+                            ]);
+                        } catch (\Exception $e) {
+                            log_message('error', 'Failed to create course creation notification: ' . $e->getMessage());
+                        }
+                        
+                        // Notify instructor about new course assignment
+                        if ($instructorId) {
+                            try {
+                                $notificationModel->insert([
+                                    'user_id' => $instructorId,
+                                    'message' => "You have been assigned to teach \"" . $title . "\"",
+                                    'is_read' => 0,
+                                    'created_at' => date('Y-m-d H:i:s')
+                                ]);
+                            } catch (\Exception $e) {
+                                log_message('error', 'Failed to create instructor course assignment notification: ' . $e->getMessage());
+                            }
+                        }
+                        
                         $session->setFlashdata('success', 'Course created successfully.');
                         return redirect()->to('/admin/courses');
                     } else {
@@ -901,6 +1053,22 @@ class Auth extends Controller
                     $startTime = $this->request->getPost('start_time');
                     $endTime = $this->request->getPost('end_time');
                     
+                    // Check for duplicate course (same title, instructor, semester, and academic year) - exclude current course
+                    $title = trim($this->request->getPost('title'));
+                    $semester = $this->request->getPost('semester');
+                    $academicYear = $this->request->getPost('academic_year');
+                    $existingCourse = $courseModel->where('title', $title)
+                        ->where('instructor_id', $instructorId)
+                        ->where('semester', $semester)
+                        ->where('academic_year', $academicYear)
+                        ->where('id !=', $courseId)
+                        ->first();
+                    
+                    if ($existingCourse) {
+                        $session->setFlashdata('error', 'A course with the same title, instructor, semester, and academic year already exists. Please use a different title or modify the existing course.');
+                        return redirect()->to('/admin/courses');
+                    }
+                    
                     // Check for schedule conflicts (exclude current course being edited)
                     $conflict = $courseModel->checkScheduleConflict($instructorId, $scheduleDays, $startTime, $endTime, $courseId);
                     if ($conflict !== false) {
@@ -909,18 +1077,35 @@ class Auth extends Controller
                     }
                     
                     $data = [
-                        'title' => $this->request->getPost('title'),
+                        'title' => $title,
                         'description' => $this->request->getPost('description'),
                         'instructor_id' => $instructorId,
                         'status' => $this->request->getPost('status'),
-                        'semester' => $this->request->getPost('semester'),
-                        'academic_year' => $this->request->getPost('academic_year'),
+                        'semester' => $semester,
+                        'academic_year' => $academicYear,
                         'schedule_days' => $scheduleDays,
                         'start_time' => $startTime,
                         'end_time' => $endTime
                     ];
                     
                     if ($courseModel->update($courseId, $data)) {
+                        // Create notification for admin
+                        $notificationModel = new NotificationModel();
+                        $courseTitle = $title;
+                        $instructorName = $instructor['name'] ?? 'N/A';
+                        $notificationMessage = "Course \"" . $courseTitle . "\" updated and assigned to " . $instructorName;
+                        
+                        try {
+                            $notificationModel->insert([
+                                'user_id' => $userId,
+                                'message' => $notificationMessage,
+                                'is_read' => 0,
+                                'created_at' => date('Y-m-d H:i:s')
+                            ]);
+                        } catch (\Exception $e) {
+                            log_message('error', 'Failed to create course update notification: ' . $e->getMessage());
+                        }
+                        
                         $session->setFlashdata('success', 'Course updated successfully.');
                         return redirect()->to('/admin/courses');
                     } else {
@@ -932,7 +1117,27 @@ class Auth extends Controller
             } elseif ($action === 'delete') {
                 // Delete course
                 $courseId = (int) $this->request->getPost('course_id');
+                $courseToDelete = $courseModel->find($courseId);
+                
                 if ($courseModel->delete($courseId)) {
+                    // Create notification for admin
+                    if ($courseToDelete) {
+                        $notificationModel = new NotificationModel();
+                        $courseTitle = $courseToDelete['title'] ?? 'Untitled Course';
+                        $notificationMessage = "Course \"" . $courseTitle . "\" deleted";
+                        
+                        try {
+                            $notificationModel->insert([
+                                'user_id' => $userId,
+                                'message' => $notificationMessage,
+                                'is_read' => 0,
+                                'created_at' => date('Y-m-d H:i:s')
+                            ]);
+                        } catch (\Exception $e) {
+                            log_message('error', 'Failed to create course deletion notification: ' . $e->getMessage());
+                        }
+                    }
+                    
                     $session->setFlashdata('success', 'Course deleted successfully.');
                     return redirect()->to('/admin/courses');
                 } else {
@@ -1109,6 +1314,29 @@ class Auth extends Controller
         
         // Update enrollment status to approved
         if ($enrollmentModel->update($enrollmentId, ['status' => 'approved'])) {
+            // Create notification for the student
+            $notificationModel = new NotificationModel();
+            $courseTitle = $course['title'] ?? 'Untitled Course';
+            $notificationMessage = "Your enrollment in " . $courseTitle . " has been approved!";
+            
+            // Get student_id from enrollment (database uses student_id)
+            $studentId = $enrollment['student_id'] ?? $enrollment['user_id'];
+            
+            $notificationData = [
+                'user_id' => $studentId,
+                'message' => $notificationMessage,
+                'is_read' => 0,
+                'created_at' => date('Y-m-d H:i:s')
+            ];
+            
+            // Insert notification (don't fail approval if notification fails)
+            try {
+                $notificationModel->insert($notificationData);
+            } catch (\Exception $e) {
+                // Log error but don't fail approval
+                log_message('error', 'Failed to create approval notification: ' . $e->getMessage());
+            }
+            
             return $this->response->setJSON([
                 'success' => true,
                 'message' => 'Enrollment approved successfully.'
@@ -1180,6 +1408,25 @@ class Auth extends Controller
             'status' => 'declined',
             'decline_reason' => $declineReason
         ])) {
+            // Create notification for the student
+            $notificationModel = new NotificationModel();
+            $courseTitle = $course['title'] ?? 'Untitled Course';
+            $studentId = $enrollment['student_id'] ?? $enrollment['user_id'];
+            $notificationMessage = "Your enrollment request for \"" . $courseTitle . "\" has been declined. Reason: " . $declineReason;
+            
+            $notificationData = [
+                'user_id' => $studentId,
+                'message' => $notificationMessage,
+                'is_read' => 0,
+                'created_at' => date('Y-m-d H:i:s')
+            ];
+            
+            try {
+                $notificationModel->insert($notificationData);
+            } catch (\Exception $e) {
+                log_message('error', 'Failed to create decline notification: ' . $e->getMessage());
+            }
+            
             return $this->response->setJSON([
                 'success' => true,
                 'message' => 'Enrollment declined successfully.'
@@ -1239,6 +1486,26 @@ class Auth extends Controller
         
         // Delete enrollment
         if ($enrollmentModel->delete($enrollmentId)) {
+            // Create notification for the student
+            $notificationModel = new NotificationModel();
+            $courseTitle = $course['title'] ?? 'Untitled Course';
+            $studentId = $enrollment['student_id'] ?? $enrollment['user_id'];
+            $instructorName = $session->get('user_name') ?? 'Instructor';
+            $notificationMessage = "You have been unenrolled from \"" . $courseTitle . "\" by " . $instructorName;
+            
+            $notificationData = [
+                'user_id' => $studentId,
+                'message' => $notificationMessage,
+                'is_read' => 0,
+                'created_at' => date('Y-m-d H:i:s')
+            ];
+            
+            try {
+                $notificationModel->insert($notificationData);
+            } catch (\Exception $e) {
+                log_message('error', 'Failed to create unenroll notification: ' . $e->getMessage());
+            }
+            
             return $this->response->setJSON([
                 'success' => true,
                 'message' => 'Student unenrolled successfully.'
@@ -1324,6 +1591,27 @@ class Auth extends Controller
         $enrollmentId = $enrollmentModel->enrollUser($enrollmentData);
         
         if ($enrollmentId) {
+            // Create notification for the student
+            $notificationModel = new NotificationModel();
+            $courseTitle = $course['title'] ?? 'Untitled Course';
+            $instructorName = $session->get('user_name') ?? 'Instructor';
+            $notificationMessage = "You have been enrolled in \"" . $courseTitle . "\" by " . $instructorName;
+            
+            $notificationData = [
+                'user_id' => $studentId,
+                'message' => $notificationMessage,
+                'is_read' => 0,
+                'created_at' => date('Y-m-d H:i:s')
+            ];
+            
+            // Insert notification (don't fail enrollment if notification fails)
+            try {
+                $notificationModel->insert($notificationData);
+            } catch (\Exception $e) {
+                // Log error but don't fail enrollment
+                log_message('error', 'Failed to create enrollment notification: ' . $e->getMessage());
+            }
+            
             return $this->response->setJSON([
                 'success' => true,
                 'message' => 'Student enrolled successfully.',

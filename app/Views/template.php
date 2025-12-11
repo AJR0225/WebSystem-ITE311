@@ -70,6 +70,89 @@
             background-color: #4a9eff;
             color: #ffffff;
         }
+        .notification-dropdown-container {
+            position: relative;
+            margin-left: 1rem;
+        }
+        .notification-dropdown {
+            position: relative;
+        }
+        .notification-link {
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #e8e8e8;
+            font-size: 1.3rem;
+            padding: 0.5rem;
+            border-radius: 50%;
+            transition: all 0.3s;
+            text-decoration: none;
+            width: 40px;
+            height: 40px;
+            border: none;
+            background: transparent;
+        }
+        .notification-link:hover {
+            background-color: rgba(74, 158, 255, 0.1);
+            color: #4a9eff;
+        }
+        .notification-link .notification-badge {
+            position: absolute;
+            top: 0;
+            right: 0;
+            font-size: 0.7rem;
+            font-weight: 600;
+            padding: 2px 6px;
+            border-radius: 10px;
+            min-width: 18px;
+            text-align: center;
+            line-height: 1.4;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+        }
+        .notification-menu {
+            min-width: 350px;
+            max-width: 400px;
+            max-height: 500px;
+            overflow-y: auto;
+            background-color: #2d3447;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
+        }
+        .notification-menu .dropdown-header {
+            color: #e8e8e8;
+            padding: 12px 16px;
+            background-color: rgba(74, 158, 255, 0.1);
+        }
+        .notification-list {
+            max-height: 350px;
+            overflow-y: auto;
+        }
+        .notification-item {
+            padding: 12px 16px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            transition: background-color 0.2s;
+        }
+        .notification-item:hover {
+            background-color: rgba(255, 255, 255, 0.05);
+        }
+        .notification-item.unread {
+            background-color: rgba(74, 158, 255, 0.05);
+        }
+        .notification-item .notification-message {
+            color: #e8e8e8;
+            font-size: 0.9rem;
+            margin-bottom: 8px;
+        }
+        .notification-item .notification-time {
+            color: #888888;
+            font-size: 0.75rem;
+        }
+        .notification-item .mark-read-btn {
+            margin-top: 8px;
+            font-size: 0.8rem;
+            padding: 4px 12px;
+        }
         .user-menu {
             display: flex;
             align-items: center;
@@ -978,6 +1061,164 @@
     <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
     <!-- Bootstrap JS -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    
+    <!-- Notification System Script -->
+    <?php if (session()->get('is_logged_in') && !in_array(uri_string(), ['', 'home', 'about', 'contact', 'login', 'register'])): ?>
+    <script>
+    $(document).ready(function() {
+        // Function to fetch and update notifications
+        function fetchNotifications() {
+            $.get('<?= base_url('notifications') ?>')
+                .done(function(response) {
+                    if (response.success) {
+                        updateNotificationBadge(response.unread_count);
+                        updateNotificationList(response.notifications);
+                    }
+                })
+                .fail(function(xhr) {
+                    console.error('Failed to fetch notifications:', xhr);
+                });
+        }
+        
+        // Function to update notification badge
+        function updateNotificationBadge(count) {
+            const $badge = $('#notificationBadge');
+            const $count = $('#notificationCount');
+            
+            if (count > 0) {
+                $badge.text(count).show();
+                $count.text(count);
+            } else {
+                $badge.hide();
+                $count.text('0');
+            }
+        }
+        
+        // Function to update notification list
+        function updateNotificationList(notifications) {
+            const $list = $('#notificationList');
+            
+            if (!notifications || notifications.length === 0) {
+                $list.html(`
+                    <div class="text-center p-3 text-muted">
+                        <i class="bi bi-inbox"></i>
+                        <p class="mb-0 mt-2">No notifications</p>
+                    </div>
+                `);
+                return;
+            }
+            
+            let html = '';
+            notifications.forEach(function(notification) {
+                const isUnread = notification.is_read == 0;
+                const timeAgo = getTimeAgo(notification.created_at);
+                const unreadClass = isUnread ? 'unread' : '';
+                const markReadBtn = isUnread ? `
+                    <button class="btn btn-sm btn-outline-primary mark-read-btn" onclick="markAsRead(${notification.id}, this)">
+                        <i class="bi bi-check-circle"></i> Mark as Read
+                    </button>
+                ` : '';
+                
+                html += `
+                    <div class="notification-item ${unreadClass}" data-notification-id="${notification.id}">
+                        <div class="notification-message">${escapeHtml(notification.message)}</div>
+                        <div class="notification-time">
+                            <i class="bi bi-clock"></i> ${timeAgo}
+                        </div>
+                        ${markReadBtn}
+                    </div>
+                `;
+            });
+            
+            $list.html(html);
+        }
+        
+        // Function to mark notification as read
+        window.markAsRead = function(notificationId, buttonElement) {
+            $.post('<?= base_url('notifications/mark_read') ?>/' + notificationId)
+                .done(function(response) {
+                    if (response.success) {
+                        // Remove the notification item
+                        $(buttonElement).closest('.notification-item').fadeOut(300, function() {
+                            $(this).remove();
+                            
+                            // Update badge count
+                            const currentCount = parseInt($('#notificationBadge').text()) || 0;
+                            const newCount = Math.max(0, currentCount - 1);
+                            updateNotificationBadge(newCount);
+                            
+                            // Update count in header
+                            $('#notificationCount').text(newCount);
+                            
+                            // If no notifications left, show empty state
+                            if ($('#notificationList .notification-item').length === 0) {
+                                $('#notificationList').html(`
+                                    <div class="text-center p-3 text-muted">
+                                        <i class="bi bi-inbox"></i>
+                                        <p class="mb-0 mt-2">No notifications</p>
+                                    </div>
+                                `);
+                            }
+                        });
+                    } else {
+                        alert('Failed to mark notification as read: ' + (response.message || 'Unknown error'));
+                    }
+                })
+                .fail(function(xhr) {
+                    console.error('Failed to mark notification as read:', xhr);
+                    alert('Failed to mark notification as read. Please try again.');
+                });
+        };
+        
+        // Function to get time ago
+        function getTimeAgo(dateString) {
+            const now = new Date();
+            const date = new Date(dateString);
+            const diffInSeconds = Math.floor((now - date) / 1000);
+            
+            if (diffInSeconds < 60) {
+                return 'Just now';
+            } else if (diffInSeconds < 3600) {
+                const minutes = Math.floor(diffInSeconds / 60);
+                return minutes + ' minute' + (minutes > 1 ? 's' : '') + ' ago';
+            } else if (diffInSeconds < 86400) {
+                const hours = Math.floor(diffInSeconds / 3600);
+                return hours + ' hour' + (hours > 1 ? 's' : '') + ' ago';
+            } else if (diffInSeconds < 604800) {
+                const days = Math.floor(diffInSeconds / 86400);
+                return days + ' day' + (days > 1 ? 's' : '') + ' ago';
+            } else {
+                return date.toLocaleDateString();
+            }
+        }
+        
+        // Function to escape HTML
+        function escapeHtml(text) {
+            const map = {
+                '&': '&amp;',
+                '<': '&lt;',
+                '>': '&gt;',
+                '"': '&quot;',
+                "'": '&#039;'
+            };
+            return text.replace(/[&<>"']/g, function(m) { return map[m]; });
+        }
+        
+        // Fetch notifications on page load (when document is ready)
+        fetchNotifications();
+        
+        // Real-time updates: Refresh notifications every 60 seconds
+        // This ensures users see new notifications without manually refreshing the page
+        setInterval(fetchNotifications, 60000);
+        
+        // Refresh notifications when dropdown is opened (for immediate updates)
+        $('#notificationDropdown').on('shown.bs.dropdown', function() {
+            fetchNotifications();
+        });
+    });
+    </script>
+    <?php endif; ?>
+    
     <?= $this->renderSection('scripts') ?? '' ?>
 </body>
 </html>

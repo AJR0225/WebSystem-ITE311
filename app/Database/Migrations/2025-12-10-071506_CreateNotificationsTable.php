@@ -15,23 +15,14 @@ class CreateNotificationsTable extends Migration
                 'unsigned' => true,
                 'auto_increment' => true,
             ],
-            'type' => [
-                'type' => 'VARCHAR',
-                'constraint' => 50,
-            ],
-            'message' => [
-                'type' => 'TEXT',
-            ],
             'user_id' => [
                 'type' => 'INT',
                 'constraint' => 11,
                 'unsigned' => true,
-                'null' => true,
             ],
-            'user_name' => [
+            'message' => [
                 'type' => 'VARCHAR',
                 'constraint' => 255,
-                'null' => true,
             ],
             'is_read' => [
                 'type' => 'TINYINT',
@@ -42,14 +33,10 @@ class CreateNotificationsTable extends Migration
                 'type' => 'DATETIME',
                 'null' => true,
             ],
-            'updated_at' => [
-                'type' => 'DATETIME',
-                'null' => true,
-            ],
         ]);
         
         $this->forge->addKey('id', true);
-        $this->forge->addKey('created_at');
+        $this->forge->addForeignKey('user_id', 'users', 'id', 'CASCADE', 'CASCADE');
         $this->forge->createTable('notifications');
     }
 

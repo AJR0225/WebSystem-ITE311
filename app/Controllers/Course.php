@@ -3,6 +3,7 @@
 namespace App\Controllers;
 
 use App\Models\EnrollmentModel;
+use App\Models\NotificationModel;
 use CodeIgniter\Controller;
 
 class Course extends Controller
@@ -114,9 +115,51 @@ class Course extends Controller
         if ($enrollmentId) {
             // Course details already fetched above for validation
             
-            // Fetch instructor name
+            // Fetch instructor and student names
             $userModel = new \App\Models\UserModel();
             $instructor = $course ? $userModel->find($course['instructor_id']) : null;
+            $student = $userModel->find($user_id);
+            
+            $courseTitle = $course['title'] ?? 'Untitled Course';
+            $studentName = $student['name'] ?? 'A student';
+            
+            $notificationModel = new NotificationModel();
+            
+            // Create notification for the student
+            $studentNotificationMessage = "You have been enrolled in " . $courseTitle;
+            $studentNotificationData = [
+                'user_id' => $user_id,
+                'message' => $studentNotificationMessage,
+                'is_read' => 0,
+                'created_at' => date('Y-m-d H:i:s')
+            ];
+            
+            // Create notification for the instructor (new enrollment request)
+            $instructorNotificationMessage = "New enrollment request for \"" . $courseTitle . "\" from " . $studentName;
+            $instructorNotificationData = [
+                'user_id' => $course['instructor_id'],
+                'message' => $instructorNotificationMessage,
+                'is_read' => 0,
+                'created_at' => date('Y-m-d H:i:s')
+            ];
+            
+            // Insert notifications (don't fail enrollment if notification fails)
+            try {
+                $notificationModel->insert($studentNotificationData);
+            } catch (\Exception $e) {
+                // Log error but don't fail enrollment
+                log_message('error', 'Failed to create student enrollment notification: ' . $e->getMessage());
+            }
+            
+            // Notify instructor about the enrollment request
+            if ($course['instructor_id']) {
+                try {
+                    $notificationModel->insert($instructorNotificationData);
+                } catch (\Exception $e) {
+                    // Log error but don't fail enrollment
+                    log_message('error', 'Failed to create instructor enrollment notification: ' . $e->getMessage());
+                }
+            }
             
             // Success response with course data
             return $this->response->setJSON([
@@ -125,7 +168,7 @@ class Course extends Controller
                 'enrollment_id' => $enrollmentId,
                 'course' => [
                     'id' => $course_id,
-                    'title' => $course['title'] ?? 'Untitled Course',
+                    'title' => $courseTitle,
                     'description' => $course['description'] ?? 'No description available',
                     'instructor_name' => $instructor['name'] ?? 'N/A',
                     'enrollment_date' => date('Y-m-d H:i:s'),

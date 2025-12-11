@@ -30,6 +30,21 @@ $isPublicPage = in_array($currentUri, ['', 'home', 'about', 'contact', 'login', 
 
 // Check if user is on dashboard or admin pages
 $isDashboardOrAdminPage = ($currentUri == 'dashboard' || strpos($currentUri, 'admin/') === 0 || strpos($currentUri, 'instructor/') === 0 || strpos($currentUri, 'student/') === 0);
+
+// Fetch unread notification count for logged-in users
+$unreadNotificationCount = 0;
+if ($isLoggedIn && !$isPublicPage) {
+    $userId = session()->get('user_id');
+    if ($userId) {
+        $notificationModel = new \App\Models\NotificationModel();
+        // Admin sees all notifications, others see only their own
+        if ($userRole === 'admin') {
+            $unreadNotificationCount = $notificationModel->where('is_read', 0)->countAllResults();
+        } else {
+            $unreadNotificationCount = $notificationModel->getUnreadCount($userId);
+        }
+    }
+}
 ?>
 
 <header>
@@ -170,6 +185,39 @@ $isDashboardOrAdminPage = ($currentUri == 'dashboard' || strpos($currentUri, 'ad
                                 </a>
                             </li>
                         <?php endif; ?>
+                    <?php endif; ?>
+                    
+                    <!-- Notification Dropdown (Only for logged-in users) -->
+                    <?php if ($isLoggedIn && !$isPublicPage): ?>
+                        <li class="notification-dropdown-container">
+                            <div class="dropdown notification-dropdown">
+                                <a href="#" class="notification-link dropdown-toggle" id="notificationDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false" title="Notifications">
+                                    <i class="bi bi-bell"></i>
+                                    <span class="badge bg-danger notification-badge" id="notificationBadge" style="display: none;">0</span>
+                                </a>
+                                <ul class="dropdown-menu dropdown-menu-end notification-menu" aria-labelledby="notificationDropdown" id="notificationMenu">
+                                    <li class="dropdown-header">
+                                        <strong>Notifications</strong>
+                                        <span class="badge bg-primary ms-2" id="notificationCount">0</span>
+                                    </li>
+                                    <li><hr class="dropdown-divider"></li>
+                                    <li>
+                                        <div id="notificationList" class="notification-list">
+                                            <div class="text-center p-3 text-muted">
+                                                <i class="bi bi-inbox"></i>
+                                                <p class="mb-0 mt-2">No notifications</p>
+                                            </div>
+                                        </div>
+                                    </li>
+                                    <li><hr class="dropdown-divider"></li>
+                                    <li>
+                                        <a class="dropdown-item text-center" href="<?= base_url('notifications') ?>">
+                                            <small>View all notifications</small>
+                                        </a>
+                                    </li>
+                                </ul>
+                            </div>
+                        </li>
                     <?php endif; ?>
                     
                     <!-- User Menu Dropdown (Only on Dashboard/Admin Pages, NOT on public pages) -->

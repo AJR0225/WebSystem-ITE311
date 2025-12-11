@@ -78,8 +78,9 @@ class Filters extends BaseFilters
                 'instructor/enrollment/approve',
                 'instructor/enrollment/decline',
                 'instructor/enrollment/unenroll',
-                'instructor/enrollment/enroll'
-            ]], // Enable CSRF globally, except enrollment routes (handled manually)
+                'instructor/enrollment/enroll',
+                'notifications/mark_read/*'
+            ]], // Enable CSRF globally, except enrollment and notification routes (handled manually)
             // 'invalidchars',
         ],
         'after' => [

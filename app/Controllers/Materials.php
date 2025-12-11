@@ -5,6 +5,7 @@ namespace App\Controllers;
 use App\Models\MaterialModel;
 use App\Models\CourseModel;
 use App\Models\EnrollmentModel;
+use App\Models\NotificationModel;
 use CodeIgniter\Controller;
 
 class Materials extends Controller
@@ -114,6 +115,31 @@ class Materials extends Controller
 
                         // Save to database using MaterialModel
                         if ($this->materialModel->insertMaterial($materialData)) {
+                            // Notify all enrolled students (approved status only)
+                            $notificationModel = new NotificationModel();
+                            $enrolledStudents = $this->enrollmentModel->where('course_id', $course_id)
+                                ->whereIn('status', ['approved', 'enrolled'])
+                                ->findAll();
+                            
+                            $courseTitle = $course['title'] ?? 'Untitled Course';
+                            $fileName = $file->getClientName();
+                            
+                            foreach ($enrolledStudents as $enrollment) {
+                                $studentId = $enrollment['student_id'] ?? $enrollment['user_id'];
+                                $notificationMessage = "New material uploaded for \"" . $courseTitle . "\": " . $fileName;
+                                
+                                try {
+                                    $notificationModel->insert([
+                                        'user_id' => $studentId,
+                                        'message' => $notificationMessage,
+                                        'is_read' => 0,
+                                        'created_at' => date('Y-m-d H:i:s')
+                                    ]);
+                                } catch (\Exception $e) {
+                                    log_message('error', 'Failed to create material notification for student ' . $studentId . ': ' . $e->getMessage());
+                                }
+                            }
+                            
                             // Set success flash message
                             $session->setFlashdata('success', 'Material uploaded successfully.');
                             // Redirect back to upload page
