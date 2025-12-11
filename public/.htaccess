@@ -14,7 +14,18 @@ Options -Indexes
 	# If you installed CodeIgniter in a subfolder, you will need to
 	# change the following line to match the subfolder you need.
 	# http://httpd.apache.org/docs/current/mod/mod_rewrite.html#rewritebase
-	# RewriteBase /
+	RewriteBase /ITE311-ROQUERO/public/
+
+	# Block any URL containing /public/ - return 404 Not Found
+	RewriteCond %{THE_REQUEST} \s/ITE311-ROQUERO/public/([^\s?]*) [NC]
+	RewriteRule ^ - [R=404,L]
+	
+	# Block any URL containing index.php - return 404 Not Found
+	RewriteCond %{THE_REQUEST} \s/ITE311-ROQUERO/public/index\.php[/\s?]([^\s?]*) [NC]
+	RewriteRule ^ - [R=404,L]
+	
+	RewriteCond %{THE_REQUEST} \s/ITE311-ROQUERO/index\.php[/\s?]([^\s?]*) [NC]
+	RewriteRule ^ - [R=404,L]
 
 	# Redirect Trailing Slashes...
 	RewriteCond %{REQUEST_FILENAME} !-d

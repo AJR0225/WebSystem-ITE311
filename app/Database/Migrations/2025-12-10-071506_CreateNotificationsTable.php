@@ -4,7 +4,7 @@ namespace App\Database\Migrations;
 
 use CodeIgniter\Database\Migration;
 
-class CreateUsersTable extends Migration
+class CreateNotificationsTable extends Migration
 {
     public function up()
     {
@@ -15,22 +15,28 @@ class CreateUsersTable extends Migration
                 'unsigned' => true,
                 'auto_increment' => true,
             ],
-            'name' => [
-                'type' => 'VARCHAR',
-                'constraint' => 255,
-            ],
-            'email' => [
-                'type' => 'VARCHAR',
-                'constraint' => 255,
-                'unique' => true,
-            ],
-            'password' => [
-                'type' => 'VARCHAR',
-                'constraint' => 255,
-            ],
-            'role' => [
+            'type' => [
                 'type' => 'VARCHAR',
                 'constraint' => 50,
+            ],
+            'message' => [
+                'type' => 'TEXT',
+            ],
+            'user_id' => [
+                'type' => 'INT',
+                'constraint' => 11,
+                'unsigned' => true,
+                'null' => true,
+            ],
+            'user_name' => [
+                'type' => 'VARCHAR',
+                'constraint' => 255,
+                'null' => true,
+            ],
+            'is_read' => [
+                'type' => 'TINYINT',
+                'constraint' => 1,
+                'default' => 0,
             ],
             'created_at' => [
                 'type' => 'DATETIME',
@@ -43,11 +49,12 @@ class CreateUsersTable extends Migration
         ]);
         
         $this->forge->addKey('id', true);
-        $this->forge->createTable('users');
+        $this->forge->addKey('created_at');
+        $this->forge->createTable('notifications');
     }
 
     public function down()
     {
-        $this->forge->dropTable('users');
+        $this->forge->dropTable('notifications');
     }
 }

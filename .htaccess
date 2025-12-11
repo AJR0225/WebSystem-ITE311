@@ -1,0 +1,21 @@
+# Redirect all requests to public folder
+<IfModule mod_rewrite.c>
+    RewriteEngine On
+    RewriteBase /ITE311-ROQUERO/
+    
+    # Block direct access to /public/ in URL - return 404 Not Found
+    RewriteCond %{THE_REQUEST} \s/ITE311-ROQUERO/public/([^\s?]*) [NC]
+    RewriteRule ^ - [R=404,L]
+    
+    # Block direct access to index.php in URL - return 404 Not Found
+    RewriteCond %{THE_REQUEST} \s/ITE311-ROQUERO/index\.php[/\s?]([^\s?]*) [NC]
+    RewriteRule ^ - [R=404,L]
+    
+    # Redirect all other requests to public folder
+    RewriteCond %{REQUEST_FILENAME} !-f
+    RewriteCond %{REQUEST_FILENAME} !-d
+    RewriteRule ^(.*)$ public/$1 [L]
+</IfModule>
+
+# Prevent directory listing
+Options -Indexes
