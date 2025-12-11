@@ -100,12 +100,12 @@ class Course extends Controller
             ]);
         }
 
-        // Prepare enrollment data
+        // Prepare enrollment data (status will be 'pending' for teacher approval)
         $enrollmentData = [
             'user_id' => $user_id,
             'course_id' => $course_id,
             'enrollment_date' => date('Y-m-d H:i:s'),
-            'status' => 'enrolled'
+            'status' => 'pending' // Changed to pending - requires teacher approval
         ];
 
         // Insert the new enrollment record
@@ -121,7 +121,7 @@ class Course extends Controller
             // Success response with course data
             return $this->response->setJSON([
                 'success' => true,
-                'message' => 'Successfully enrolled in the course!',
+                'message' => 'Enrollment request submitted! Waiting for instructor approval.',
                 'enrollment_id' => $enrollmentId,
                 'course' => [
                     'id' => $course_id,
@@ -129,7 +129,7 @@ class Course extends Controller
                     'description' => $course['description'] ?? 'No description available',
                     'instructor_name' => $instructor['name'] ?? 'N/A',
                     'enrollment_date' => date('Y-m-d H:i:s'),
-                    'status' => 'enrolled'
+                    'status' => 'pending' // Status is pending, waiting for approval
                 ]
             ]);
         } else {

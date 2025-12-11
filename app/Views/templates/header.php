@@ -122,6 +122,11 @@ $isDashboardOrAdminPage = ($currentUri == 'dashboard' || strpos($currentUri, 'ad
                                     <i class="bi bi-file-earmark-text"></i> Assignments
                                 </a>
                             </li>
+                            <li class="role-nav-section">
+                                <a href="<?= base_url('logout') ?>" onclick="return confirm('Are you sure you want to log out?');" style="color: #ff4444;">
+                                    <i class="bi bi-box-arrow-right"></i> Logout
+                                </a>
+                            </li>
                         <?php else: ?>
                             <!-- Student-Specific Navigation Items (Only on Dashboard/Student Pages) -->
                             <li class="role-nav-section">
@@ -147,6 +152,11 @@ $isDashboardOrAdminPage = ($currentUri == 'dashboard' || strpos($currentUri, 'ad
                             <li class="role-nav-section">
                                 <a href="<?= base_url('student/quizzes') ?>" class="<?= (strpos($currentUri, 'student/quizzes') !== false) ? 'active' : '' ?>">
                                     <i class="bi bi-question-circle"></i> Quizzes
+                                </a>
+                            </li>
+                            <li class="role-nav-section">
+                                <a href="<?= base_url('logout') ?>" onclick="return confirm('Are you sure you want to log out?');" style="color: #ff4444;">
+                                    <i class="bi bi-box-arrow-right"></i> Logout
                                 </a>
                             </li>
                         <?php endif; ?>

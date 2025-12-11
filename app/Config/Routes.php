@@ -42,7 +42,8 @@ $routes->group('admin', function($routes) {
     $routes->get('create-user', 'Auth::createUser'); // Create new user - GET
     $routes->post('create-user', 'Auth::createUser'); // Create new user - POST
     $routes->get('users', 'Auth::dashboard'); // Placeholder - redirects to dashboard
-    $routes->get('courses', 'Auth::dashboard'); // Placeholder - redirects to dashboard
+    $routes->get('courses', 'Auth::adminCourses'); // Admin courses management - GET
+    $routes->post('courses', 'Auth::adminCourses'); // Admin courses management - POST (add, edit, delete)
     $routes->get('reports', 'Auth::dashboard'); // Placeholder - redirects to dashboard
     $routes->get('settings', 'Auth::dashboard'); // Placeholder - redirects to dashboard
 });
@@ -50,6 +51,11 @@ $routes->group('admin', function($routes) {
 // Instructor Routes (Auth check is done in controller)
 $routes->group('instructor', function($routes) {
     $routes->get('courses', 'Auth::dashboard'); // Placeholder - redirects to dashboard
+    $routes->get('course/(:num)', 'Auth::viewCourseStudents/$1'); // View enrolled students for a specific course
+    $routes->post('enrollment/approve', 'Auth::approveEnrollment'); // Approve enrollment
+    $routes->post('enrollment/decline', 'Auth::declineEnrollment'); // Decline enrollment
+    $routes->post('enrollment/unenroll', 'Auth::unenrollStudent'); // Unenroll student
+    $routes->post('enrollment/enroll', 'Auth::enrollStudent'); // Enroll student manually
     $routes->get('students', 'Auth::dashboard'); // Placeholder - redirects to dashboard
     $routes->get('grades', 'Auth::dashboard'); // Placeholder - redirects to dashboard
     $routes->get('quizzes', 'Auth::dashboard'); // Placeholder - redirects to dashboard

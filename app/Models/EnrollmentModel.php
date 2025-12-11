@@ -12,7 +12,7 @@ class EnrollmentModel extends Model
     protected $returnType       = 'array';
     protected $useSoftDeletes   = false;
     protected $protectFields    = true;
-    protected $allowedFields    = ['student_id', 'course_id', 'enrollment_date', 'status', 'created_at', 'updated_at'];
+    protected $allowedFields    = ['student_id', 'course_id', 'enrollment_date', 'status', 'decline_reason', 'created_at', 'updated_at'];
 
     // Dates
     protected $useTimestamps = true;
@@ -57,9 +57,9 @@ class EnrollmentModel extends Model
             $data['enrollment_date'] = date('Y-m-d H:i:s');
         }
 
-        // Set default status if not provided
+        // Set default status if not provided (pending for approval)
         if (!isset($data['status'])) {
-            $data['status'] = 'enrolled';
+            $data['status'] = 'pending';
         }
 
         return $this->insert($data);
@@ -74,25 +74,60 @@ class EnrollmentModel extends Model
     public function getUserEnrollments($user_id)
     {
         // Use student_id as that's what exists in the database table
+        // Show all enrollments (pending, approved, declined) - students can see their status
         return $this->select('enrollments.*, courses.title, courses.description, courses.instructor_id, courses.status as course_status, users.name as instructor_name')
                     ->join('courses', 'courses.id = enrollments.course_id', 'left')
                     ->join('users', 'users.id = courses.instructor_id', 'left')
                     ->where('enrollments.student_id', $user_id)
-                    ->where('enrollments.status', 'enrolled')
+                    ->orderBy('enrollments.enrollment_date', 'DESC')
+                    ->findAll();
+    }
+    
+    /**
+     * Get pending enrollments for a course (for instructor approval)
+     * 
+     * @param int $course_id Course ID
+     * @return array Array of pending enrollment records with student details
+     */
+    public function getPendingEnrollments($course_id)
+    {
+        return $this->select('enrollments.*, users.name as student_name, users.email as student_email, users.id as student_id, courses.title as course_title')
+                    ->join('users', 'users.id = enrollments.student_id', 'left')
+                    ->join('courses', 'courses.id = enrollments.course_id', 'left')
+                    ->where('enrollments.course_id', $course_id)
+                    ->where('enrollments.status', 'pending')
+                    ->orderBy('enrollments.enrollment_date', 'DESC')
+                    ->findAll();
+    }
+    
+    /**
+     * Get all enrollments for a course (for instructor to see all students)
+     * 
+     * @param int $course_id Course ID
+     * @return array Array of enrollment records with student details
+     */
+    public function getCourseEnrollments($course_id)
+    {
+        return $this->select('enrollments.*, users.name as student_name, users.email as student_email, users.id as student_id, courses.title as course_title')
+                    ->join('users', 'users.id = enrollments.student_id', 'left')
+                    ->join('courses', 'courses.id = enrollments.course_id', 'left')
+                    ->where('enrollments.course_id', $course_id)
+                    ->whereIn('enrollments.status', ['approved', 'enrolled'])
                     ->orderBy('enrollments.enrollment_date', 'DESC')
                     ->findAll();
     }
 
     /**
-     * Check if a user is already enrolled in a specific course
+     * Check if a user is already enrolled in a specific course (any status)
      * 
      * @param int $user_id User ID
      * @param int $course_id Course ID
-     * @return bool True if enrolled, false otherwise
+     * @return bool True if enrolled (pending/approved/declined), false otherwise
      */
     public function isAlreadyEnrolled($user_id, $course_id)
     {
         // Use student_id as that's what exists in the database table
+        // Check for any enrollment status (pending, approved, declined, enrolled)
         $enrollment = $this->where('student_id', $user_id)
                            ->where('course_id', $course_id)
                            ->first();

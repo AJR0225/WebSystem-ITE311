@@ -702,6 +702,244 @@
                 font-size: 1rem;
             }
         }
+
+        /* Admin Courses Management Styles */
+        .table-container {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            padding: 20px;
+            overflow-x: auto;
+        }
+
+        .data-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .data-table thead {
+            background: rgba(255, 255, 255, 0.05);
+        }
+
+        .data-table th {
+            color: #ffffff;
+            font-weight: 600;
+            padding: 15px;
+            text-align: left;
+            border-bottom: 2px solid rgba(255, 255, 255, 0.1);
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .data-table td {
+            color: #e0e0e0;
+            padding: 15px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+            font-size: 0.95rem;
+        }
+
+        .data-table tbody tr:hover {
+            background: rgba(255, 255, 255, 0.03);
+        }
+
+        .description-cell {
+            max-width: 300px;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+
+        .instructor-info {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            color: #e0e0e0;
+        }
+
+        .status-badge {
+            display: inline-block;
+            padding: 6px 12px;
+            border-radius: 6px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .status-badge.status-published {
+            background: rgba(76, 175, 80, 0.2);
+            color: #4caf50;
+            border: 1px solid rgba(76, 175, 80, 0.3);
+        }
+
+        .status-badge.status-draft {
+            background: rgba(158, 158, 158, 0.2);
+            color: #9e9e9e;
+            border: 1px solid rgba(158, 158, 158, 0.3);
+        }
+
+        .status-badge.status-archived {
+            background: rgba(244, 67, 54, 0.2);
+            color: #f44336;
+            border: 1px solid rgba(244, 67, 54, 0.3);
+        }
+
+        .text-center {
+            text-align: center;
+        }
+
+        .text-muted {
+            color: #888888;
+        }
+
+        .text-warning {
+            color: #ff9800;
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgba(0, 0, 0, 0.8);
+        }
+
+        .modal-content {
+            background: linear-gradient(145deg, #0a0a0a 0%, #1a1a1a 100%);
+            margin: 5% auto;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            width: 90%;
+            max-width: 600px;
+            max-height: 90vh;
+            overflow-y: auto;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.8);
+        }
+
+        .modal-small {
+            max-width: 500px;
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px 30px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .modal-header h2 {
+            color: #ffffff;
+            font-size: 1.5rem;
+            font-weight: 600;
+            margin: 0;
+        }
+
+        .close {
+            color: #aaaaaa;
+            font-size: 28px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: color 0.3s ease;
+        }
+
+        .close:hover,
+        .close:focus {
+            color: #ffffff;
+        }
+
+        .modal-body {
+            padding: 20px 30px;
+            color: #e0e0e0;
+        }
+
+        .modal-footer {
+            display: flex;
+            justify-content: flex-end;
+            gap: 10px;
+            padding: 20px 30px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            color: #ffffff;
+            font-weight: 600;
+            margin-bottom: 8px;
+            font-size: 0.95rem;
+        }
+
+        .required {
+            color: #ff4444;
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 12px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 8px;
+            color: #ffffff;
+            font-size: 0.95rem;
+            transition: all 0.3s ease;
+        }
+
+        .form-control:focus {
+            outline: none;
+            border-color: rgba(255, 102, 0, 0.5);
+            box-shadow: 0 0 0 3px rgba(255, 102, 0, 0.1);
+        }
+
+        .form-control::placeholder {
+            color: #888888;
+        }
+
+        .error-message {
+            color: #f44336;
+            font-size: 0.85rem;
+            margin-top: 5px;
+            display: block;
+        }
+
+        .btn-cancel {
+            background: rgba(158, 158, 158, 0.2);
+            color: #9e9e9e;
+            border: 1px solid rgba(158, 158, 158, 0.3);
+            padding: 10px 20px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+
+        .btn-cancel:hover {
+            background: rgba(158, 158, 158, 0.3);
+        }
+
+        .btn-submit {
+            background: linear-gradient(135deg, #ff6600 0%, #e55a00 100%);
+            color: #ffffff;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+
+        .btn-submit:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(255, 102, 0, 0.4);
+        }
     </style>
     
     <script>

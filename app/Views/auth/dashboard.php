@@ -84,10 +84,23 @@ if ($userRole === 'teacher') {
                     <h3>My Courses</h3>
                     <div class="data-list">
                         <?php foreach ($db_data['my_courses'] as $course): ?>
-                            <div class="data-item">
-                                <div class="data-item-title"><?= esc($course['title']) ?></div>
+                            <div class="data-item" style="cursor: pointer;" onclick="window.location.href='<?= base_url('instructor/course/' . $course['id']) ?>'">
+                                <div class="data-item-title">
+                                    <i class="bi bi-book"></i> <?= esc($course['title']) ?>
+                                </div>
                                 <div class="data-item-detail"><?= esc(substr($course['description'] ?? '', 0, 100)) ?>...</div>
                                 <div class="data-item-meta">
+                                    <?php if (!empty($course['semester'])): ?>
+                                        <i class="bi bi-calendar-event"></i> <?= esc($course['semester']) ?> | 
+                                    <?php endif; ?>
+                                    <?php if (!empty($course['academic_year'])): ?>
+                                        <i class="bi bi-calendar"></i> <?= esc($course['academic_year']) ?> | 
+                                    <?php endif; ?>
+                                    <?php if (!empty($course['schedule_days']) && !empty($course['start_time']) && !empty($course['end_time'])): ?>
+                                        <br>
+                                        <i class="bi bi-calendar-week"></i> <?= esc($course['schedule_days']) ?> | 
+                                        <i class="bi bi-clock"></i> <?= esc(date('g:i A', strtotime($course['start_time']))) ?> - <?= esc(date('g:i A', strtotime($course['end_time']))) ?> | 
+                                    <?php endif; ?>
                                     Status: <?= esc(ucfirst($course['status'] ?? 'draft')) ?> | 
                                     Created: <?= esc(date('M d, Y', strtotime($course['created_at'] ?? 'now'))) ?>
                                 </div>
@@ -181,11 +194,35 @@ if ($userRole === 'teacher') {
                                     </div>
                                     <div class="mt-3 pt-3" style="border-top: 1px solid rgba(255, 102, 0, 0.2);">
                                         <small class="text-muted" style="color: #888888;">
-                                            <i class="bi bi-calendar-check"></i> Enrolled: <?= esc(date('M d, Y', strtotime($enrollment['enrollment_date'] ?? 'now'))) ?> | 
-                                            <span class="badge" style="background: rgba(255, 102, 0, 0.3); color: #ff6600; padding: 4px 8px; border-radius: 4px;">
-                                                <?= esc(ucfirst($enrollment['status'] ?? 'enrolled')) ?>
-                                            </span>
+                                            <i class="bi bi-calendar-check"></i> Requested: <?= esc(date('M d, Y', strtotime($enrollment['enrollment_date'] ?? 'now'))) ?> | 
+                                            <?php 
+                                            $enrollmentStatus = strtolower($enrollment['status'] ?? 'pending');
+                                            if ($enrollmentStatus === 'pending'): 
+                                            ?>
+                                                <span class="badge" style="background: rgba(255, 204, 0, 0.3); color: #ffcc00; padding: 4px 8px; border-radius: 4px;">
+                                                    <i class="bi bi-hourglass-split"></i> Pending Approval
+                                                </span>
+                                            <?php elseif ($enrollmentStatus === 'approved' || $enrollmentStatus === 'enrolled'): ?>
+                                                <span class="badge" style="background: rgba(76, 175, 80, 0.3); color: #4caf50; padding: 4px 8px; border-radius: 4px;">
+                                                    <i class="bi bi-check-circle"></i> Approved
+                                                </span>
+                                            <?php elseif ($enrollmentStatus === 'declined'): ?>
+                                                <span class="badge" style="background: rgba(244, 67, 54, 0.3); color: #f44336; padding: 4px 8px; border-radius: 4px;">
+                                                    <i class="bi bi-x-circle"></i> Declined
+                                                </span>
+                                            <?php else: ?>
+                                                <span class="badge" style="background: rgba(255, 102, 0, 0.3); color: #ff6600; padding: 4px 8px; border-radius: 4px;">
+                                                    <?= esc(ucfirst($enrollment['status'] ?? 'pending')) ?>
+                                                </span>
+                                            <?php endif; ?>
                                         </small>
+                                        <?php if ($enrollmentStatus === 'declined' && !empty($enrollment['decline_reason'])): ?>
+                                            <div class="mt-2" style="padding: 10px; background: rgba(244, 67, 54, 0.1); border-left: 3px solid #f44336; border-radius: 4px;">
+                                                <small style="color: #f44336;">
+                                                    <i class="bi bi-exclamation-triangle"></i> <strong>Reason:</strong> <?= esc($enrollment['decline_reason']) ?>
+                                                </small>
+                                            </div>
+                                        <?php endif; ?>
                                     </div>
                                 </div>
                             <?php endforeach; ?>
@@ -310,9 +347,9 @@ $(document).ready(function() {
                 </div>
                 <div class="mt-3 pt-3" style="border-top: 1px solid rgba(255, 102, 0, 0.2);">
                     <small class="text-muted" style="color: #888888;">
-                        <i class="bi bi-calendar-check"></i> Enrolled: ${formattedDate} | 
-                        <span class="badge" style="background: rgba(255, 102, 0, 0.3); color: #ff6600; padding: 4px 8px; border-radius: 4px;">
-                            ${courseData.status || 'Enrolled'}
+                        <i class="bi bi-calendar-check"></i> Requested: ${formattedDate} | 
+                        <span class="badge" style="background: rgba(255, 204, 0, 0.3); color: #ffcc00; padding: 4px 8px; border-radius: 4px;">
+                            <i class="bi bi-hourglass-split"></i> Pending Approval
                         </span>
                     </small>
                 </div>
