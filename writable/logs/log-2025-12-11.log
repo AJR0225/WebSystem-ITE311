@@ -34,3 +34,1121 @@ in SYSTEMPATH\Exceptions\FrameworkException.php on line 39.
  7 SYSTEMPATH\Boot.php(363): CodeIgniter\CodeIgniter->run()
  8 SYSTEMPATH\Boot.php(68): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
  9 FCPATH\index.php(59): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+ERROR - 2025-12-11 15:26:33 --> mysqli_sql_exception: Table 'enrollments' already exists in C:\xampp\htdocs\ITE311-ROQUERO\system\Database\MySQLi\Connection.php:327
+Stack trace:
+#0 C:\xampp\htdocs\ITE311-ROQUERO\system\Database\MySQLi\Connection.php(327): mysqli->query('CREATE TABLE `e...', 0)
+#1 C:\xampp\htdocs\ITE311-ROQUERO\system\Database\BaseConnection.php(729): CodeIgniter\Database\MySQLi\Connection->execute('CREATE TABLE `e...')
+#2 C:\xampp\htdocs\ITE311-ROQUERO\system\Database\BaseConnection.php(646): CodeIgniter\Database\BaseConnection->simpleQuery('CREATE TABLE `e...')
+#3 C:\xampp\htdocs\ITE311-ROQUERO\system\Database\Forge.php(570): CodeIgniter\Database\BaseConnection->query('CREATE TABLE `e...')
+#4 C:\xampp\htdocs\ITE311-ROQUERO\app\Database\Migrations\2025-12-11-152558_CreateEnrollmentsTable.php(50): CodeIgniter\Database\Forge->createTable('enrollments')
+#5 C:\xampp\htdocs\ITE311-ROQUERO\system\Database\MigrationRunner.php(876): App\Database\Migrations\CreateEnrollmentsTable->up()
+#6 C:\xampp\htdocs\ITE311-ROQUERO\system\Database\MigrationRunner.php(182): CodeIgniter\Database\MigrationRunner->migrate('up', Object(stdClass))
+#7 C:\xampp\htdocs\ITE311-ROQUERO\system\Commands\Database\Migrate.php(85): CodeIgniter\Database\MigrationRunner->latest(NULL)
+#8 C:\xampp\htdocs\ITE311-ROQUERO\system\CLI\Commands.php(74): CodeIgniter\Commands\Database\Migrate->run(Array)
+#9 C:\xampp\htdocs\ITE311-ROQUERO\system\CLI\Console.php(47): CodeIgniter\CLI\Commands->run('migrate', Array)
+#10 C:\xampp\htdocs\ITE311-ROQUERO\system\Boot.php(388): CodeIgniter\CLI\Console->run()
+#11 C:\xampp\htdocs\ITE311-ROQUERO\system\Boot.php(133): CodeIgniter\Boot::runCommand(Object(CodeIgniter\CLI\Console))
+#12 C:\xampp\htdocs\ITE311-ROQUERO\spark(87): CodeIgniter\Boot::bootSpark(Object(Config\Paths))
+#13 {main}
+ERROR - 2025-12-11 15:44:42 --> mysqli_sql_exception: Unknown column 'enrollments.user_id' in 'where clause' in C:\xampp\htdocs\ITE311-ROQUERO\system\Database\MySQLi\Connection.php:327
+Stack trace:
+#0 C:\xampp\htdocs\ITE311-ROQUERO\system\Database\MySQLi\Connection.php(327): mysqli->query('SELECT `enrollm...', 0)
+#1 C:\xampp\htdocs\ITE311-ROQUERO\system\Database\BaseConnection.php(729): CodeIgniter\Database\MySQLi\Connection->execute('SELECT `enrollm...')
+#2 C:\xampp\htdocs\ITE311-ROQUERO\system\Database\BaseConnection.php(646): CodeIgniter\Database\BaseConnection->simpleQuery('SELECT `enrollm...')
+#3 C:\xampp\htdocs\ITE311-ROQUERO\system\Database\BaseBuilder.php(1649): CodeIgniter\Database\BaseConnection->query('SELECT `enrollm...', Array, false)
+#4 C:\xampp\htdocs\ITE311-ROQUERO\system\Model.php(286): CodeIgniter\Database\BaseBuilder->get()
+#5 C:\xampp\htdocs\ITE311-ROQUERO\system\BaseModel.php(677): CodeIgniter\Model->doFindAll(0, 0)
+#6 C:\xampp\htdocs\ITE311-ROQUERO\app\Models\EnrollmentModel.php(76): CodeIgniter\BaseModel->findAll()
+#7 C:\xampp\htdocs\ITE311-ROQUERO\app\Controllers\Auth.php(243): App\Models\EnrollmentModel->getUserEnrollments('1')
+#8 C:\xampp\htdocs\ITE311-ROQUERO\system\CodeIgniter.php(933): App\Controllers\Auth->dashboard()
+#9 C:\xampp\htdocs\ITE311-ROQUERO\system\CodeIgniter.php(507): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Auth))
+#10 C:\xampp\htdocs\ITE311-ROQUERO\system\CodeIgniter.php(354): CodeIgniter\CodeIgniter->handleRequest(NULL, Object(Config\Cache), false)
+#11 C:\xampp\htdocs\ITE311-ROQUERO\system\Boot.php(363): CodeIgniter\CodeIgniter->run()
+#12 C:\xampp\htdocs\ITE311-ROQUERO\system\Boot.php(68): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+#13 C:\xampp\htdocs\ITE311-ROQUERO\public\index.php(59): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+#14 {main}
+CRITICAL - 2025-12-11 15:44:42 --> CodeIgniter\Database\Exceptions\DatabaseException: Unknown column 'enrollments.user_id' in 'where clause'
+[Method: GET, Route: dashboard]
+in SYSTEMPATH\Database\BaseConnection.php on line 684.
+ 1 SYSTEMPATH\Database\BaseBuilder.php(1649): CodeIgniter\Database\BaseConnection->query('SELECT `enrollments`.*, `courses`.`title`, `courses`.`description`, `courses`.`instructor_id`, `courses`.`status` as `course_status`, `users`.`name` as `instructor_name`
+FROM `enrollments`
+LEFT JOIN `courses` ON `courses`.`id` = `enrollments`.`course_id`
+LEFT JOIN `users` ON `users`.`id` = `courses`.`instructor_id`
+WHERE `enrollments`.`user_id` = :enrollments.user_id:
+AND `enrollments`.`status` = :enrollments.status:
+ORDER BY `enrollments`.`enrollment_date` DESC', [...], false)
+ 2 SYSTEMPATH\Model.php(286): CodeIgniter\Database\BaseBuilder->get()
+ 3 SYSTEMPATH\BaseModel.php(677): CodeIgniter\Model->doFindAll(0, 0)
+ 4 APPPATH\Models\EnrollmentModel.php(76): CodeIgniter\BaseModel->findAll()
+ 5 APPPATH\Controllers\Auth.php(243): App\Models\EnrollmentModel->getUserEnrollments('1')
+ 6 SYSTEMPATH\CodeIgniter.php(933): App\Controllers\Auth->dashboard()
+ 7 SYSTEMPATH\CodeIgniter.php(507): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Auth))
+ 8 SYSTEMPATH\CodeIgniter.php(354): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 9 SYSTEMPATH\Boot.php(363): CodeIgniter\CodeIgniter->run()
+10 SYSTEMPATH\Boot.php(68): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+11 FCPATH\index.php(59): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+CRITICAL - 2025-12-11 15:44:42 --> [Caused by] CodeIgniter\Database\Exceptions\DatabaseException: Unknown column 'enrollments.user_id' in 'where clause'
+in SYSTEMPATH\Database\MySQLi\Connection.php on line 332.
+ 1 SYSTEMPATH\Database\BaseConnection.php(729): CodeIgniter\Database\MySQLi\Connection->execute('SELECT `enrollments`.*, `courses`.`title`, `courses`.`description`, `courses`.`instructor_id`, `courses`.`status` as `course_status`, `users`.`name` as `instructor_name`
+FROM `enrollments`
+LEFT JOIN `courses` ON `courses`.`id` = `enrollments`.`course_id`
+LEFT JOIN `users` ON `users`.`id` = `courses`.`instructor_id`
+WHERE `enrollments`.`user_id` = \'1\'
+AND `enrollments`.`status` = \'enrolled\'
+ORDER BY `enrollments`.`enrollment_date` DESC')
+ 2 SYSTEMPATH\Database\BaseConnection.php(646): CodeIgniter\Database\BaseConnection->simpleQuery('SELECT `enrollments`.*, `courses`.`title`, `courses`.`description`, `courses`.`instructor_id`, `courses`.`status` as `course_status`, `users`.`name` as `instructor_name`
+FROM `enrollments`
+LEFT JOIN `courses` ON `courses`.`id` = `enrollments`.`course_id`
+LEFT JOIN `users` ON `users`.`id` = `courses`.`instructor_id`
+WHERE `enrollments`.`user_id` = \'1\'
+AND `enrollments`.`status` = \'enrolled\'
+ORDER BY `enrollments`.`enrollment_date` DESC')
+ 3 SYSTEMPATH\Database\BaseBuilder.php(1649): CodeIgniter\Database\BaseConnection->query('SELECT `enrollments`.*, `courses`.`title`, `courses`.`description`, `courses`.`instructor_id`, `courses`.`status` as `course_status`, `users`.`name` as `instructor_name`
+FROM `enrollments`
+LEFT JOIN `courses` ON `courses`.`id` = `enrollments`.`course_id`
+LEFT JOIN `users` ON `users`.`id` = `courses`.`instructor_id`
+WHERE `enrollments`.`user_id` = :enrollments.user_id:
+AND `enrollments`.`status` = :enrollments.status:
+ORDER BY `enrollments`.`enrollment_date` DESC', [...], false)
+ 4 SYSTEMPATH\Model.php(286): CodeIgniter\Database\BaseBuilder->get()
+ 5 SYSTEMPATH\BaseModel.php(677): CodeIgniter\Model->doFindAll(0, 0)
+ 6 APPPATH\Models\EnrollmentModel.php(76): CodeIgniter\BaseModel->findAll()
+ 7 APPPATH\Controllers\Auth.php(243): App\Models\EnrollmentModel->getUserEnrollments('1')
+ 8 SYSTEMPATH\CodeIgniter.php(933): App\Controllers\Auth->dashboard()
+ 9 SYSTEMPATH\CodeIgniter.php(507): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Auth))
+10 SYSTEMPATH\CodeIgniter.php(354): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+11 SYSTEMPATH\Boot.php(363): CodeIgniter\CodeIgniter->run()
+12 SYSTEMPATH\Boot.php(68): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+13 FCPATH\index.php(59): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+CRITICAL - 2025-12-11 15:44:42 --> [Caused by] mysqli_sql_exception: Unknown column 'enrollments.user_id' in 'where clause'
+in SYSTEMPATH\Database\MySQLi\Connection.php on line 327.
+ 1 SYSTEMPATH\Database\MySQLi\Connection.php(327): mysqli->query('SELECT `enrollments`.*, `courses`.`title`, `courses`.`description`, `courses`.`instructor_id`, `courses`.`status` as `course_status`, `users`.`name` as `instructor_name`
+FROM `enrollments`
+LEFT JOIN `courses` ON `courses`.`id` = `enrollments`.`course_id`
+LEFT JOIN `users` ON `users`.`id` = `courses`.`instructor_id`
+WHERE `enrollments`.`user_id` = \'1\'
+AND `enrollments`.`status` = \'enrolled\'
+ORDER BY `enrollments`.`enrollment_date` DESC', 0)
+ 2 SYSTEMPATH\Database\BaseConnection.php(729): CodeIgniter\Database\MySQLi\Connection->execute('SELECT `enrollments`.*, `courses`.`title`, `courses`.`description`, `courses`.`instructor_id`, `courses`.`status` as `course_status`, `users`.`name` as `instructor_name`
+FROM `enrollments`
+LEFT JOIN `courses` ON `courses`.`id` = `enrollments`.`course_id`
+LEFT JOIN `users` ON `users`.`id` = `courses`.`instructor_id`
+WHERE `enrollments`.`user_id` = \'1\'
+AND `enrollments`.`status` = \'enrolled\'
+ORDER BY `enrollments`.`enrollment_date` DESC')
+ 3 SYSTEMPATH\Database\BaseConnection.php(646): CodeIgniter\Database\BaseConnection->simpleQuery('SELECT `enrollments`.*, `courses`.`title`, `courses`.`description`, `courses`.`instructor_id`, `courses`.`status` as `course_status`, `users`.`name` as `instructor_name`
+FROM `enrollments`
+LEFT JOIN `courses` ON `courses`.`id` = `enrollments`.`course_id`
+LEFT JOIN `users` ON `users`.`id` = `courses`.`instructor_id`
+WHERE `enrollments`.`user_id` = \'1\'
+AND `enrollments`.`status` = \'enrolled\'
+ORDER BY `enrollments`.`enrollment_date` DESC')
+ 4 SYSTEMPATH\Database\BaseBuilder.php(1649): CodeIgniter\Database\BaseConnection->query('SELECT `enrollments`.*, `courses`.`title`, `courses`.`description`, `courses`.`instructor_id`, `courses`.`status` as `course_status`, `users`.`name` as `instructor_name`
+FROM `enrollments`
+LEFT JOIN `courses` ON `courses`.`id` = `enrollments`.`course_id`
+LEFT JOIN `users` ON `users`.`id` = `courses`.`instructor_id`
+WHERE `enrollments`.`user_id` = :enrollments.user_id:
+AND `enrollments`.`status` = :enrollments.status:
+ORDER BY `enrollments`.`enrollment_date` DESC', [...], false)
+ 5 SYSTEMPATH\Model.php(286): CodeIgniter\Database\BaseBuilder->get()
+ 6 SYSTEMPATH\BaseModel.php(677): CodeIgniter\Model->doFindAll(0, 0)
+ 7 APPPATH\Models\EnrollmentModel.php(76): CodeIgniter\BaseModel->findAll()
+ 8 APPPATH\Controllers\Auth.php(243): App\Models\EnrollmentModel->getUserEnrollments('1')
+ 9 SYSTEMPATH\CodeIgniter.php(933): App\Controllers\Auth->dashboard()
+10 SYSTEMPATH\CodeIgniter.php(507): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Auth))
+11 SYSTEMPATH\CodeIgniter.php(354): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+12 SYSTEMPATH\Boot.php(363): CodeIgniter\CodeIgniter->run()
+13 SYSTEMPATH\Boot.php(68): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+14 FCPATH\index.php(59): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+ERROR - 2025-12-11 15:46:21 --> mysqli_sql_exception: Unknown column 'enrollments.user_id' in 'where clause' in C:\xampp\htdocs\ITE311-ROQUERO\system\Database\MySQLi\Connection.php:327
+Stack trace:
+#0 C:\xampp\htdocs\ITE311-ROQUERO\system\Database\MySQLi\Connection.php(327): mysqli->query('SELECT `enrollm...', 0)
+#1 C:\xampp\htdocs\ITE311-ROQUERO\system\Database\BaseConnection.php(729): CodeIgniter\Database\MySQLi\Connection->execute('SELECT `enrollm...')
+#2 C:\xampp\htdocs\ITE311-ROQUERO\system\Database\BaseConnection.php(646): CodeIgniter\Database\BaseConnection->simpleQuery('SELECT `enrollm...')
+#3 C:\xampp\htdocs\ITE311-ROQUERO\system\Database\BaseBuilder.php(1649): CodeIgniter\Database\BaseConnection->query('SELECT `enrollm...', Array, false)
+#4 C:\xampp\htdocs\ITE311-ROQUERO\system\Model.php(286): CodeIgniter\Database\BaseBuilder->get()
+#5 C:\xampp\htdocs\ITE311-ROQUERO\system\BaseModel.php(677): CodeIgniter\Model->doFindAll(0, 0)
+#6 C:\xampp\htdocs\ITE311-ROQUERO\app\Models\EnrollmentModel.php(76): CodeIgniter\BaseModel->findAll()
+#7 C:\xampp\htdocs\ITE311-ROQUERO\app\Controllers\Auth.php(243): App\Models\EnrollmentModel->getUserEnrollments('1')
+#8 C:\xampp\htdocs\ITE311-ROQUERO\system\CodeIgniter.php(933): App\Controllers\Auth->dashboard()
+#9 C:\xampp\htdocs\ITE311-ROQUERO\system\CodeIgniter.php(507): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Auth))
+#10 C:\xampp\htdocs\ITE311-ROQUERO\system\CodeIgniter.php(354): CodeIgniter\CodeIgniter->handleRequest(NULL, Object(Config\Cache), false)
+#11 C:\xampp\htdocs\ITE311-ROQUERO\system\Boot.php(363): CodeIgniter\CodeIgniter->run()
+#12 C:\xampp\htdocs\ITE311-ROQUERO\system\Boot.php(68): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+#13 C:\xampp\htdocs\ITE311-ROQUERO\public\index.php(59): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+#14 {main}
+CRITICAL - 2025-12-11 15:46:21 --> CodeIgniter\Database\Exceptions\DatabaseException: Unknown column 'enrollments.user_id' in 'where clause'
+[Method: GET, Route: dashboard]
+in SYSTEMPATH\Database\BaseConnection.php on line 684.
+ 1 SYSTEMPATH\Database\BaseBuilder.php(1649): CodeIgniter\Database\BaseConnection->query('SELECT `enrollments`.*, `courses`.`title`, `courses`.`description`, `courses`.`instructor_id`, `courses`.`status` as `course_status`, `users`.`name` as `instructor_name`
+FROM `enrollments`
+LEFT JOIN `courses` ON `courses`.`id` = `enrollments`.`course_id`
+LEFT JOIN `users` ON `users`.`id` = `courses`.`instructor_id`
+WHERE `enrollments`.`user_id` = :enrollments.user_id:
+AND `enrollments`.`status` = :enrollments.status:
+ORDER BY `enrollments`.`enrollment_date` DESC', [...], false)
+ 2 SYSTEMPATH\Model.php(286): CodeIgniter\Database\BaseBuilder->get()
+ 3 SYSTEMPATH\BaseModel.php(677): CodeIgniter\Model->doFindAll(0, 0)
+ 4 APPPATH\Models\EnrollmentModel.php(76): CodeIgniter\BaseModel->findAll()
+ 5 APPPATH\Controllers\Auth.php(243): App\Models\EnrollmentModel->getUserEnrollments('1')
+ 6 SYSTEMPATH\CodeIgniter.php(933): App\Controllers\Auth->dashboard()
+ 7 SYSTEMPATH\CodeIgniter.php(507): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Auth))
+ 8 SYSTEMPATH\CodeIgniter.php(354): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 9 SYSTEMPATH\Boot.php(363): CodeIgniter\CodeIgniter->run()
+10 SYSTEMPATH\Boot.php(68): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+11 FCPATH\index.php(59): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+CRITICAL - 2025-12-11 15:46:21 --> [Caused by] CodeIgniter\Database\Exceptions\DatabaseException: Unknown column 'enrollments.user_id' in 'where clause'
+in SYSTEMPATH\Database\MySQLi\Connection.php on line 332.
+ 1 SYSTEMPATH\Database\BaseConnection.php(729): CodeIgniter\Database\MySQLi\Connection->execute('SELECT `enrollments`.*, `courses`.`title`, `courses`.`description`, `courses`.`instructor_id`, `courses`.`status` as `course_status`, `users`.`name` as `instructor_name`
+FROM `enrollments`
+LEFT JOIN `courses` ON `courses`.`id` = `enrollments`.`course_id`
+LEFT JOIN `users` ON `users`.`id` = `courses`.`instructor_id`
+WHERE `enrollments`.`user_id` = \'1\'
+AND `enrollments`.`status` = \'enrolled\'
+ORDER BY `enrollments`.`enrollment_date` DESC')
+ 2 SYSTEMPATH\Database\BaseConnection.php(646): CodeIgniter\Database\BaseConnection->simpleQuery('SELECT `enrollments`.*, `courses`.`title`, `courses`.`description`, `courses`.`instructor_id`, `courses`.`status` as `course_status`, `users`.`name` as `instructor_name`
+FROM `enrollments`
+LEFT JOIN `courses` ON `courses`.`id` = `enrollments`.`course_id`
+LEFT JOIN `users` ON `users`.`id` = `courses`.`instructor_id`
+WHERE `enrollments`.`user_id` = \'1\'
+AND `enrollments`.`status` = \'enrolled\'
+ORDER BY `enrollments`.`enrollment_date` DESC')
+ 3 SYSTEMPATH\Database\BaseBuilder.php(1649): CodeIgniter\Database\BaseConnection->query('SELECT `enrollments`.*, `courses`.`title`, `courses`.`description`, `courses`.`instructor_id`, `courses`.`status` as `course_status`, `users`.`name` as `instructor_name`
+FROM `enrollments`
+LEFT JOIN `courses` ON `courses`.`id` = `enrollments`.`course_id`
+LEFT JOIN `users` ON `users`.`id` = `courses`.`instructor_id`
+WHERE `enrollments`.`user_id` = :enrollments.user_id:
+AND `enrollments`.`status` = :enrollments.status:
+ORDER BY `enrollments`.`enrollment_date` DESC', [...], false)
+ 4 SYSTEMPATH\Model.php(286): CodeIgniter\Database\BaseBuilder->get()
+ 5 SYSTEMPATH\BaseModel.php(677): CodeIgniter\Model->doFindAll(0, 0)
+ 6 APPPATH\Models\EnrollmentModel.php(76): CodeIgniter\BaseModel->findAll()
+ 7 APPPATH\Controllers\Auth.php(243): App\Models\EnrollmentModel->getUserEnrollments('1')
+ 8 SYSTEMPATH\CodeIgniter.php(933): App\Controllers\Auth->dashboard()
+ 9 SYSTEMPATH\CodeIgniter.php(507): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Auth))
+10 SYSTEMPATH\CodeIgniter.php(354): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+11 SYSTEMPATH\Boot.php(363): CodeIgniter\CodeIgniter->run()
+12 SYSTEMPATH\Boot.php(68): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+13 FCPATH\index.php(59): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+CRITICAL - 2025-12-11 15:46:21 --> [Caused by] mysqli_sql_exception: Unknown column 'enrollments.user_id' in 'where clause'
+in SYSTEMPATH\Database\MySQLi\Connection.php on line 327.
+ 1 SYSTEMPATH\Database\MySQLi\Connection.php(327): mysqli->query('SELECT `enrollments`.*, `courses`.`title`, `courses`.`description`, `courses`.`instructor_id`, `courses`.`status` as `course_status`, `users`.`name` as `instructor_name`
+FROM `enrollments`
+LEFT JOIN `courses` ON `courses`.`id` = `enrollments`.`course_id`
+LEFT JOIN `users` ON `users`.`id` = `courses`.`instructor_id`
+WHERE `enrollments`.`user_id` = \'1\'
+AND `enrollments`.`status` = \'enrolled\'
+ORDER BY `enrollments`.`enrollment_date` DESC', 0)
+ 2 SYSTEMPATH\Database\BaseConnection.php(729): CodeIgniter\Database\MySQLi\Connection->execute('SELECT `enrollments`.*, `courses`.`title`, `courses`.`description`, `courses`.`instructor_id`, `courses`.`status` as `course_status`, `users`.`name` as `instructor_name`
+FROM `enrollments`
+LEFT JOIN `courses` ON `courses`.`id` = `enrollments`.`course_id`
+LEFT JOIN `users` ON `users`.`id` = `courses`.`instructor_id`
+WHERE `enrollments`.`user_id` = \'1\'
+AND `enrollments`.`status` = \'enrolled\'
+ORDER BY `enrollments`.`enrollment_date` DESC')
+ 3 SYSTEMPATH\Database\BaseConnection.php(646): CodeIgniter\Database\BaseConnection->simpleQuery('SELECT `enrollments`.*, `courses`.`title`, `courses`.`description`, `courses`.`instructor_id`, `courses`.`status` as `course_status`, `users`.`name` as `instructor_name`
+FROM `enrollments`
+LEFT JOIN `courses` ON `courses`.`id` = `enrollments`.`course_id`
+LEFT JOIN `users` ON `users`.`id` = `courses`.`instructor_id`
+WHERE `enrollments`.`user_id` = \'1\'
+AND `enrollments`.`status` = \'enrolled\'
+ORDER BY `enrollments`.`enrollment_date` DESC')
+ 4 SYSTEMPATH\Database\BaseBuilder.php(1649): CodeIgniter\Database\BaseConnection->query('SELECT `enrollments`.*, `courses`.`title`, `courses`.`description`, `courses`.`instructor_id`, `courses`.`status` as `course_status`, `users`.`name` as `instructor_name`
+FROM `enrollments`
+LEFT JOIN `courses` ON `courses`.`id` = `enrollments`.`course_id`
+LEFT JOIN `users` ON `users`.`id` = `courses`.`instructor_id`
+WHERE `enrollments`.`user_id` = :enrollments.user_id:
+AND `enrollments`.`status` = :enrollments.status:
+ORDER BY `enrollments`.`enrollment_date` DESC', [...], false)
+ 5 SYSTEMPATH\Model.php(286): CodeIgniter\Database\BaseBuilder->get()
+ 6 SYSTEMPATH\BaseModel.php(677): CodeIgniter\Model->doFindAll(0, 0)
+ 7 APPPATH\Models\EnrollmentModel.php(76): CodeIgniter\BaseModel->findAll()
+ 8 APPPATH\Controllers\Auth.php(243): App\Models\EnrollmentModel->getUserEnrollments('1')
+ 9 SYSTEMPATH\CodeIgniter.php(933): App\Controllers\Auth->dashboard()
+10 SYSTEMPATH\CodeIgniter.php(507): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Auth))
+11 SYSTEMPATH\CodeIgniter.php(354): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+12 SYSTEMPATH\Boot.php(363): CodeIgniter\CodeIgniter->run()
+13 SYSTEMPATH\Boot.php(68): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+14 FCPATH\index.php(59): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+ERROR - 2025-12-11 15:47:09 --> mysqli_sql_exception: Unknown column 'enrollments.user_id' in 'where clause' in C:\xampp\htdocs\ITE311-ROQUERO\system\Database\MySQLi\Connection.php:327
+Stack trace:
+#0 C:\xampp\htdocs\ITE311-ROQUERO\system\Database\MySQLi\Connection.php(327): mysqli->query('SELECT `enrollm...', 0)
+#1 C:\xampp\htdocs\ITE311-ROQUERO\system\Database\BaseConnection.php(729): CodeIgniter\Database\MySQLi\Connection->execute('SELECT `enrollm...')
+#2 C:\xampp\htdocs\ITE311-ROQUERO\system\Database\BaseConnection.php(646): CodeIgniter\Database\BaseConnection->simpleQuery('SELECT `enrollm...')
+#3 C:\xampp\htdocs\ITE311-ROQUERO\system\Database\BaseBuilder.php(1649): CodeIgniter\Database\BaseConnection->query('SELECT `enrollm...', Array, false)
+#4 C:\xampp\htdocs\ITE311-ROQUERO\system\Model.php(286): CodeIgniter\Database\BaseBuilder->get()
+#5 C:\xampp\htdocs\ITE311-ROQUERO\system\BaseModel.php(677): CodeIgniter\Model->doFindAll(0, 0)
+#6 C:\xampp\htdocs\ITE311-ROQUERO\app\Models\EnrollmentModel.php(76): CodeIgniter\BaseModel->findAll()
+#7 C:\xampp\htdocs\ITE311-ROQUERO\app\Controllers\Auth.php(244): App\Models\EnrollmentModel->getUserEnrollments('1')
+#8 C:\xampp\htdocs\ITE311-ROQUERO\system\CodeIgniter.php(933): App\Controllers\Auth->dashboard()
+#9 C:\xampp\htdocs\ITE311-ROQUERO\system\CodeIgniter.php(507): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Auth))
+#10 C:\xampp\htdocs\ITE311-ROQUERO\system\CodeIgniter.php(354): CodeIgniter\CodeIgniter->handleRequest(NULL, Object(Config\Cache), false)
+#11 C:\xampp\htdocs\ITE311-ROQUERO\system\Boot.php(363): CodeIgniter\CodeIgniter->run()
+#12 C:\xampp\htdocs\ITE311-ROQUERO\system\Boot.php(68): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+#13 C:\xampp\htdocs\ITE311-ROQUERO\public\index.php(59): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+#14 {main}
+CRITICAL - 2025-12-11 15:47:09 --> ParseError: syntax error, unexpected token "endif", expecting end of file
+[Method: GET, Route: dashboard]
+in APPPATH\Views\auth\dashboard.php on line 249.
+ 1 SYSTEMPATH\View\View.php(229): CodeIgniter\View\View->CodeIgniter\View\{closure}()
+ 2 SYSTEMPATH\Common.php(1167): CodeIgniter\View\View->render('auth/dashboard', [], true)
+ 3 APPPATH\Controllers\Auth.php(297): view('auth/dashboard', [...])
+ 4 SYSTEMPATH\CodeIgniter.php(933): App\Controllers\Auth->dashboard()
+ 5 SYSTEMPATH\CodeIgniter.php(507): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Auth))
+ 6 SYSTEMPATH\CodeIgniter.php(354): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 7 SYSTEMPATH\Boot.php(363): CodeIgniter\CodeIgniter->run()
+ 8 SYSTEMPATH\Boot.php(68): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+ 9 FCPATH\index.php(59): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+ERROR - 2025-12-11 15:47:23 --> mysqli_sql_exception: Unknown column 'enrollments.user_id' in 'where clause' in C:\xampp\htdocs\ITE311-ROQUERO\system\Database\MySQLi\Connection.php:327
+Stack trace:
+#0 C:\xampp\htdocs\ITE311-ROQUERO\system\Database\MySQLi\Connection.php(327): mysqli->query('SELECT `enrollm...', 0)
+#1 C:\xampp\htdocs\ITE311-ROQUERO\system\Database\BaseConnection.php(729): CodeIgniter\Database\MySQLi\Connection->execute('SELECT `enrollm...')
+#2 C:\xampp\htdocs\ITE311-ROQUERO\system\Database\BaseConnection.php(646): CodeIgniter\Database\BaseConnection->simpleQuery('SELECT `enrollm...')
+#3 C:\xampp\htdocs\ITE311-ROQUERO\system\Database\BaseBuilder.php(1649): CodeIgniter\Database\BaseConnection->query('SELECT `enrollm...', Array, false)
+#4 C:\xampp\htdocs\ITE311-ROQUERO\system\Model.php(286): CodeIgniter\Database\BaseBuilder->get()
+#5 C:\xampp\htdocs\ITE311-ROQUERO\system\BaseModel.php(677): CodeIgniter\Model->doFindAll(0, 0)
+#6 C:\xampp\htdocs\ITE311-ROQUERO\app\Models\EnrollmentModel.php(76): CodeIgniter\BaseModel->findAll()
+#7 C:\xampp\htdocs\ITE311-ROQUERO\app\Controllers\Auth.php(244): App\Models\EnrollmentModel->getUserEnrollments('1')
+#8 C:\xampp\htdocs\ITE311-ROQUERO\system\CodeIgniter.php(933): App\Controllers\Auth->dashboard()
+#9 C:\xampp\htdocs\ITE311-ROQUERO\system\CodeIgniter.php(507): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Auth))
+#10 C:\xampp\htdocs\ITE311-ROQUERO\system\CodeIgniter.php(354): CodeIgniter\CodeIgniter->handleRequest(NULL, Object(Config\Cache), false)
+#11 C:\xampp\htdocs\ITE311-ROQUERO\system\Boot.php(363): CodeIgniter\CodeIgniter->run()
+#12 C:\xampp\htdocs\ITE311-ROQUERO\system\Boot.php(68): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+#13 C:\xampp\htdocs\ITE311-ROQUERO\public\index.php(59): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+#14 {main}
+ERROR - 2025-12-11 15:47:31 --> mysqli_sql_exception: Unknown column 'enrollments.user_id' in 'where clause' in C:\xampp\htdocs\ITE311-ROQUERO\system\Database\MySQLi\Connection.php:327
+Stack trace:
+#0 C:\xampp\htdocs\ITE311-ROQUERO\system\Database\MySQLi\Connection.php(327): mysqli->query('SELECT `enrollm...', 0)
+#1 C:\xampp\htdocs\ITE311-ROQUERO\system\Database\BaseConnection.php(729): CodeIgniter\Database\MySQLi\Connection->execute('SELECT `enrollm...')
+#2 C:\xampp\htdocs\ITE311-ROQUERO\system\Database\BaseConnection.php(646): CodeIgniter\Database\BaseConnection->simpleQuery('SELECT `enrollm...')
+#3 C:\xampp\htdocs\ITE311-ROQUERO\system\Database\BaseBuilder.php(1649): CodeIgniter\Database\BaseConnection->query('SELECT `enrollm...', Array, false)
+#4 C:\xampp\htdocs\ITE311-ROQUERO\system\Model.php(286): CodeIgniter\Database\BaseBuilder->get()
+#5 C:\xampp\htdocs\ITE311-ROQUERO\system\BaseModel.php(677): CodeIgniter\Model->doFindAll(0, 0)
+#6 C:\xampp\htdocs\ITE311-ROQUERO\app\Models\EnrollmentModel.php(76): CodeIgniter\BaseModel->findAll()
+#7 C:\xampp\htdocs\ITE311-ROQUERO\app\Controllers\Auth.php(244): App\Models\EnrollmentModel->getUserEnrollments('1')
+#8 C:\xampp\htdocs\ITE311-ROQUERO\system\CodeIgniter.php(933): App\Controllers\Auth->dashboard()
+#9 C:\xampp\htdocs\ITE311-ROQUERO\system\CodeIgniter.php(507): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Auth))
+#10 C:\xampp\htdocs\ITE311-ROQUERO\system\CodeIgniter.php(354): CodeIgniter\CodeIgniter->handleRequest(NULL, Object(Config\Cache), false)
+#11 C:\xampp\htdocs\ITE311-ROQUERO\system\Boot.php(363): CodeIgniter\CodeIgniter->run()
+#12 C:\xampp\htdocs\ITE311-ROQUERO\system\Boot.php(68): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+#13 C:\xampp\htdocs\ITE311-ROQUERO\public\index.php(59): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+#14 {main}
+ERROR - 2025-12-11 15:47:33 --> mysqli_sql_exception: Unknown column 'enrollments.user_id' in 'where clause' in C:\xampp\htdocs\ITE311-ROQUERO\system\Database\MySQLi\Connection.php:327
+Stack trace:
+#0 C:\xampp\htdocs\ITE311-ROQUERO\system\Database\MySQLi\Connection.php(327): mysqli->query('SELECT `enrollm...', 0)
+#1 C:\xampp\htdocs\ITE311-ROQUERO\system\Database\BaseConnection.php(729): CodeIgniter\Database\MySQLi\Connection->execute('SELECT `enrollm...')
+#2 C:\xampp\htdocs\ITE311-ROQUERO\system\Database\BaseConnection.php(646): CodeIgniter\Database\BaseConnection->simpleQuery('SELECT `enrollm...')
+#3 C:\xampp\htdocs\ITE311-ROQUERO\system\Database\BaseBuilder.php(1649): CodeIgniter\Database\BaseConnection->query('SELECT `enrollm...', Array, false)
+#4 C:\xampp\htdocs\ITE311-ROQUERO\system\Model.php(286): CodeIgniter\Database\BaseBuilder->get()
+#5 C:\xampp\htdocs\ITE311-ROQUERO\system\BaseModel.php(677): CodeIgniter\Model->doFindAll(0, 0)
+#6 C:\xampp\htdocs\ITE311-ROQUERO\app\Models\EnrollmentModel.php(76): CodeIgniter\BaseModel->findAll()
+#7 C:\xampp\htdocs\ITE311-ROQUERO\app\Controllers\Auth.php(244): App\Models\EnrollmentModel->getUserEnrollments('1')
+#8 C:\xampp\htdocs\ITE311-ROQUERO\system\CodeIgniter.php(933): App\Controllers\Auth->dashboard()
+#9 C:\xampp\htdocs\ITE311-ROQUERO\system\CodeIgniter.php(507): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Auth))
+#10 C:\xampp\htdocs\ITE311-ROQUERO\system\CodeIgniter.php(354): CodeIgniter\CodeIgniter->handleRequest(NULL, Object(Config\Cache), false)
+#11 C:\xampp\htdocs\ITE311-ROQUERO\system\Boot.php(363): CodeIgniter\CodeIgniter->run()
+#12 C:\xampp\htdocs\ITE311-ROQUERO\system\Boot.php(68): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+#13 C:\xampp\htdocs\ITE311-ROQUERO\public\index.php(59): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+#14 {main}
+ERROR - 2025-12-11 15:47:37 --> mysqli_sql_exception: Unknown column 'enrollments.user_id' in 'where clause' in C:\xampp\htdocs\ITE311-ROQUERO\system\Database\MySQLi\Connection.php:327
+Stack trace:
+#0 C:\xampp\htdocs\ITE311-ROQUERO\system\Database\MySQLi\Connection.php(327): mysqli->query('SELECT `enrollm...', 0)
+#1 C:\xampp\htdocs\ITE311-ROQUERO\system\Database\BaseConnection.php(729): CodeIgniter\Database\MySQLi\Connection->execute('SELECT `enrollm...')
+#2 C:\xampp\htdocs\ITE311-ROQUERO\system\Database\BaseConnection.php(646): CodeIgniter\Database\BaseConnection->simpleQuery('SELECT `enrollm...')
+#3 C:\xampp\htdocs\ITE311-ROQUERO\system\Database\BaseBuilder.php(1649): CodeIgniter\Database\BaseConnection->query('SELECT `enrollm...', Array, false)
+#4 C:\xampp\htdocs\ITE311-ROQUERO\system\Model.php(286): CodeIgniter\Database\BaseBuilder->get()
+#5 C:\xampp\htdocs\ITE311-ROQUERO\system\BaseModel.php(677): CodeIgniter\Model->doFindAll(0, 0)
+#6 C:\xampp\htdocs\ITE311-ROQUERO\app\Models\EnrollmentModel.php(76): CodeIgniter\BaseModel->findAll()
+#7 C:\xampp\htdocs\ITE311-ROQUERO\app\Controllers\Auth.php(244): App\Models\EnrollmentModel->getUserEnrollments('1')
+#8 C:\xampp\htdocs\ITE311-ROQUERO\system\CodeIgniter.php(933): App\Controllers\Auth->dashboard()
+#9 C:\xampp\htdocs\ITE311-ROQUERO\system\CodeIgniter.php(507): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Auth))
+#10 C:\xampp\htdocs\ITE311-ROQUERO\system\CodeIgniter.php(354): CodeIgniter\CodeIgniter->handleRequest(NULL, Object(Config\Cache), false)
+#11 C:\xampp\htdocs\ITE311-ROQUERO\system\Boot.php(363): CodeIgniter\CodeIgniter->run()
+#12 C:\xampp\htdocs\ITE311-ROQUERO\system\Boot.php(68): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+#13 C:\xampp\htdocs\ITE311-ROQUERO\public\index.php(59): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+#14 {main}
+ERROR - 2025-12-11 15:47:40 --> mysqli_sql_exception: Unknown column 'enrollments.user_id' in 'where clause' in C:\xampp\htdocs\ITE311-ROQUERO\system\Database\MySQLi\Connection.php:327
+Stack trace:
+#0 C:\xampp\htdocs\ITE311-ROQUERO\system\Database\MySQLi\Connection.php(327): mysqli->query('SELECT `enrollm...', 0)
+#1 C:\xampp\htdocs\ITE311-ROQUERO\system\Database\BaseConnection.php(729): CodeIgniter\Database\MySQLi\Connection->execute('SELECT `enrollm...')
+#2 C:\xampp\htdocs\ITE311-ROQUERO\system\Database\BaseConnection.php(646): CodeIgniter\Database\BaseConnection->simpleQuery('SELECT `enrollm...')
+#3 C:\xampp\htdocs\ITE311-ROQUERO\system\Database\BaseBuilder.php(1649): CodeIgniter\Database\BaseConnection->query('SELECT `enrollm...', Array, false)
+#4 C:\xampp\htdocs\ITE311-ROQUERO\system\Model.php(286): CodeIgniter\Database\BaseBuilder->get()
+#5 C:\xampp\htdocs\ITE311-ROQUERO\system\BaseModel.php(677): CodeIgniter\Model->doFindAll(0, 0)
+#6 C:\xampp\htdocs\ITE311-ROQUERO\app\Models\EnrollmentModel.php(76): CodeIgniter\BaseModel->findAll()
+#7 C:\xampp\htdocs\ITE311-ROQUERO\app\Controllers\Auth.php(244): App\Models\EnrollmentModel->getUserEnrollments('1')
+#8 C:\xampp\htdocs\ITE311-ROQUERO\system\CodeIgniter.php(933): App\Controllers\Auth->dashboard()
+#9 C:\xampp\htdocs\ITE311-ROQUERO\system\CodeIgniter.php(507): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Auth))
+#10 C:\xampp\htdocs\ITE311-ROQUERO\system\CodeIgniter.php(354): CodeIgniter\CodeIgniter->handleRequest(NULL, Object(Config\Cache), false)
+#11 C:\xampp\htdocs\ITE311-ROQUERO\system\Boot.php(363): CodeIgniter\CodeIgniter->run()
+#12 C:\xampp\htdocs\ITE311-ROQUERO\system\Boot.php(68): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+#13 C:\xampp\htdocs\ITE311-ROQUERO\public\index.php(59): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+#14 {main}
+ERROR - 2025-12-11 15:51:39 --> mysqli_sql_exception: Unknown column 'enrollments.user_id' in 'where clause' in C:\xampp\htdocs\ITE311-ROQUERO\system\Database\MySQLi\Connection.php:327
+Stack trace:
+#0 C:\xampp\htdocs\ITE311-ROQUERO\system\Database\MySQLi\Connection.php(327): mysqli->query('SELECT `enrollm...', 0)
+#1 C:\xampp\htdocs\ITE311-ROQUERO\system\Database\BaseConnection.php(729): CodeIgniter\Database\MySQLi\Connection->execute('SELECT `enrollm...')
+#2 C:\xampp\htdocs\ITE311-ROQUERO\system\Database\BaseConnection.php(646): CodeIgniter\Database\BaseConnection->simpleQuery('SELECT `enrollm...')
+#3 C:\xampp\htdocs\ITE311-ROQUERO\system\Database\BaseBuilder.php(1649): CodeIgniter\Database\BaseConnection->query('SELECT `enrollm...', Array, false)
+#4 C:\xampp\htdocs\ITE311-ROQUERO\system\Model.php(286): CodeIgniter\Database\BaseBuilder->get()
+#5 C:\xampp\htdocs\ITE311-ROQUERO\system\BaseModel.php(677): CodeIgniter\Model->doFindAll(0, 0)
+#6 C:\xampp\htdocs\ITE311-ROQUERO\app\Models\EnrollmentModel.php(76): CodeIgniter\BaseModel->findAll()
+#7 C:\xampp\htdocs\ITE311-ROQUERO\app\Controllers\Auth.php(244): App\Models\EnrollmentModel->getUserEnrollments('1')
+#8 C:\xampp\htdocs\ITE311-ROQUERO\system\CodeIgniter.php(933): App\Controllers\Auth->dashboard()
+#9 C:\xampp\htdocs\ITE311-ROQUERO\system\CodeIgniter.php(507): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Auth))
+#10 C:\xampp\htdocs\ITE311-ROQUERO\system\CodeIgniter.php(354): CodeIgniter\CodeIgniter->handleRequest(NULL, Object(Config\Cache), false)
+#11 C:\xampp\htdocs\ITE311-ROQUERO\system\Boot.php(363): CodeIgniter\CodeIgniter->run()
+#12 C:\xampp\htdocs\ITE311-ROQUERO\system\Boot.php(68): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+#13 C:\xampp\htdocs\ITE311-ROQUERO\public\index.php(59): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+#14 {main}
+ERROR - 2025-12-11 15:51:45 --> mysqli_sql_exception: Unknown column 'enrollments.user_id' in 'where clause' in C:\xampp\htdocs\ITE311-ROQUERO\system\Database\MySQLi\Connection.php:327
+Stack trace:
+#0 C:\xampp\htdocs\ITE311-ROQUERO\system\Database\MySQLi\Connection.php(327): mysqli->query('SELECT `enrollm...', 0)
+#1 C:\xampp\htdocs\ITE311-ROQUERO\system\Database\BaseConnection.php(729): CodeIgniter\Database\MySQLi\Connection->execute('SELECT `enrollm...')
+#2 C:\xampp\htdocs\ITE311-ROQUERO\system\Database\BaseConnection.php(646): CodeIgniter\Database\BaseConnection->simpleQuery('SELECT `enrollm...')
+#3 C:\xampp\htdocs\ITE311-ROQUERO\system\Database\BaseBuilder.php(1649): CodeIgniter\Database\BaseConnection->query('SELECT `enrollm...', Array, false)
+#4 C:\xampp\htdocs\ITE311-ROQUERO\system\Model.php(286): CodeIgniter\Database\BaseBuilder->get()
+#5 C:\xampp\htdocs\ITE311-ROQUERO\system\BaseModel.php(677): CodeIgniter\Model->doFindAll(0, 0)
+#6 C:\xampp\htdocs\ITE311-ROQUERO\app\Models\EnrollmentModel.php(76): CodeIgniter\BaseModel->findAll()
+#7 C:\xampp\htdocs\ITE311-ROQUERO\app\Controllers\Auth.php(244): App\Models\EnrollmentModel->getUserEnrollments('1')
+#8 C:\xampp\htdocs\ITE311-ROQUERO\system\CodeIgniter.php(933): App\Controllers\Auth->dashboard()
+#9 C:\xampp\htdocs\ITE311-ROQUERO\system\CodeIgniter.php(507): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Auth))
+#10 C:\xampp\htdocs\ITE311-ROQUERO\system\CodeIgniter.php(354): CodeIgniter\CodeIgniter->handleRequest(NULL, Object(Config\Cache), false)
+#11 C:\xampp\htdocs\ITE311-ROQUERO\system\Boot.php(363): CodeIgniter\CodeIgniter->run()
+#12 C:\xampp\htdocs\ITE311-ROQUERO\system\Boot.php(68): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+#13 C:\xampp\htdocs\ITE311-ROQUERO\public\index.php(59): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+#14 {main}
+ERROR - 2025-12-11 15:51:46 --> mysqli_sql_exception: Unknown column 'enrollments.user_id' in 'where clause' in C:\xampp\htdocs\ITE311-ROQUERO\system\Database\MySQLi\Connection.php:327
+Stack trace:
+#0 C:\xampp\htdocs\ITE311-ROQUERO\system\Database\MySQLi\Connection.php(327): mysqli->query('SELECT `enrollm...', 0)
+#1 C:\xampp\htdocs\ITE311-ROQUERO\system\Database\BaseConnection.php(729): CodeIgniter\Database\MySQLi\Connection->execute('SELECT `enrollm...')
+#2 C:\xampp\htdocs\ITE311-ROQUERO\system\Database\BaseConnection.php(646): CodeIgniter\Database\BaseConnection->simpleQuery('SELECT `enrollm...')
+#3 C:\xampp\htdocs\ITE311-ROQUERO\system\Database\BaseBuilder.php(1649): CodeIgniter\Database\BaseConnection->query('SELECT `enrollm...', Array, false)
+#4 C:\xampp\htdocs\ITE311-ROQUERO\system\Model.php(286): CodeIgniter\Database\BaseBuilder->get()
+#5 C:\xampp\htdocs\ITE311-ROQUERO\system\BaseModel.php(677): CodeIgniter\Model->doFindAll(0, 0)
+#6 C:\xampp\htdocs\ITE311-ROQUERO\app\Models\EnrollmentModel.php(76): CodeIgniter\BaseModel->findAll()
+#7 C:\xampp\htdocs\ITE311-ROQUERO\app\Controllers\Auth.php(244): App\Models\EnrollmentModel->getUserEnrollments('1')
+#8 C:\xampp\htdocs\ITE311-ROQUERO\system\CodeIgniter.php(933): App\Controllers\Auth->dashboard()
+#9 C:\xampp\htdocs\ITE311-ROQUERO\system\CodeIgniter.php(507): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Auth))
+#10 C:\xampp\htdocs\ITE311-ROQUERO\system\CodeIgniter.php(354): CodeIgniter\CodeIgniter->handleRequest(NULL, Object(Config\Cache), false)
+#11 C:\xampp\htdocs\ITE311-ROQUERO\system\Boot.php(363): CodeIgniter\CodeIgniter->run()
+#12 C:\xampp\htdocs\ITE311-ROQUERO\system\Boot.php(68): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+#13 C:\xampp\htdocs\ITE311-ROQUERO\public\index.php(59): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+#14 {main}
+ERROR - 2025-12-11 15:51:46 --> mysqli_sql_exception: Unknown column 'enrollments.user_id' in 'where clause' in C:\xampp\htdocs\ITE311-ROQUERO\system\Database\MySQLi\Connection.php:327
+Stack trace:
+#0 C:\xampp\htdocs\ITE311-ROQUERO\system\Database\MySQLi\Connection.php(327): mysqli->query('SELECT `enrollm...', 0)
+#1 C:\xampp\htdocs\ITE311-ROQUERO\system\Database\BaseConnection.php(729): CodeIgniter\Database\MySQLi\Connection->execute('SELECT `enrollm...')
+#2 C:\xampp\htdocs\ITE311-ROQUERO\system\Database\BaseConnection.php(646): CodeIgniter\Database\BaseConnection->simpleQuery('SELECT `enrollm...')
+#3 C:\xampp\htdocs\ITE311-ROQUERO\system\Database\BaseBuilder.php(1649): CodeIgniter\Database\BaseConnection->query('SELECT `enrollm...', Array, false)
+#4 C:\xampp\htdocs\ITE311-ROQUERO\system\Model.php(286): CodeIgniter\Database\BaseBuilder->get()
+#5 C:\xampp\htdocs\ITE311-ROQUERO\system\BaseModel.php(677): CodeIgniter\Model->doFindAll(0, 0)
+#6 C:\xampp\htdocs\ITE311-ROQUERO\app\Models\EnrollmentModel.php(76): CodeIgniter\BaseModel->findAll()
+#7 C:\xampp\htdocs\ITE311-ROQUERO\app\Controllers\Auth.php(244): App\Models\EnrollmentModel->getUserEnrollments('1')
+#8 C:\xampp\htdocs\ITE311-ROQUERO\system\CodeIgniter.php(933): App\Controllers\Auth->dashboard()
+#9 C:\xampp\htdocs\ITE311-ROQUERO\system\CodeIgniter.php(507): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Auth))
+#10 C:\xampp\htdocs\ITE311-ROQUERO\system\CodeIgniter.php(354): CodeIgniter\CodeIgniter->handleRequest(NULL, Object(Config\Cache), false)
+#11 C:\xampp\htdocs\ITE311-ROQUERO\system\Boot.php(363): CodeIgniter\CodeIgniter->run()
+#12 C:\xampp\htdocs\ITE311-ROQUERO\system\Boot.php(68): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+#13 C:\xampp\htdocs\ITE311-ROQUERO\public\index.php(59): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+#14 {main}
+ERROR - 2025-12-11 15:51:47 --> mysqli_sql_exception: Unknown column 'enrollments.user_id' in 'where clause' in C:\xampp\htdocs\ITE311-ROQUERO\system\Database\MySQLi\Connection.php:327
+Stack trace:
+#0 C:\xampp\htdocs\ITE311-ROQUERO\system\Database\MySQLi\Connection.php(327): mysqli->query('SELECT `enrollm...', 0)
+#1 C:\xampp\htdocs\ITE311-ROQUERO\system\Database\BaseConnection.php(729): CodeIgniter\Database\MySQLi\Connection->execute('SELECT `enrollm...')
+#2 C:\xampp\htdocs\ITE311-ROQUERO\system\Database\BaseConnection.php(646): CodeIgniter\Database\BaseConnection->simpleQuery('SELECT `enrollm...')
+#3 C:\xampp\htdocs\ITE311-ROQUERO\system\Database\BaseBuilder.php(1649): CodeIgniter\Database\BaseConnection->query('SELECT `enrollm...', Array, false)
+#4 C:\xampp\htdocs\ITE311-ROQUERO\system\Model.php(286): CodeIgniter\Database\BaseBuilder->get()
+#5 C:\xampp\htdocs\ITE311-ROQUERO\system\BaseModel.php(677): CodeIgniter\Model->doFindAll(0, 0)
+#6 C:\xampp\htdocs\ITE311-ROQUERO\app\Models\EnrollmentModel.php(76): CodeIgniter\BaseModel->findAll()
+#7 C:\xampp\htdocs\ITE311-ROQUERO\app\Controllers\Auth.php(244): App\Models\EnrollmentModel->getUserEnrollments('1')
+#8 C:\xampp\htdocs\ITE311-ROQUERO\system\CodeIgniter.php(933): App\Controllers\Auth->dashboard()
+#9 C:\xampp\htdocs\ITE311-ROQUERO\system\CodeIgniter.php(507): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Auth))
+#10 C:\xampp\htdocs\ITE311-ROQUERO\system\CodeIgniter.php(354): CodeIgniter\CodeIgniter->handleRequest(NULL, Object(Config\Cache), false)
+#11 C:\xampp\htdocs\ITE311-ROQUERO\system\Boot.php(363): CodeIgniter\CodeIgniter->run()
+#12 C:\xampp\htdocs\ITE311-ROQUERO\system\Boot.php(68): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+#13 C:\xampp\htdocs\ITE311-ROQUERO\public\index.php(59): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+#14 {main}
+ERROR - 2025-12-11 15:51:47 --> mysqli_sql_exception: Unknown column 'enrollments.user_id' in 'where clause' in C:\xampp\htdocs\ITE311-ROQUERO\system\Database\MySQLi\Connection.php:327
+Stack trace:
+#0 C:\xampp\htdocs\ITE311-ROQUERO\system\Database\MySQLi\Connection.php(327): mysqli->query('SELECT `enrollm...', 0)
+#1 C:\xampp\htdocs\ITE311-ROQUERO\system\Database\BaseConnection.php(729): CodeIgniter\Database\MySQLi\Connection->execute('SELECT `enrollm...')
+#2 C:\xampp\htdocs\ITE311-ROQUERO\system\Database\BaseConnection.php(646): CodeIgniter\Database\BaseConnection->simpleQuery('SELECT `enrollm...')
+#3 C:\xampp\htdocs\ITE311-ROQUERO\system\Database\BaseBuilder.php(1649): CodeIgniter\Database\BaseConnection->query('SELECT `enrollm...', Array, false)
+#4 C:\xampp\htdocs\ITE311-ROQUERO\system\Model.php(286): CodeIgniter\Database\BaseBuilder->get()
+#5 C:\xampp\htdocs\ITE311-ROQUERO\system\BaseModel.php(677): CodeIgniter\Model->doFindAll(0, 0)
+#6 C:\xampp\htdocs\ITE311-ROQUERO\app\Models\EnrollmentModel.php(76): CodeIgniter\BaseModel->findAll()
+#7 C:\xampp\htdocs\ITE311-ROQUERO\app\Controllers\Auth.php(244): App\Models\EnrollmentModel->getUserEnrollments('1')
+#8 C:\xampp\htdocs\ITE311-ROQUERO\system\CodeIgniter.php(933): App\Controllers\Auth->dashboard()
+#9 C:\xampp\htdocs\ITE311-ROQUERO\system\CodeIgniter.php(507): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Auth))
+#10 C:\xampp\htdocs\ITE311-ROQUERO\system\CodeIgniter.php(354): CodeIgniter\CodeIgniter->handleRequest(NULL, Object(Config\Cache), false)
+#11 C:\xampp\htdocs\ITE311-ROQUERO\system\Boot.php(363): CodeIgniter\CodeIgniter->run()
+#12 C:\xampp\htdocs\ITE311-ROQUERO\system\Boot.php(68): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+#13 C:\xampp\htdocs\ITE311-ROQUERO\public\index.php(59): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+#14 {main}
+ERROR - 2025-12-11 15:51:47 --> mysqli_sql_exception: Unknown column 'enrollments.user_id' in 'where clause' in C:\xampp\htdocs\ITE311-ROQUERO\system\Database\MySQLi\Connection.php:327
+Stack trace:
+#0 C:\xampp\htdocs\ITE311-ROQUERO\system\Database\MySQLi\Connection.php(327): mysqli->query('SELECT `enrollm...', 0)
+#1 C:\xampp\htdocs\ITE311-ROQUERO\system\Database\BaseConnection.php(729): CodeIgniter\Database\MySQLi\Connection->execute('SELECT `enrollm...')
+#2 C:\xampp\htdocs\ITE311-ROQUERO\system\Database\BaseConnection.php(646): CodeIgniter\Database\BaseConnection->simpleQuery('SELECT `enrollm...')
+#3 C:\xampp\htdocs\ITE311-ROQUERO\system\Database\BaseBuilder.php(1649): CodeIgniter\Database\BaseConnection->query('SELECT `enrollm...', Array, false)
+#4 C:\xampp\htdocs\ITE311-ROQUERO\system\Model.php(286): CodeIgniter\Database\BaseBuilder->get()
+#5 C:\xampp\htdocs\ITE311-ROQUERO\system\BaseModel.php(677): CodeIgniter\Model->doFindAll(0, 0)
+#6 C:\xampp\htdocs\ITE311-ROQUERO\app\Models\EnrollmentModel.php(76): CodeIgniter\BaseModel->findAll()
+#7 C:\xampp\htdocs\ITE311-ROQUERO\app\Controllers\Auth.php(244): App\Models\EnrollmentModel->getUserEnrollments('1')
+#8 C:\xampp\htdocs\ITE311-ROQUERO\system\CodeIgniter.php(933): App\Controllers\Auth->dashboard()
+#9 C:\xampp\htdocs\ITE311-ROQUERO\system\CodeIgniter.php(507): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Auth))
+#10 C:\xampp\htdocs\ITE311-ROQUERO\system\CodeIgniter.php(354): CodeIgniter\CodeIgniter->handleRequest(NULL, Object(Config\Cache), false)
+#11 C:\xampp\htdocs\ITE311-ROQUERO\system\Boot.php(363): CodeIgniter\CodeIgniter->run()
+#12 C:\xampp\htdocs\ITE311-ROQUERO\system\Boot.php(68): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+#13 C:\xampp\htdocs\ITE311-ROQUERO\public\index.php(59): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+#14 {main}
+ERROR - 2025-12-11 15:51:48 --> mysqli_sql_exception: Unknown column 'enrollments.user_id' in 'where clause' in C:\xampp\htdocs\ITE311-ROQUERO\system\Database\MySQLi\Connection.php:327
+Stack trace:
+#0 C:\xampp\htdocs\ITE311-ROQUERO\system\Database\MySQLi\Connection.php(327): mysqli->query('SELECT `enrollm...', 0)
+#1 C:\xampp\htdocs\ITE311-ROQUERO\system\Database\BaseConnection.php(729): CodeIgniter\Database\MySQLi\Connection->execute('SELECT `enrollm...')
+#2 C:\xampp\htdocs\ITE311-ROQUERO\system\Database\BaseConnection.php(646): CodeIgniter\Database\BaseConnection->simpleQuery('SELECT `enrollm...')
+#3 C:\xampp\htdocs\ITE311-ROQUERO\system\Database\BaseBuilder.php(1649): CodeIgniter\Database\BaseConnection->query('SELECT `enrollm...', Array, false)
+#4 C:\xampp\htdocs\ITE311-ROQUERO\system\Model.php(286): CodeIgniter\Database\BaseBuilder->get()
+#5 C:\xampp\htdocs\ITE311-ROQUERO\system\BaseModel.php(677): CodeIgniter\Model->doFindAll(0, 0)
+#6 C:\xampp\htdocs\ITE311-ROQUERO\app\Models\EnrollmentModel.php(76): CodeIgniter\BaseModel->findAll()
+#7 C:\xampp\htdocs\ITE311-ROQUERO\app\Controllers\Auth.php(244): App\Models\EnrollmentModel->getUserEnrollments('1')
+#8 C:\xampp\htdocs\ITE311-ROQUERO\system\CodeIgniter.php(933): App\Controllers\Auth->dashboard()
+#9 C:\xampp\htdocs\ITE311-ROQUERO\system\CodeIgniter.php(507): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Auth))
+#10 C:\xampp\htdocs\ITE311-ROQUERO\system\CodeIgniter.php(354): CodeIgniter\CodeIgniter->handleRequest(NULL, Object(Config\Cache), false)
+#11 C:\xampp\htdocs\ITE311-ROQUERO\system\Boot.php(363): CodeIgniter\CodeIgniter->run()
+#12 C:\xampp\htdocs\ITE311-ROQUERO\system\Boot.php(68): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+#13 C:\xampp\htdocs\ITE311-ROQUERO\public\index.php(59): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+#14 {main}
+ERROR - 2025-12-11 15:51:48 --> mysqli_sql_exception: Unknown column 'enrollments.user_id' in 'where clause' in C:\xampp\htdocs\ITE311-ROQUERO\system\Database\MySQLi\Connection.php:327
+Stack trace:
+#0 C:\xampp\htdocs\ITE311-ROQUERO\system\Database\MySQLi\Connection.php(327): mysqli->query('SELECT `enrollm...', 0)
+#1 C:\xampp\htdocs\ITE311-ROQUERO\system\Database\BaseConnection.php(729): CodeIgniter\Database\MySQLi\Connection->execute('SELECT `enrollm...')
+#2 C:\xampp\htdocs\ITE311-ROQUERO\system\Database\BaseConnection.php(646): CodeIgniter\Database\BaseConnection->simpleQuery('SELECT `enrollm...')
+#3 C:\xampp\htdocs\ITE311-ROQUERO\system\Database\BaseBuilder.php(1649): CodeIgniter\Database\BaseConnection->query('SELECT `enrollm...', Array, false)
+#4 C:\xampp\htdocs\ITE311-ROQUERO\system\Model.php(286): CodeIgniter\Database\BaseBuilder->get()
+#5 C:\xampp\htdocs\ITE311-ROQUERO\system\BaseModel.php(677): CodeIgniter\Model->doFindAll(0, 0)
+#6 C:\xampp\htdocs\ITE311-ROQUERO\app\Models\EnrollmentModel.php(76): CodeIgniter\BaseModel->findAll()
+#7 C:\xampp\htdocs\ITE311-ROQUERO\app\Controllers\Auth.php(244): App\Models\EnrollmentModel->getUserEnrollments('1')
+#8 C:\xampp\htdocs\ITE311-ROQUERO\system\CodeIgniter.php(933): App\Controllers\Auth->dashboard()
+#9 C:\xampp\htdocs\ITE311-ROQUERO\system\CodeIgniter.php(507): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Auth))
+#10 C:\xampp\htdocs\ITE311-ROQUERO\system\CodeIgniter.php(354): CodeIgniter\CodeIgniter->handleRequest(NULL, Object(Config\Cache), false)
+#11 C:\xampp\htdocs\ITE311-ROQUERO\system\Boot.php(363): CodeIgniter\CodeIgniter->run()
+#12 C:\xampp\htdocs\ITE311-ROQUERO\system\Boot.php(68): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+#13 C:\xampp\htdocs\ITE311-ROQUERO\public\index.php(59): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+#14 {main}
+ERROR - 2025-12-11 15:51:48 --> mysqli_sql_exception: Unknown column 'enrollments.user_id' in 'where clause' in C:\xampp\htdocs\ITE311-ROQUERO\system\Database\MySQLi\Connection.php:327
+Stack trace:
+#0 C:\xampp\htdocs\ITE311-ROQUERO\system\Database\MySQLi\Connection.php(327): mysqli->query('SELECT `enrollm...', 0)
+#1 C:\xampp\htdocs\ITE311-ROQUERO\system\Database\BaseConnection.php(729): CodeIgniter\Database\MySQLi\Connection->execute('SELECT `enrollm...')
+#2 C:\xampp\htdocs\ITE311-ROQUERO\system\Database\BaseConnection.php(646): CodeIgniter\Database\BaseConnection->simpleQuery('SELECT `enrollm...')
+#3 C:\xampp\htdocs\ITE311-ROQUERO\system\Database\BaseBuilder.php(1649): CodeIgniter\Database\BaseConnection->query('SELECT `enrollm...', Array, false)
+#4 C:\xampp\htdocs\ITE311-ROQUERO\system\Model.php(286): CodeIgniter\Database\BaseBuilder->get()
+#5 C:\xampp\htdocs\ITE311-ROQUERO\system\BaseModel.php(677): CodeIgniter\Model->doFindAll(0, 0)
+#6 C:\xampp\htdocs\ITE311-ROQUERO\app\Models\EnrollmentModel.php(76): CodeIgniter\BaseModel->findAll()
+#7 C:\xampp\htdocs\ITE311-ROQUERO\app\Controllers\Auth.php(244): App\Models\EnrollmentModel->getUserEnrollments('1')
+#8 C:\xampp\htdocs\ITE311-ROQUERO\system\CodeIgniter.php(933): App\Controllers\Auth->dashboard()
+#9 C:\xampp\htdocs\ITE311-ROQUERO\system\CodeIgniter.php(507): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Auth))
+#10 C:\xampp\htdocs\ITE311-ROQUERO\system\CodeIgniter.php(354): CodeIgniter\CodeIgniter->handleRequest(NULL, Object(Config\Cache), false)
+#11 C:\xampp\htdocs\ITE311-ROQUERO\system\Boot.php(363): CodeIgniter\CodeIgniter->run()
+#12 C:\xampp\htdocs\ITE311-ROQUERO\system\Boot.php(68): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+#13 C:\xampp\htdocs\ITE311-ROQUERO\public\index.php(59): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+#14 {main}
+ERROR - 2025-12-11 15:51:49 --> mysqli_sql_exception: Unknown column 'enrollments.user_id' in 'where clause' in C:\xampp\htdocs\ITE311-ROQUERO\system\Database\MySQLi\Connection.php:327
+Stack trace:
+#0 C:\xampp\htdocs\ITE311-ROQUERO\system\Database\MySQLi\Connection.php(327): mysqli->query('SELECT `enrollm...', 0)
+#1 C:\xampp\htdocs\ITE311-ROQUERO\system\Database\BaseConnection.php(729): CodeIgniter\Database\MySQLi\Connection->execute('SELECT `enrollm...')
+#2 C:\xampp\htdocs\ITE311-ROQUERO\system\Database\BaseConnection.php(646): CodeIgniter\Database\BaseConnection->simpleQuery('SELECT `enrollm...')
+#3 C:\xampp\htdocs\ITE311-ROQUERO\system\Database\BaseBuilder.php(1649): CodeIgniter\Database\BaseConnection->query('SELECT `enrollm...', Array, false)
+#4 C:\xampp\htdocs\ITE311-ROQUERO\system\Model.php(286): CodeIgniter\Database\BaseBuilder->get()
+#5 C:\xampp\htdocs\ITE311-ROQUERO\system\BaseModel.php(677): CodeIgniter\Model->doFindAll(0, 0)
+#6 C:\xampp\htdocs\ITE311-ROQUERO\app\Models\EnrollmentModel.php(76): CodeIgniter\BaseModel->findAll()
+#7 C:\xampp\htdocs\ITE311-ROQUERO\app\Controllers\Auth.php(244): App\Models\EnrollmentModel->getUserEnrollments('1')
+#8 C:\xampp\htdocs\ITE311-ROQUERO\system\CodeIgniter.php(933): App\Controllers\Auth->dashboard()
+#9 C:\xampp\htdocs\ITE311-ROQUERO\system\CodeIgniter.php(507): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Auth))
+#10 C:\xampp\htdocs\ITE311-ROQUERO\system\CodeIgniter.php(354): CodeIgniter\CodeIgniter->handleRequest(NULL, Object(Config\Cache), false)
+#11 C:\xampp\htdocs\ITE311-ROQUERO\system\Boot.php(363): CodeIgniter\CodeIgniter->run()
+#12 C:\xampp\htdocs\ITE311-ROQUERO\system\Boot.php(68): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+#13 C:\xampp\htdocs\ITE311-ROQUERO\public\index.php(59): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+#14 {main}
+ERROR - 2025-12-11 15:51:49 --> mysqli_sql_exception: Unknown column 'enrollments.user_id' in 'where clause' in C:\xampp\htdocs\ITE311-ROQUERO\system\Database\MySQLi\Connection.php:327
+Stack trace:
+#0 C:\xampp\htdocs\ITE311-ROQUERO\system\Database\MySQLi\Connection.php(327): mysqli->query('SELECT `enrollm...', 0)
+#1 C:\xampp\htdocs\ITE311-ROQUERO\system\Database\BaseConnection.php(729): CodeIgniter\Database\MySQLi\Connection->execute('SELECT `enrollm...')
+#2 C:\xampp\htdocs\ITE311-ROQUERO\system\Database\BaseConnection.php(646): CodeIgniter\Database\BaseConnection->simpleQuery('SELECT `enrollm...')
+#3 C:\xampp\htdocs\ITE311-ROQUERO\system\Database\BaseBuilder.php(1649): CodeIgniter\Database\BaseConnection->query('SELECT `enrollm...', Array, false)
+#4 C:\xampp\htdocs\ITE311-ROQUERO\system\Model.php(286): CodeIgniter\Database\BaseBuilder->get()
+#5 C:\xampp\htdocs\ITE311-ROQUERO\system\BaseModel.php(677): CodeIgniter\Model->doFindAll(0, 0)
+#6 C:\xampp\htdocs\ITE311-ROQUERO\app\Models\EnrollmentModel.php(76): CodeIgniter\BaseModel->findAll()
+#7 C:\xampp\htdocs\ITE311-ROQUERO\app\Controllers\Auth.php(244): App\Models\EnrollmentModel->getUserEnrollments('1')
+#8 C:\xampp\htdocs\ITE311-ROQUERO\system\CodeIgniter.php(933): App\Controllers\Auth->dashboard()
+#9 C:\xampp\htdocs\ITE311-ROQUERO\system\CodeIgniter.php(507): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Auth))
+#10 C:\xampp\htdocs\ITE311-ROQUERO\system\CodeIgniter.php(354): CodeIgniter\CodeIgniter->handleRequest(NULL, Object(Config\Cache), false)
+#11 C:\xampp\htdocs\ITE311-ROQUERO\system\Boot.php(363): CodeIgniter\CodeIgniter->run()
+#12 C:\xampp\htdocs\ITE311-ROQUERO\system\Boot.php(68): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+#13 C:\xampp\htdocs\ITE311-ROQUERO\public\index.php(59): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+#14 {main}
+ERROR - 2025-12-11 15:51:54 --> mysqli_sql_exception: Unknown column 'enrollments.user_id' in 'where clause' in C:\xampp\htdocs\ITE311-ROQUERO\system\Database\MySQLi\Connection.php:327
+Stack trace:
+#0 C:\xampp\htdocs\ITE311-ROQUERO\system\Database\MySQLi\Connection.php(327): mysqli->query('SELECT `enrollm...', 0)
+#1 C:\xampp\htdocs\ITE311-ROQUERO\system\Database\BaseConnection.php(729): CodeIgniter\Database\MySQLi\Connection->execute('SELECT `enrollm...')
+#2 C:\xampp\htdocs\ITE311-ROQUERO\system\Database\BaseConnection.php(646): CodeIgniter\Database\BaseConnection->simpleQuery('SELECT `enrollm...')
+#3 C:\xampp\htdocs\ITE311-ROQUERO\system\Database\BaseBuilder.php(1649): CodeIgniter\Database\BaseConnection->query('SELECT `enrollm...', Array, false)
+#4 C:\xampp\htdocs\ITE311-ROQUERO\system\Model.php(286): CodeIgniter\Database\BaseBuilder->get()
+#5 C:\xampp\htdocs\ITE311-ROQUERO\system\BaseModel.php(677): CodeIgniter\Model->doFindAll(0, 0)
+#6 C:\xampp\htdocs\ITE311-ROQUERO\app\Models\EnrollmentModel.php(76): CodeIgniter\BaseModel->findAll()
+#7 C:\xampp\htdocs\ITE311-ROQUERO\app\Controllers\Auth.php(244): App\Models\EnrollmentModel->getUserEnrollments('1')
+#8 C:\xampp\htdocs\ITE311-ROQUERO\system\CodeIgniter.php(933): App\Controllers\Auth->dashboard()
+#9 C:\xampp\htdocs\ITE311-ROQUERO\system\CodeIgniter.php(507): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Auth))
+#10 C:\xampp\htdocs\ITE311-ROQUERO\system\CodeIgniter.php(354): CodeIgniter\CodeIgniter->handleRequest(NULL, Object(Config\Cache), false)
+#11 C:\xampp\htdocs\ITE311-ROQUERO\system\Boot.php(363): CodeIgniter\CodeIgniter->run()
+#12 C:\xampp\htdocs\ITE311-ROQUERO\system\Boot.php(68): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+#13 C:\xampp\htdocs\ITE311-ROQUERO\public\index.php(59): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+#14 {main}
+ERROR - 2025-12-11 15:52:34 --> mysqli_sql_exception: Unknown column 'enrollments.user_id' in 'where clause' in C:\xampp\htdocs\ITE311-ROQUERO\system\Database\MySQLi\Connection.php:327
+Stack trace:
+#0 C:\xampp\htdocs\ITE311-ROQUERO\system\Database\MySQLi\Connection.php(327): mysqli->query('SELECT `enrollm...', 0)
+#1 C:\xampp\htdocs\ITE311-ROQUERO\system\Database\BaseConnection.php(729): CodeIgniter\Database\MySQLi\Connection->execute('SELECT `enrollm...')
+#2 C:\xampp\htdocs\ITE311-ROQUERO\system\Database\BaseConnection.php(646): CodeIgniter\Database\BaseConnection->simpleQuery('SELECT `enrollm...')
+#3 C:\xampp\htdocs\ITE311-ROQUERO\system\Database\BaseBuilder.php(1649): CodeIgniter\Database\BaseConnection->query('SELECT `enrollm...', Array, false)
+#4 C:\xampp\htdocs\ITE311-ROQUERO\system\Model.php(286): CodeIgniter\Database\BaseBuilder->get()
+#5 C:\xampp\htdocs\ITE311-ROQUERO\system\BaseModel.php(677): CodeIgniter\Model->doFindAll(0, 0)
+#6 C:\xampp\htdocs\ITE311-ROQUERO\app\Models\EnrollmentModel.php(76): CodeIgniter\BaseModel->findAll()
+#7 C:\xampp\htdocs\ITE311-ROQUERO\app\Controllers\Auth.php(244): App\Models\EnrollmentModel->getUserEnrollments('1')
+#8 C:\xampp\htdocs\ITE311-ROQUERO\system\CodeIgniter.php(933): App\Controllers\Auth->dashboard()
+#9 C:\xampp\htdocs\ITE311-ROQUERO\system\CodeIgniter.php(507): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Auth))
+#10 C:\xampp\htdocs\ITE311-ROQUERO\system\CodeIgniter.php(354): CodeIgniter\CodeIgniter->handleRequest(NULL, Object(Config\Cache), false)
+#11 C:\xampp\htdocs\ITE311-ROQUERO\system\Boot.php(363): CodeIgniter\CodeIgniter->run()
+#12 C:\xampp\htdocs\ITE311-ROQUERO\system\Boot.php(68): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+#13 C:\xampp\htdocs\ITE311-ROQUERO\public\index.php(59): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+#14 {main}
+ERROR - 2025-12-11 15:52:35 --> mysqli_sql_exception: Unknown column 'enrollments.user_id' in 'where clause' in C:\xampp\htdocs\ITE311-ROQUERO\system\Database\MySQLi\Connection.php:327
+Stack trace:
+#0 C:\xampp\htdocs\ITE311-ROQUERO\system\Database\MySQLi\Connection.php(327): mysqli->query('SELECT `enrollm...', 0)
+#1 C:\xampp\htdocs\ITE311-ROQUERO\system\Database\BaseConnection.php(729): CodeIgniter\Database\MySQLi\Connection->execute('SELECT `enrollm...')
+#2 C:\xampp\htdocs\ITE311-ROQUERO\system\Database\BaseConnection.php(646): CodeIgniter\Database\BaseConnection->simpleQuery('SELECT `enrollm...')
+#3 C:\xampp\htdocs\ITE311-ROQUERO\system\Database\BaseBuilder.php(1649): CodeIgniter\Database\BaseConnection->query('SELECT `enrollm...', Array, false)
+#4 C:\xampp\htdocs\ITE311-ROQUERO\system\Model.php(286): CodeIgniter\Database\BaseBuilder->get()
+#5 C:\xampp\htdocs\ITE311-ROQUERO\system\BaseModel.php(677): CodeIgniter\Model->doFindAll(0, 0)
+#6 C:\xampp\htdocs\ITE311-ROQUERO\app\Models\EnrollmentModel.php(76): CodeIgniter\BaseModel->findAll()
+#7 C:\xampp\htdocs\ITE311-ROQUERO\app\Controllers\Auth.php(244): App\Models\EnrollmentModel->getUserEnrollments('1')
+#8 C:\xampp\htdocs\ITE311-ROQUERO\system\CodeIgniter.php(933): App\Controllers\Auth->dashboard()
+#9 C:\xampp\htdocs\ITE311-ROQUERO\system\CodeIgniter.php(507): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Auth))
+#10 C:\xampp\htdocs\ITE311-ROQUERO\system\CodeIgniter.php(354): CodeIgniter\CodeIgniter->handleRequest(NULL, Object(Config\Cache), false)
+#11 C:\xampp\htdocs\ITE311-ROQUERO\system\Boot.php(363): CodeIgniter\CodeIgniter->run()
+#12 C:\xampp\htdocs\ITE311-ROQUERO\system\Boot.php(68): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+#13 C:\xampp\htdocs\ITE311-ROQUERO\public\index.php(59): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+#14 {main}
+ERROR - 2025-12-11 15:52:36 --> mysqli_sql_exception: Unknown column 'enrollments.user_id' in 'where clause' in C:\xampp\htdocs\ITE311-ROQUERO\system\Database\MySQLi\Connection.php:327
+Stack trace:
+#0 C:\xampp\htdocs\ITE311-ROQUERO\system\Database\MySQLi\Connection.php(327): mysqli->query('SELECT `enrollm...', 0)
+#1 C:\xampp\htdocs\ITE311-ROQUERO\system\Database\BaseConnection.php(729): CodeIgniter\Database\MySQLi\Connection->execute('SELECT `enrollm...')
+#2 C:\xampp\htdocs\ITE311-ROQUERO\system\Database\BaseConnection.php(646): CodeIgniter\Database\BaseConnection->simpleQuery('SELECT `enrollm...')
+#3 C:\xampp\htdocs\ITE311-ROQUERO\system\Database\BaseBuilder.php(1649): CodeIgniter\Database\BaseConnection->query('SELECT `enrollm...', Array, false)
+#4 C:\xampp\htdocs\ITE311-ROQUERO\system\Model.php(286): CodeIgniter\Database\BaseBuilder->get()
+#5 C:\xampp\htdocs\ITE311-ROQUERO\system\BaseModel.php(677): CodeIgniter\Model->doFindAll(0, 0)
+#6 C:\xampp\htdocs\ITE311-ROQUERO\app\Models\EnrollmentModel.php(76): CodeIgniter\BaseModel->findAll()
+#7 C:\xampp\htdocs\ITE311-ROQUERO\app\Controllers\Auth.php(244): App\Models\EnrollmentModel->getUserEnrollments('1')
+#8 C:\xampp\htdocs\ITE311-ROQUERO\system\CodeIgniter.php(933): App\Controllers\Auth->dashboard()
+#9 C:\xampp\htdocs\ITE311-ROQUERO\system\CodeIgniter.php(507): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Auth))
+#10 C:\xampp\htdocs\ITE311-ROQUERO\system\CodeIgniter.php(354): CodeIgniter\CodeIgniter->handleRequest(NULL, Object(Config\Cache), false)
+#11 C:\xampp\htdocs\ITE311-ROQUERO\system\Boot.php(363): CodeIgniter\CodeIgniter->run()
+#12 C:\xampp\htdocs\ITE311-ROQUERO\system\Boot.php(68): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+#13 C:\xampp\htdocs\ITE311-ROQUERO\public\index.php(59): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+#14 {main}
+ERROR - 2025-12-11 15:52:37 --> mysqli_sql_exception: Unknown column 'enrollments.user_id' in 'where clause' in C:\xampp\htdocs\ITE311-ROQUERO\system\Database\MySQLi\Connection.php:327
+Stack trace:
+#0 C:\xampp\htdocs\ITE311-ROQUERO\system\Database\MySQLi\Connection.php(327): mysqli->query('SELECT `enrollm...', 0)
+#1 C:\xampp\htdocs\ITE311-ROQUERO\system\Database\BaseConnection.php(729): CodeIgniter\Database\MySQLi\Connection->execute('SELECT `enrollm...')
+#2 C:\xampp\htdocs\ITE311-ROQUERO\system\Database\BaseConnection.php(646): CodeIgniter\Database\BaseConnection->simpleQuery('SELECT `enrollm...')
+#3 C:\xampp\htdocs\ITE311-ROQUERO\system\Database\BaseBuilder.php(1649): CodeIgniter\Database\BaseConnection->query('SELECT `enrollm...', Array, false)
+#4 C:\xampp\htdocs\ITE311-ROQUERO\system\Model.php(286): CodeIgniter\Database\BaseBuilder->get()
+#5 C:\xampp\htdocs\ITE311-ROQUERO\system\BaseModel.php(677): CodeIgniter\Model->doFindAll(0, 0)
+#6 C:\xampp\htdocs\ITE311-ROQUERO\app\Models\EnrollmentModel.php(76): CodeIgniter\BaseModel->findAll()
+#7 C:\xampp\htdocs\ITE311-ROQUERO\app\Controllers\Auth.php(244): App\Models\EnrollmentModel->getUserEnrollments('1')
+#8 C:\xampp\htdocs\ITE311-ROQUERO\system\CodeIgniter.php(933): App\Controllers\Auth->dashboard()
+#9 C:\xampp\htdocs\ITE311-ROQUERO\system\CodeIgniter.php(507): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Auth))
+#10 C:\xampp\htdocs\ITE311-ROQUERO\system\CodeIgniter.php(354): CodeIgniter\CodeIgniter->handleRequest(NULL, Object(Config\Cache), false)
+#11 C:\xampp\htdocs\ITE311-ROQUERO\system\Boot.php(363): CodeIgniter\CodeIgniter->run()
+#12 C:\xampp\htdocs\ITE311-ROQUERO\system\Boot.php(68): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+#13 C:\xampp\htdocs\ITE311-ROQUERO\public\index.php(59): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+#14 {main}
+ERROR - 2025-12-11 15:52:37 --> mysqli_sql_exception: Unknown column 'enrollments.user_id' in 'where clause' in C:\xampp\htdocs\ITE311-ROQUERO\system\Database\MySQLi\Connection.php:327
+Stack trace:
+#0 C:\xampp\htdocs\ITE311-ROQUERO\system\Database\MySQLi\Connection.php(327): mysqli->query('SELECT `enrollm...', 0)
+#1 C:\xampp\htdocs\ITE311-ROQUERO\system\Database\BaseConnection.php(729): CodeIgniter\Database\MySQLi\Connection->execute('SELECT `enrollm...')
+#2 C:\xampp\htdocs\ITE311-ROQUERO\system\Database\BaseConnection.php(646): CodeIgniter\Database\BaseConnection->simpleQuery('SELECT `enrollm...')
+#3 C:\xampp\htdocs\ITE311-ROQUERO\system\Database\BaseBuilder.php(1649): CodeIgniter\Database\BaseConnection->query('SELECT `enrollm...', Array, false)
+#4 C:\xampp\htdocs\ITE311-ROQUERO\system\Model.php(286): CodeIgniter\Database\BaseBuilder->get()
+#5 C:\xampp\htdocs\ITE311-ROQUERO\system\BaseModel.php(677): CodeIgniter\Model->doFindAll(0, 0)
+#6 C:\xampp\htdocs\ITE311-ROQUERO\app\Models\EnrollmentModel.php(76): CodeIgniter\BaseModel->findAll()
+#7 C:\xampp\htdocs\ITE311-ROQUERO\app\Controllers\Auth.php(244): App\Models\EnrollmentModel->getUserEnrollments('1')
+#8 C:\xampp\htdocs\ITE311-ROQUERO\system\CodeIgniter.php(933): App\Controllers\Auth->dashboard()
+#9 C:\xampp\htdocs\ITE311-ROQUERO\system\CodeIgniter.php(507): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Auth))
+#10 C:\xampp\htdocs\ITE311-ROQUERO\system\CodeIgniter.php(354): CodeIgniter\CodeIgniter->handleRequest(NULL, Object(Config\Cache), false)
+#11 C:\xampp\htdocs\ITE311-ROQUERO\system\Boot.php(363): CodeIgniter\CodeIgniter->run()
+#12 C:\xampp\htdocs\ITE311-ROQUERO\system\Boot.php(68): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+#13 C:\xampp\htdocs\ITE311-ROQUERO\public\index.php(59): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+#14 {main}
+ERROR - 2025-12-11 15:52:37 --> mysqli_sql_exception: Unknown column 'enrollments.user_id' in 'where clause' in C:\xampp\htdocs\ITE311-ROQUERO\system\Database\MySQLi\Connection.php:327
+Stack trace:
+#0 C:\xampp\htdocs\ITE311-ROQUERO\system\Database\MySQLi\Connection.php(327): mysqli->query('SELECT `enrollm...', 0)
+#1 C:\xampp\htdocs\ITE311-ROQUERO\system\Database\BaseConnection.php(729): CodeIgniter\Database\MySQLi\Connection->execute('SELECT `enrollm...')
+#2 C:\xampp\htdocs\ITE311-ROQUERO\system\Database\BaseConnection.php(646): CodeIgniter\Database\BaseConnection->simpleQuery('SELECT `enrollm...')
+#3 C:\xampp\htdocs\ITE311-ROQUERO\system\Database\BaseBuilder.php(1649): CodeIgniter\Database\BaseConnection->query('SELECT `enrollm...', Array, false)
+#4 C:\xampp\htdocs\ITE311-ROQUERO\system\Model.php(286): CodeIgniter\Database\BaseBuilder->get()
+#5 C:\xampp\htdocs\ITE311-ROQUERO\system\BaseModel.php(677): CodeIgniter\Model->doFindAll(0, 0)
+#6 C:\xampp\htdocs\ITE311-ROQUERO\app\Models\EnrollmentModel.php(76): CodeIgniter\BaseModel->findAll()
+#7 C:\xampp\htdocs\ITE311-ROQUERO\app\Controllers\Auth.php(244): App\Models\EnrollmentModel->getUserEnrollments('1')
+#8 C:\xampp\htdocs\ITE311-ROQUERO\system\CodeIgniter.php(933): App\Controllers\Auth->dashboard()
+#9 C:\xampp\htdocs\ITE311-ROQUERO\system\CodeIgniter.php(507): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Auth))
+#10 C:\xampp\htdocs\ITE311-ROQUERO\system\CodeIgniter.php(354): CodeIgniter\CodeIgniter->handleRequest(NULL, Object(Config\Cache), false)
+#11 C:\xampp\htdocs\ITE311-ROQUERO\system\Boot.php(363): CodeIgniter\CodeIgniter->run()
+#12 C:\xampp\htdocs\ITE311-ROQUERO\system\Boot.php(68): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+#13 C:\xampp\htdocs\ITE311-ROQUERO\public\index.php(59): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+#14 {main}
+ERROR - 2025-12-11 15:52:38 --> mysqli_sql_exception: Unknown column 'enrollments.user_id' in 'where clause' in C:\xampp\htdocs\ITE311-ROQUERO\system\Database\MySQLi\Connection.php:327
+Stack trace:
+#0 C:\xampp\htdocs\ITE311-ROQUERO\system\Database\MySQLi\Connection.php(327): mysqli->query('SELECT `enrollm...', 0)
+#1 C:\xampp\htdocs\ITE311-ROQUERO\system\Database\BaseConnection.php(729): CodeIgniter\Database\MySQLi\Connection->execute('SELECT `enrollm...')
+#2 C:\xampp\htdocs\ITE311-ROQUERO\system\Database\BaseConnection.php(646): CodeIgniter\Database\BaseConnection->simpleQuery('SELECT `enrollm...')
+#3 C:\xampp\htdocs\ITE311-ROQUERO\system\Database\BaseBuilder.php(1649): CodeIgniter\Database\BaseConnection->query('SELECT `enrollm...', Array, false)
+#4 C:\xampp\htdocs\ITE311-ROQUERO\system\Model.php(286): CodeIgniter\Database\BaseBuilder->get()
+#5 C:\xampp\htdocs\ITE311-ROQUERO\system\BaseModel.php(677): CodeIgniter\Model->doFindAll(0, 0)
+#6 C:\xampp\htdocs\ITE311-ROQUERO\app\Models\EnrollmentModel.php(76): CodeIgniter\BaseModel->findAll()
+#7 C:\xampp\htdocs\ITE311-ROQUERO\app\Controllers\Auth.php(244): App\Models\EnrollmentModel->getUserEnrollments('1')
+#8 C:\xampp\htdocs\ITE311-ROQUERO\system\CodeIgniter.php(933): App\Controllers\Auth->dashboard()
+#9 C:\xampp\htdocs\ITE311-ROQUERO\system\CodeIgniter.php(507): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Auth))
+#10 C:\xampp\htdocs\ITE311-ROQUERO\system\CodeIgniter.php(354): CodeIgniter\CodeIgniter->handleRequest(NULL, Object(Config\Cache), false)
+#11 C:\xampp\htdocs\ITE311-ROQUERO\system\Boot.php(363): CodeIgniter\CodeIgniter->run()
+#12 C:\xampp\htdocs\ITE311-ROQUERO\system\Boot.php(68): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+#13 C:\xampp\htdocs\ITE311-ROQUERO\public\index.php(59): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+#14 {main}
+ERROR - 2025-12-11 15:52:39 --> mysqli_sql_exception: Unknown column 'enrollments.user_id' in 'where clause' in C:\xampp\htdocs\ITE311-ROQUERO\system\Database\MySQLi\Connection.php:327
+Stack trace:
+#0 C:\xampp\htdocs\ITE311-ROQUERO\system\Database\MySQLi\Connection.php(327): mysqli->query('SELECT `enrollm...', 0)
+#1 C:\xampp\htdocs\ITE311-ROQUERO\system\Database\BaseConnection.php(729): CodeIgniter\Database\MySQLi\Connection->execute('SELECT `enrollm...')
+#2 C:\xampp\htdocs\ITE311-ROQUERO\system\Database\BaseConnection.php(646): CodeIgniter\Database\BaseConnection->simpleQuery('SELECT `enrollm...')
+#3 C:\xampp\htdocs\ITE311-ROQUERO\system\Database\BaseBuilder.php(1649): CodeIgniter\Database\BaseConnection->query('SELECT `enrollm...', Array, false)
+#4 C:\xampp\htdocs\ITE311-ROQUERO\system\Model.php(286): CodeIgniter\Database\BaseBuilder->get()
+#5 C:\xampp\htdocs\ITE311-ROQUERO\system\BaseModel.php(677): CodeIgniter\Model->doFindAll(0, 0)
+#6 C:\xampp\htdocs\ITE311-ROQUERO\app\Models\EnrollmentModel.php(76): CodeIgniter\BaseModel->findAll()
+#7 C:\xampp\htdocs\ITE311-ROQUERO\app\Controllers\Auth.php(244): App\Models\EnrollmentModel->getUserEnrollments('1')
+#8 C:\xampp\htdocs\ITE311-ROQUERO\system\CodeIgniter.php(933): App\Controllers\Auth->dashboard()
+#9 C:\xampp\htdocs\ITE311-ROQUERO\system\CodeIgniter.php(507): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Auth))
+#10 C:\xampp\htdocs\ITE311-ROQUERO\system\CodeIgniter.php(354): CodeIgniter\CodeIgniter->handleRequest(NULL, Object(Config\Cache), false)
+#11 C:\xampp\htdocs\ITE311-ROQUERO\system\Boot.php(363): CodeIgniter\CodeIgniter->run()
+#12 C:\xampp\htdocs\ITE311-ROQUERO\system\Boot.php(68): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+#13 C:\xampp\htdocs\ITE311-ROQUERO\public\index.php(59): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+#14 {main}
+ERROR - 2025-12-11 15:52:39 --> mysqli_sql_exception: Unknown column 'enrollments.user_id' in 'where clause' in C:\xampp\htdocs\ITE311-ROQUERO\system\Database\MySQLi\Connection.php:327
+Stack trace:
+#0 C:\xampp\htdocs\ITE311-ROQUERO\system\Database\MySQLi\Connection.php(327): mysqli->query('SELECT `enrollm...', 0)
+#1 C:\xampp\htdocs\ITE311-ROQUERO\system\Database\BaseConnection.php(729): CodeIgniter\Database\MySQLi\Connection->execute('SELECT `enrollm...')
+#2 C:\xampp\htdocs\ITE311-ROQUERO\system\Database\BaseConnection.php(646): CodeIgniter\Database\BaseConnection->simpleQuery('SELECT `enrollm...')
+#3 C:\xampp\htdocs\ITE311-ROQUERO\system\Database\BaseBuilder.php(1649): CodeIgniter\Database\BaseConnection->query('SELECT `enrollm...', Array, false)
+#4 C:\xampp\htdocs\ITE311-ROQUERO\system\Model.php(286): CodeIgniter\Database\BaseBuilder->get()
+#5 C:\xampp\htdocs\ITE311-ROQUERO\system\BaseModel.php(677): CodeIgniter\Model->doFindAll(0, 0)
+#6 C:\xampp\htdocs\ITE311-ROQUERO\app\Models\EnrollmentModel.php(76): CodeIgniter\BaseModel->findAll()
+#7 C:\xampp\htdocs\ITE311-ROQUERO\app\Controllers\Auth.php(244): App\Models\EnrollmentModel->getUserEnrollments('1')
+#8 C:\xampp\htdocs\ITE311-ROQUERO\system\CodeIgniter.php(933): App\Controllers\Auth->dashboard()
+#9 C:\xampp\htdocs\ITE311-ROQUERO\system\CodeIgniter.php(507): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Auth))
+#10 C:\xampp\htdocs\ITE311-ROQUERO\system\CodeIgniter.php(354): CodeIgniter\CodeIgniter->handleRequest(NULL, Object(Config\Cache), false)
+#11 C:\xampp\htdocs\ITE311-ROQUERO\system\Boot.php(363): CodeIgniter\CodeIgniter->run()
+#12 C:\xampp\htdocs\ITE311-ROQUERO\system\Boot.php(68): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+#13 C:\xampp\htdocs\ITE311-ROQUERO\public\index.php(59): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+#14 {main}
+ERROR - 2025-12-11 15:52:39 --> mysqli_sql_exception: Unknown column 'enrollments.user_id' in 'where clause' in C:\xampp\htdocs\ITE311-ROQUERO\system\Database\MySQLi\Connection.php:327
+Stack trace:
+#0 C:\xampp\htdocs\ITE311-ROQUERO\system\Database\MySQLi\Connection.php(327): mysqli->query('SELECT `enrollm...', 0)
+#1 C:\xampp\htdocs\ITE311-ROQUERO\system\Database\BaseConnection.php(729): CodeIgniter\Database\MySQLi\Connection->execute('SELECT `enrollm...')
+#2 C:\xampp\htdocs\ITE311-ROQUERO\system\Database\BaseConnection.php(646): CodeIgniter\Database\BaseConnection->simpleQuery('SELECT `enrollm...')
+#3 C:\xampp\htdocs\ITE311-ROQUERO\system\Database\BaseBuilder.php(1649): CodeIgniter\Database\BaseConnection->query('SELECT `enrollm...', Array, false)
+#4 C:\xampp\htdocs\ITE311-ROQUERO\system\Model.php(286): CodeIgniter\Database\BaseBuilder->get()
+#5 C:\xampp\htdocs\ITE311-ROQUERO\system\BaseModel.php(677): CodeIgniter\Model->doFindAll(0, 0)
+#6 C:\xampp\htdocs\ITE311-ROQUERO\app\Models\EnrollmentModel.php(76): CodeIgniter\BaseModel->findAll()
+#7 C:\xampp\htdocs\ITE311-ROQUERO\app\Controllers\Auth.php(244): App\Models\EnrollmentModel->getUserEnrollments('1')
+#8 C:\xampp\htdocs\ITE311-ROQUERO\system\CodeIgniter.php(933): App\Controllers\Auth->dashboard()
+#9 C:\xampp\htdocs\ITE311-ROQUERO\system\CodeIgniter.php(507): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Auth))
+#10 C:\xampp\htdocs\ITE311-ROQUERO\system\CodeIgniter.php(354): CodeIgniter\CodeIgniter->handleRequest(NULL, Object(Config\Cache), false)
+#11 C:\xampp\htdocs\ITE311-ROQUERO\system\Boot.php(363): CodeIgniter\CodeIgniter->run()
+#12 C:\xampp\htdocs\ITE311-ROQUERO\system\Boot.php(68): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+#13 C:\xampp\htdocs\ITE311-ROQUERO\public\index.php(59): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+#14 {main}
+ERROR - 2025-12-11 15:52:40 --> mysqli_sql_exception: Unknown column 'enrollments.user_id' in 'where clause' in C:\xampp\htdocs\ITE311-ROQUERO\system\Database\MySQLi\Connection.php:327
+Stack trace:
+#0 C:\xampp\htdocs\ITE311-ROQUERO\system\Database\MySQLi\Connection.php(327): mysqli->query('SELECT `enrollm...', 0)
+#1 C:\xampp\htdocs\ITE311-ROQUERO\system\Database\BaseConnection.php(729): CodeIgniter\Database\MySQLi\Connection->execute('SELECT `enrollm...')
+#2 C:\xampp\htdocs\ITE311-ROQUERO\system\Database\BaseConnection.php(646): CodeIgniter\Database\BaseConnection->simpleQuery('SELECT `enrollm...')
+#3 C:\xampp\htdocs\ITE311-ROQUERO\system\Database\BaseBuilder.php(1649): CodeIgniter\Database\BaseConnection->query('SELECT `enrollm...', Array, false)
+#4 C:\xampp\htdocs\ITE311-ROQUERO\system\Model.php(286): CodeIgniter\Database\BaseBuilder->get()
+#5 C:\xampp\htdocs\ITE311-ROQUERO\system\BaseModel.php(677): CodeIgniter\Model->doFindAll(0, 0)
+#6 C:\xampp\htdocs\ITE311-ROQUERO\app\Models\EnrollmentModel.php(76): CodeIgniter\BaseModel->findAll()
+#7 C:\xampp\htdocs\ITE311-ROQUERO\app\Controllers\Auth.php(244): App\Models\EnrollmentModel->getUserEnrollments('1')
+#8 C:\xampp\htdocs\ITE311-ROQUERO\system\CodeIgniter.php(933): App\Controllers\Auth->dashboard()
+#9 C:\xampp\htdocs\ITE311-ROQUERO\system\CodeIgniter.php(507): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Auth))
+#10 C:\xampp\htdocs\ITE311-ROQUERO\system\CodeIgniter.php(354): CodeIgniter\CodeIgniter->handleRequest(NULL, Object(Config\Cache), false)
+#11 C:\xampp\htdocs\ITE311-ROQUERO\system\Boot.php(363): CodeIgniter\CodeIgniter->run()
+#12 C:\xampp\htdocs\ITE311-ROQUERO\system\Boot.php(68): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+#13 C:\xampp\htdocs\ITE311-ROQUERO\public\index.php(59): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+#14 {main}
+ERROR - 2025-12-11 15:52:41 --> mysqli_sql_exception: Unknown column 'enrollments.user_id' in 'where clause' in C:\xampp\htdocs\ITE311-ROQUERO\system\Database\MySQLi\Connection.php:327
+Stack trace:
+#0 C:\xampp\htdocs\ITE311-ROQUERO\system\Database\MySQLi\Connection.php(327): mysqli->query('SELECT `enrollm...', 0)
+#1 C:\xampp\htdocs\ITE311-ROQUERO\system\Database\BaseConnection.php(729): CodeIgniter\Database\MySQLi\Connection->execute('SELECT `enrollm...')
+#2 C:\xampp\htdocs\ITE311-ROQUERO\system\Database\BaseConnection.php(646): CodeIgniter\Database\BaseConnection->simpleQuery('SELECT `enrollm...')
+#3 C:\xampp\htdocs\ITE311-ROQUERO\system\Database\BaseBuilder.php(1649): CodeIgniter\Database\BaseConnection->query('SELECT `enrollm...', Array, false)
+#4 C:\xampp\htdocs\ITE311-ROQUERO\system\Model.php(286): CodeIgniter\Database\BaseBuilder->get()
+#5 C:\xampp\htdocs\ITE311-ROQUERO\system\BaseModel.php(677): CodeIgniter\Model->doFindAll(0, 0)
+#6 C:\xampp\htdocs\ITE311-ROQUERO\app\Models\EnrollmentModel.php(76): CodeIgniter\BaseModel->findAll()
+#7 C:\xampp\htdocs\ITE311-ROQUERO\app\Controllers\Auth.php(244): App\Models\EnrollmentModel->getUserEnrollments('1')
+#8 C:\xampp\htdocs\ITE311-ROQUERO\system\CodeIgniter.php(933): App\Controllers\Auth->dashboard()
+#9 C:\xampp\htdocs\ITE311-ROQUERO\system\CodeIgniter.php(507): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Auth))
+#10 C:\xampp\htdocs\ITE311-ROQUERO\system\CodeIgniter.php(354): CodeIgniter\CodeIgniter->handleRequest(NULL, Object(Config\Cache), false)
+#11 C:\xampp\htdocs\ITE311-ROQUERO\system\Boot.php(363): CodeIgniter\CodeIgniter->run()
+#12 C:\xampp\htdocs\ITE311-ROQUERO\system\Boot.php(68): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+#13 C:\xampp\htdocs\ITE311-ROQUERO\public\index.php(59): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+#14 {main}
+ERROR - 2025-12-11 15:52:43 --> mysqli_sql_exception: Unknown column 'enrollments.user_id' in 'where clause' in C:\xampp\htdocs\ITE311-ROQUERO\system\Database\MySQLi\Connection.php:327
+Stack trace:
+#0 C:\xampp\htdocs\ITE311-ROQUERO\system\Database\MySQLi\Connection.php(327): mysqli->query('SELECT `enrollm...', 0)
+#1 C:\xampp\htdocs\ITE311-ROQUERO\system\Database\BaseConnection.php(729): CodeIgniter\Database\MySQLi\Connection->execute('SELECT `enrollm...')
+#2 C:\xampp\htdocs\ITE311-ROQUERO\system\Database\BaseConnection.php(646): CodeIgniter\Database\BaseConnection->simpleQuery('SELECT `enrollm...')
+#3 C:\xampp\htdocs\ITE311-ROQUERO\system\Database\BaseBuilder.php(1649): CodeIgniter\Database\BaseConnection->query('SELECT `enrollm...', Array, false)
+#4 C:\xampp\htdocs\ITE311-ROQUERO\system\Model.php(286): CodeIgniter\Database\BaseBuilder->get()
+#5 C:\xampp\htdocs\ITE311-ROQUERO\system\BaseModel.php(677): CodeIgniter\Model->doFindAll(0, 0)
+#6 C:\xampp\htdocs\ITE311-ROQUERO\app\Models\EnrollmentModel.php(76): CodeIgniter\BaseModel->findAll()
+#7 C:\xampp\htdocs\ITE311-ROQUERO\app\Controllers\Auth.php(244): App\Models\EnrollmentModel->getUserEnrollments('1')
+#8 C:\xampp\htdocs\ITE311-ROQUERO\system\CodeIgniter.php(933): App\Controllers\Auth->dashboard()
+#9 C:\xampp\htdocs\ITE311-ROQUERO\system\CodeIgniter.php(507): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Auth))
+#10 C:\xampp\htdocs\ITE311-ROQUERO\system\CodeIgniter.php(354): CodeIgniter\CodeIgniter->handleRequest(NULL, Object(Config\Cache), false)
+#11 C:\xampp\htdocs\ITE311-ROQUERO\system\Boot.php(363): CodeIgniter\CodeIgniter->run()
+#12 C:\xampp\htdocs\ITE311-ROQUERO\system\Boot.php(68): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+#13 C:\xampp\htdocs\ITE311-ROQUERO\public\index.php(59): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+#14 {main}
+ERROR - 2025-12-11 15:52:45 --> mysqli_sql_exception: Unknown column 'enrollments.user_id' in 'where clause' in C:\xampp\htdocs\ITE311-ROQUERO\system\Database\MySQLi\Connection.php:327
+Stack trace:
+#0 C:\xampp\htdocs\ITE311-ROQUERO\system\Database\MySQLi\Connection.php(327): mysqli->query('SELECT `enrollm...', 0)
+#1 C:\xampp\htdocs\ITE311-ROQUERO\system\Database\BaseConnection.php(729): CodeIgniter\Database\MySQLi\Connection->execute('SELECT `enrollm...')
+#2 C:\xampp\htdocs\ITE311-ROQUERO\system\Database\BaseConnection.php(646): CodeIgniter\Database\BaseConnection->simpleQuery('SELECT `enrollm...')
+#3 C:\xampp\htdocs\ITE311-ROQUERO\system\Database\BaseBuilder.php(1649): CodeIgniter\Database\BaseConnection->query('SELECT `enrollm...', Array, false)
+#4 C:\xampp\htdocs\ITE311-ROQUERO\system\Model.php(286): CodeIgniter\Database\BaseBuilder->get()
+#5 C:\xampp\htdocs\ITE311-ROQUERO\system\BaseModel.php(677): CodeIgniter\Model->doFindAll(0, 0)
+#6 C:\xampp\htdocs\ITE311-ROQUERO\app\Models\EnrollmentModel.php(76): CodeIgniter\BaseModel->findAll()
+#7 C:\xampp\htdocs\ITE311-ROQUERO\app\Controllers\Auth.php(244): App\Models\EnrollmentModel->getUserEnrollments('1')
+#8 C:\xampp\htdocs\ITE311-ROQUERO\system\CodeIgniter.php(933): App\Controllers\Auth->dashboard()
+#9 C:\xampp\htdocs\ITE311-ROQUERO\system\CodeIgniter.php(507): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Auth))
+#10 C:\xampp\htdocs\ITE311-ROQUERO\system\CodeIgniter.php(354): CodeIgniter\CodeIgniter->handleRequest(NULL, Object(Config\Cache), false)
+#11 C:\xampp\htdocs\ITE311-ROQUERO\system\Boot.php(363): CodeIgniter\CodeIgniter->run()
+#12 C:\xampp\htdocs\ITE311-ROQUERO\system\Boot.php(68): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+#13 C:\xampp\htdocs\ITE311-ROQUERO\public\index.php(59): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+#14 {main}
+ERROR - 2025-12-11 15:52:46 --> mysqli_sql_exception: Unknown column 'enrollments.user_id' in 'where clause' in C:\xampp\htdocs\ITE311-ROQUERO\system\Database\MySQLi\Connection.php:327
+Stack trace:
+#0 C:\xampp\htdocs\ITE311-ROQUERO\system\Database\MySQLi\Connection.php(327): mysqli->query('SELECT `enrollm...', 0)
+#1 C:\xampp\htdocs\ITE311-ROQUERO\system\Database\BaseConnection.php(729): CodeIgniter\Database\MySQLi\Connection->execute('SELECT `enrollm...')
+#2 C:\xampp\htdocs\ITE311-ROQUERO\system\Database\BaseConnection.php(646): CodeIgniter\Database\BaseConnection->simpleQuery('SELECT `enrollm...')
+#3 C:\xampp\htdocs\ITE311-ROQUERO\system\Database\BaseBuilder.php(1649): CodeIgniter\Database\BaseConnection->query('SELECT `enrollm...', Array, false)
+#4 C:\xampp\htdocs\ITE311-ROQUERO\system\Model.php(286): CodeIgniter\Database\BaseBuilder->get()
+#5 C:\xampp\htdocs\ITE311-ROQUERO\system\BaseModel.php(677): CodeIgniter\Model->doFindAll(0, 0)
+#6 C:\xampp\htdocs\ITE311-ROQUERO\app\Models\EnrollmentModel.php(76): CodeIgniter\BaseModel->findAll()
+#7 C:\xampp\htdocs\ITE311-ROQUERO\app\Controllers\Auth.php(244): App\Models\EnrollmentModel->getUserEnrollments('1')
+#8 C:\xampp\htdocs\ITE311-ROQUERO\system\CodeIgniter.php(933): App\Controllers\Auth->dashboard()
+#9 C:\xampp\htdocs\ITE311-ROQUERO\system\CodeIgniter.php(507): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Auth))
+#10 C:\xampp\htdocs\ITE311-ROQUERO\system\CodeIgniter.php(354): CodeIgniter\CodeIgniter->handleRequest(NULL, Object(Config\Cache), false)
+#11 C:\xampp\htdocs\ITE311-ROQUERO\system\Boot.php(363): CodeIgniter\CodeIgniter->run()
+#12 C:\xampp\htdocs\ITE311-ROQUERO\system\Boot.php(68): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+#13 C:\xampp\htdocs\ITE311-ROQUERO\public\index.php(59): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+#14 {main}
+ERROR - 2025-12-11 15:52:48 --> mysqli_sql_exception: Unknown column 'enrollments.user_id' in 'where clause' in C:\xampp\htdocs\ITE311-ROQUERO\system\Database\MySQLi\Connection.php:327
+Stack trace:
+#0 C:\xampp\htdocs\ITE311-ROQUERO\system\Database\MySQLi\Connection.php(327): mysqli->query('SELECT `enrollm...', 0)
+#1 C:\xampp\htdocs\ITE311-ROQUERO\system\Database\BaseConnection.php(729): CodeIgniter\Database\MySQLi\Connection->execute('SELECT `enrollm...')
+#2 C:\xampp\htdocs\ITE311-ROQUERO\system\Database\BaseConnection.php(646): CodeIgniter\Database\BaseConnection->simpleQuery('SELECT `enrollm...')
+#3 C:\xampp\htdocs\ITE311-ROQUERO\system\Database\BaseBuilder.php(1649): CodeIgniter\Database\BaseConnection->query('SELECT `enrollm...', Array, false)
+#4 C:\xampp\htdocs\ITE311-ROQUERO\system\Model.php(286): CodeIgniter\Database\BaseBuilder->get()
+#5 C:\xampp\htdocs\ITE311-ROQUERO\system\BaseModel.php(677): CodeIgniter\Model->doFindAll(0, 0)
+#6 C:\xampp\htdocs\ITE311-ROQUERO\app\Models\EnrollmentModel.php(76): CodeIgniter\BaseModel->findAll()
+#7 C:\xampp\htdocs\ITE311-ROQUERO\app\Controllers\Auth.php(244): App\Models\EnrollmentModel->getUserEnrollments('1')
+#8 C:\xampp\htdocs\ITE311-ROQUERO\system\CodeIgniter.php(933): App\Controllers\Auth->dashboard()
+#9 C:\xampp\htdocs\ITE311-ROQUERO\system\CodeIgniter.php(507): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Auth))
+#10 C:\xampp\htdocs\ITE311-ROQUERO\system\CodeIgniter.php(354): CodeIgniter\CodeIgniter->handleRequest(NULL, Object(Config\Cache), false)
+#11 C:\xampp\htdocs\ITE311-ROQUERO\system\Boot.php(363): CodeIgniter\CodeIgniter->run()
+#12 C:\xampp\htdocs\ITE311-ROQUERO\system\Boot.php(68): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+#13 C:\xampp\htdocs\ITE311-ROQUERO\public\index.php(59): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+#14 {main}
+ERROR - 2025-12-11 15:52:49 --> mysqli_sql_exception: Unknown column 'enrollments.user_id' in 'where clause' in C:\xampp\htdocs\ITE311-ROQUERO\system\Database\MySQLi\Connection.php:327
+Stack trace:
+#0 C:\xampp\htdocs\ITE311-ROQUERO\system\Database\MySQLi\Connection.php(327): mysqli->query('SELECT `enrollm...', 0)
+#1 C:\xampp\htdocs\ITE311-ROQUERO\system\Database\BaseConnection.php(729): CodeIgniter\Database\MySQLi\Connection->execute('SELECT `enrollm...')
+#2 C:\xampp\htdocs\ITE311-ROQUERO\system\Database\BaseConnection.php(646): CodeIgniter\Database\BaseConnection->simpleQuery('SELECT `enrollm...')
+#3 C:\xampp\htdocs\ITE311-ROQUERO\system\Database\BaseBuilder.php(1649): CodeIgniter\Database\BaseConnection->query('SELECT `enrollm...', Array, false)
+#4 C:\xampp\htdocs\ITE311-ROQUERO\system\Model.php(286): CodeIgniter\Database\BaseBuilder->get()
+#5 C:\xampp\htdocs\ITE311-ROQUERO\system\BaseModel.php(677): CodeIgniter\Model->doFindAll(0, 0)
+#6 C:\xampp\htdocs\ITE311-ROQUERO\app\Models\EnrollmentModel.php(76): CodeIgniter\BaseModel->findAll()
+#7 C:\xampp\htdocs\ITE311-ROQUERO\app\Controllers\Auth.php(244): App\Models\EnrollmentModel->getUserEnrollments('1')
+#8 C:\xampp\htdocs\ITE311-ROQUERO\system\CodeIgniter.php(933): App\Controllers\Auth->dashboard()
+#9 C:\xampp\htdocs\ITE311-ROQUERO\system\CodeIgniter.php(507): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Auth))
+#10 C:\xampp\htdocs\ITE311-ROQUERO\system\CodeIgniter.php(354): CodeIgniter\CodeIgniter->handleRequest(NULL, Object(Config\Cache), false)
+#11 C:\xampp\htdocs\ITE311-ROQUERO\system\Boot.php(363): CodeIgniter\CodeIgniter->run()
+#12 C:\xampp\htdocs\ITE311-ROQUERO\system\Boot.php(68): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+#13 C:\xampp\htdocs\ITE311-ROQUERO\public\index.php(59): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+#14 {main}
+ERROR - 2025-12-11 15:55:35 --> mysqli_sql_exception: Unknown column 'enrollments.user_id' in 'where clause' in C:\xampp\htdocs\ITE311-ROQUERO\system\Database\MySQLi\Connection.php:327
+Stack trace:
+#0 C:\xampp\htdocs\ITE311-ROQUERO\system\Database\MySQLi\Connection.php(327): mysqli->query('SELECT `enrollm...', 0)
+#1 C:\xampp\htdocs\ITE311-ROQUERO\system\Database\BaseConnection.php(729): CodeIgniter\Database\MySQLi\Connection->execute('SELECT `enrollm...')
+#2 C:\xampp\htdocs\ITE311-ROQUERO\system\Database\BaseConnection.php(646): CodeIgniter\Database\BaseConnection->simpleQuery('SELECT `enrollm...')
+#3 C:\xampp\htdocs\ITE311-ROQUERO\system\Database\BaseBuilder.php(1649): CodeIgniter\Database\BaseConnection->query('SELECT `enrollm...', Array, false)
+#4 C:\xampp\htdocs\ITE311-ROQUERO\system\Model.php(286): CodeIgniter\Database\BaseBuilder->get()
+#5 C:\xampp\htdocs\ITE311-ROQUERO\system\BaseModel.php(677): CodeIgniter\Model->doFindAll(0, 0)
+#6 C:\xampp\htdocs\ITE311-ROQUERO\app\Models\EnrollmentModel.php(76): CodeIgniter\BaseModel->findAll()
+#7 C:\xampp\htdocs\ITE311-ROQUERO\app\Controllers\Auth.php(244): App\Models\EnrollmentModel->getUserEnrollments('1')
+#8 C:\xampp\htdocs\ITE311-ROQUERO\system\CodeIgniter.php(933): App\Controllers\Auth->dashboard()
+#9 C:\xampp\htdocs\ITE311-ROQUERO\system\CodeIgniter.php(507): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Auth))
+#10 C:\xampp\htdocs\ITE311-ROQUERO\system\CodeIgniter.php(354): CodeIgniter\CodeIgniter->handleRequest(NULL, Object(Config\Cache), false)
+#11 C:\xampp\htdocs\ITE311-ROQUERO\system\Boot.php(363): CodeIgniter\CodeIgniter->run()
+#12 C:\xampp\htdocs\ITE311-ROQUERO\system\Boot.php(68): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+#13 C:\xampp\htdocs\ITE311-ROQUERO\public\index.php(59): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+#14 {main}
+ERROR - 2025-12-11 15:55:35 --> Error fetching student courses: Unknown column 'enrollments.user_id' in 'where clause'
+ERROR - 2025-12-11 15:57:03 --> mysqli_sql_exception: Unknown column 'enrollments.user_id' in 'where clause' in C:\xampp\htdocs\ITE311-ROQUERO\system\Database\MySQLi\Connection.php:327
+Stack trace:
+#0 C:\xampp\htdocs\ITE311-ROQUERO\system\Database\MySQLi\Connection.php(327): mysqli->query('SELECT `enrollm...', 0)
+#1 C:\xampp\htdocs\ITE311-ROQUERO\system\Database\BaseConnection.php(729): CodeIgniter\Database\MySQLi\Connection->execute('SELECT `enrollm...')
+#2 C:\xampp\htdocs\ITE311-ROQUERO\system\Database\BaseConnection.php(646): CodeIgniter\Database\BaseConnection->simpleQuery('SELECT `enrollm...')
+#3 C:\xampp\htdocs\ITE311-ROQUERO\system\Database\BaseBuilder.php(1649): CodeIgniter\Database\BaseConnection->query('SELECT `enrollm...', Array, false)
+#4 C:\xampp\htdocs\ITE311-ROQUERO\system\Model.php(286): CodeIgniter\Database\BaseBuilder->get()
+#5 C:\xampp\htdocs\ITE311-ROQUERO\system\BaseModel.php(677): CodeIgniter\Model->doFindAll(0, 0)
+#6 C:\xampp\htdocs\ITE311-ROQUERO\app\Models\EnrollmentModel.php(76): CodeIgniter\BaseModel->findAll()
+#7 C:\xampp\htdocs\ITE311-ROQUERO\app\Controllers\Auth.php(244): App\Models\EnrollmentModel->getUserEnrollments('1')
+#8 C:\xampp\htdocs\ITE311-ROQUERO\system\CodeIgniter.php(933): App\Controllers\Auth->dashboard()
+#9 C:\xampp\htdocs\ITE311-ROQUERO\system\CodeIgniter.php(507): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Auth))
+#10 C:\xampp\htdocs\ITE311-ROQUERO\system\CodeIgniter.php(354): CodeIgniter\CodeIgniter->handleRequest(NULL, Object(Config\Cache), false)
+#11 C:\xampp\htdocs\ITE311-ROQUERO\system\Boot.php(363): CodeIgniter\CodeIgniter->run()
+#12 C:\xampp\htdocs\ITE311-ROQUERO\system\Boot.php(68): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+#13 C:\xampp\htdocs\ITE311-ROQUERO\public\index.php(59): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+#14 {main}
+ERROR - 2025-12-11 15:57:03 --> Error fetching student courses: Unknown column 'enrollments.user_id' in 'where clause'
+ERROR - 2025-12-11 15:57:04 --> mysqli_sql_exception: Unknown column 'enrollments.user_id' in 'where clause' in C:\xampp\htdocs\ITE311-ROQUERO\system\Database\MySQLi\Connection.php:327
+Stack trace:
+#0 C:\xampp\htdocs\ITE311-ROQUERO\system\Database\MySQLi\Connection.php(327): mysqli->query('SELECT `enrollm...', 0)
+#1 C:\xampp\htdocs\ITE311-ROQUERO\system\Database\BaseConnection.php(729): CodeIgniter\Database\MySQLi\Connection->execute('SELECT `enrollm...')
+#2 C:\xampp\htdocs\ITE311-ROQUERO\system\Database\BaseConnection.php(646): CodeIgniter\Database\BaseConnection->simpleQuery('SELECT `enrollm...')
+#3 C:\xampp\htdocs\ITE311-ROQUERO\system\Database\BaseBuilder.php(1649): CodeIgniter\Database\BaseConnection->query('SELECT `enrollm...', Array, false)
+#4 C:\xampp\htdocs\ITE311-ROQUERO\system\Model.php(286): CodeIgniter\Database\BaseBuilder->get()
+#5 C:\xampp\htdocs\ITE311-ROQUERO\system\BaseModel.php(677): CodeIgniter\Model->doFindAll(0, 0)
+#6 C:\xampp\htdocs\ITE311-ROQUERO\app\Models\EnrollmentModel.php(76): CodeIgniter\BaseModel->findAll()
+#7 C:\xampp\htdocs\ITE311-ROQUERO\app\Controllers\Auth.php(244): App\Models\EnrollmentModel->getUserEnrollments('1')
+#8 C:\xampp\htdocs\ITE311-ROQUERO\system\CodeIgniter.php(933): App\Controllers\Auth->dashboard()
+#9 C:\xampp\htdocs\ITE311-ROQUERO\system\CodeIgniter.php(507): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Auth))
+#10 C:\xampp\htdocs\ITE311-ROQUERO\system\CodeIgniter.php(354): CodeIgniter\CodeIgniter->handleRequest(NULL, Object(Config\Cache), false)
+#11 C:\xampp\htdocs\ITE311-ROQUERO\system\Boot.php(363): CodeIgniter\CodeIgniter->run()
+#12 C:\xampp\htdocs\ITE311-ROQUERO\system\Boot.php(68): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+#13 C:\xampp\htdocs\ITE311-ROQUERO\public\index.php(59): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+#14 {main}
+ERROR - 2025-12-11 15:57:04 --> Error fetching student courses: Unknown column 'enrollments.user_id' in 'where clause'
+ERROR - 2025-12-11 15:57:04 --> mysqli_sql_exception: Unknown column 'enrollments.user_id' in 'where clause' in C:\xampp\htdocs\ITE311-ROQUERO\system\Database\MySQLi\Connection.php:327
+Stack trace:
+#0 C:\xampp\htdocs\ITE311-ROQUERO\system\Database\MySQLi\Connection.php(327): mysqli->query('SELECT `enrollm...', 0)
+#1 C:\xampp\htdocs\ITE311-ROQUERO\system\Database\BaseConnection.php(729): CodeIgniter\Database\MySQLi\Connection->execute('SELECT `enrollm...')
+#2 C:\xampp\htdocs\ITE311-ROQUERO\system\Database\BaseConnection.php(646): CodeIgniter\Database\BaseConnection->simpleQuery('SELECT `enrollm...')
+#3 C:\xampp\htdocs\ITE311-ROQUERO\system\Database\BaseBuilder.php(1649): CodeIgniter\Database\BaseConnection->query('SELECT `enrollm...', Array, false)
+#4 C:\xampp\htdocs\ITE311-ROQUERO\system\Model.php(286): CodeIgniter\Database\BaseBuilder->get()
+#5 C:\xampp\htdocs\ITE311-ROQUERO\system\BaseModel.php(677): CodeIgniter\Model->doFindAll(0, 0)
+#6 C:\xampp\htdocs\ITE311-ROQUERO\app\Models\EnrollmentModel.php(76): CodeIgniter\BaseModel->findAll()
+#7 C:\xampp\htdocs\ITE311-ROQUERO\app\Controllers\Auth.php(244): App\Models\EnrollmentModel->getUserEnrollments('1')
+#8 C:\xampp\htdocs\ITE311-ROQUERO\system\CodeIgniter.php(933): App\Controllers\Auth->dashboard()
+#9 C:\xampp\htdocs\ITE311-ROQUERO\system\CodeIgniter.php(507): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Auth))
+#10 C:\xampp\htdocs\ITE311-ROQUERO\system\CodeIgniter.php(354): CodeIgniter\CodeIgniter->handleRequest(NULL, Object(Config\Cache), false)
+#11 C:\xampp\htdocs\ITE311-ROQUERO\system\Boot.php(363): CodeIgniter\CodeIgniter->run()
+#12 C:\xampp\htdocs\ITE311-ROQUERO\system\Boot.php(68): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+#13 C:\xampp\htdocs\ITE311-ROQUERO\public\index.php(59): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+#14 {main}
+ERROR - 2025-12-11 15:57:04 --> Error fetching student courses: Unknown column 'enrollments.user_id' in 'where clause'
+ERROR - 2025-12-11 15:57:04 --> mysqli_sql_exception: Unknown column 'enrollments.user_id' in 'where clause' in C:\xampp\htdocs\ITE311-ROQUERO\system\Database\MySQLi\Connection.php:327
+Stack trace:
+#0 C:\xampp\htdocs\ITE311-ROQUERO\system\Database\MySQLi\Connection.php(327): mysqli->query('SELECT `enrollm...', 0)
+#1 C:\xampp\htdocs\ITE311-ROQUERO\system\Database\BaseConnection.php(729): CodeIgniter\Database\MySQLi\Connection->execute('SELECT `enrollm...')
+#2 C:\xampp\htdocs\ITE311-ROQUERO\system\Database\BaseConnection.php(646): CodeIgniter\Database\BaseConnection->simpleQuery('SELECT `enrollm...')
+#3 C:\xampp\htdocs\ITE311-ROQUERO\system\Database\BaseBuilder.php(1649): CodeIgniter\Database\BaseConnection->query('SELECT `enrollm...', Array, false)
+#4 C:\xampp\htdocs\ITE311-ROQUERO\system\Model.php(286): CodeIgniter\Database\BaseBuilder->get()
+#5 C:\xampp\htdocs\ITE311-ROQUERO\system\BaseModel.php(677): CodeIgniter\Model->doFindAll(0, 0)
+#6 C:\xampp\htdocs\ITE311-ROQUERO\app\Models\EnrollmentModel.php(76): CodeIgniter\BaseModel->findAll()
+#7 C:\xampp\htdocs\ITE311-ROQUERO\app\Controllers\Auth.php(244): App\Models\EnrollmentModel->getUserEnrollments('1')
+#8 C:\xampp\htdocs\ITE311-ROQUERO\system\CodeIgniter.php(933): App\Controllers\Auth->dashboard()
+#9 C:\xampp\htdocs\ITE311-ROQUERO\system\CodeIgniter.php(507): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Auth))
+#10 C:\xampp\htdocs\ITE311-ROQUERO\system\CodeIgniter.php(354): CodeIgniter\CodeIgniter->handleRequest(NULL, Object(Config\Cache), false)
+#11 C:\xampp\htdocs\ITE311-ROQUERO\system\Boot.php(363): CodeIgniter\CodeIgniter->run()
+#12 C:\xampp\htdocs\ITE311-ROQUERO\system\Boot.php(68): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+#13 C:\xampp\htdocs\ITE311-ROQUERO\public\index.php(59): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+#14 {main}
+ERROR - 2025-12-11 15:57:04 --> Error fetching student courses: Unknown column 'enrollments.user_id' in 'where clause'
+ERROR - 2025-12-11 15:57:05 --> mysqli_sql_exception: Unknown column 'enrollments.user_id' in 'where clause' in C:\xampp\htdocs\ITE311-ROQUERO\system\Database\MySQLi\Connection.php:327
+Stack trace:
+#0 C:\xampp\htdocs\ITE311-ROQUERO\system\Database\MySQLi\Connection.php(327): mysqli->query('SELECT `enrollm...', 0)
+#1 C:\xampp\htdocs\ITE311-ROQUERO\system\Database\BaseConnection.php(729): CodeIgniter\Database\MySQLi\Connection->execute('SELECT `enrollm...')
+#2 C:\xampp\htdocs\ITE311-ROQUERO\system\Database\BaseConnection.php(646): CodeIgniter\Database\BaseConnection->simpleQuery('SELECT `enrollm...')
+#3 C:\xampp\htdocs\ITE311-ROQUERO\system\Database\BaseBuilder.php(1649): CodeIgniter\Database\BaseConnection->query('SELECT `enrollm...', Array, false)
+#4 C:\xampp\htdocs\ITE311-ROQUERO\system\Model.php(286): CodeIgniter\Database\BaseBuilder->get()
+#5 C:\xampp\htdocs\ITE311-ROQUERO\system\BaseModel.php(677): CodeIgniter\Model->doFindAll(0, 0)
+#6 C:\xampp\htdocs\ITE311-ROQUERO\app\Models\EnrollmentModel.php(76): CodeIgniter\BaseModel->findAll()
+#7 C:\xampp\htdocs\ITE311-ROQUERO\app\Controllers\Auth.php(244): App\Models\EnrollmentModel->getUserEnrollments('1')
+#8 C:\xampp\htdocs\ITE311-ROQUERO\system\CodeIgniter.php(933): App\Controllers\Auth->dashboard()
+#9 C:\xampp\htdocs\ITE311-ROQUERO\system\CodeIgniter.php(507): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Auth))
+#10 C:\xampp\htdocs\ITE311-ROQUERO\system\CodeIgniter.php(354): CodeIgniter\CodeIgniter->handleRequest(NULL, Object(Config\Cache), false)
+#11 C:\xampp\htdocs\ITE311-ROQUERO\system\Boot.php(363): CodeIgniter\CodeIgniter->run()
+#12 C:\xampp\htdocs\ITE311-ROQUERO\system\Boot.php(68): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+#13 C:\xampp\htdocs\ITE311-ROQUERO\public\index.php(59): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+#14 {main}
+ERROR - 2025-12-11 15:57:05 --> Error fetching student courses: Unknown column 'enrollments.user_id' in 'where clause'
+ERROR - 2025-12-11 15:57:30 --> mysqli_sql_exception: Unknown column 'enrollments.user_id' in 'where clause' in C:\xampp\htdocs\ITE311-ROQUERO\system\Database\MySQLi\Connection.php:327
+Stack trace:
+#0 C:\xampp\htdocs\ITE311-ROQUERO\system\Database\MySQLi\Connection.php(327): mysqli->query('SELECT `enrollm...', 0)
+#1 C:\xampp\htdocs\ITE311-ROQUERO\system\Database\BaseConnection.php(729): CodeIgniter\Database\MySQLi\Connection->execute('SELECT `enrollm...')
+#2 C:\xampp\htdocs\ITE311-ROQUERO\system\Database\BaseConnection.php(646): CodeIgniter\Database\BaseConnection->simpleQuery('SELECT `enrollm...')
+#3 C:\xampp\htdocs\ITE311-ROQUERO\system\Database\BaseBuilder.php(1649): CodeIgniter\Database\BaseConnection->query('SELECT `enrollm...', Array, false)
+#4 C:\xampp\htdocs\ITE311-ROQUERO\system\Model.php(286): CodeIgniter\Database\BaseBuilder->get()
+#5 C:\xampp\htdocs\ITE311-ROQUERO\system\BaseModel.php(677): CodeIgniter\Model->doFindAll(0, 0)
+#6 C:\xampp\htdocs\ITE311-ROQUERO\app\Models\EnrollmentModel.php(76): CodeIgniter\BaseModel->findAll()
+#7 C:\xampp\htdocs\ITE311-ROQUERO\app\Controllers\Auth.php(244): App\Models\EnrollmentModel->getUserEnrollments('1')
+#8 C:\xampp\htdocs\ITE311-ROQUERO\system\CodeIgniter.php(933): App\Controllers\Auth->dashboard()
+#9 C:\xampp\htdocs\ITE311-ROQUERO\system\CodeIgniter.php(507): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Auth))
+#10 C:\xampp\htdocs\ITE311-ROQUERO\system\CodeIgniter.php(354): CodeIgniter\CodeIgniter->handleRequest(NULL, Object(Config\Cache), false)
+#11 C:\xampp\htdocs\ITE311-ROQUERO\system\Boot.php(363): CodeIgniter\CodeIgniter->run()
+#12 C:\xampp\htdocs\ITE311-ROQUERO\system\Boot.php(68): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+#13 C:\xampp\htdocs\ITE311-ROQUERO\public\index.php(59): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+#14 {main}
+ERROR - 2025-12-11 15:57:30 --> Error fetching student courses: Unknown column 'enrollments.user_id' in 'where clause'
+ERROR - 2025-12-11 15:59:01 --> mysqli_sql_exception: Unknown column 'enrollments.user_id' in 'where clause' in C:\xampp\htdocs\ITE311-ROQUERO\system\Database\MySQLi\Connection.php:327
+Stack trace:
+#0 C:\xampp\htdocs\ITE311-ROQUERO\system\Database\MySQLi\Connection.php(327): mysqli->query('SELECT `enrollm...', 0)
+#1 C:\xampp\htdocs\ITE311-ROQUERO\system\Database\BaseConnection.php(729): CodeIgniter\Database\MySQLi\Connection->execute('SELECT `enrollm...')
+#2 C:\xampp\htdocs\ITE311-ROQUERO\system\Database\BaseConnection.php(646): CodeIgniter\Database\BaseConnection->simpleQuery('SELECT `enrollm...')
+#3 C:\xampp\htdocs\ITE311-ROQUERO\system\Database\BaseBuilder.php(1649): CodeIgniter\Database\BaseConnection->query('SELECT `enrollm...', Array, false)
+#4 C:\xampp\htdocs\ITE311-ROQUERO\system\Model.php(286): CodeIgniter\Database\BaseBuilder->get()
+#5 C:\xampp\htdocs\ITE311-ROQUERO\system\BaseModel.php(677): CodeIgniter\Model->doFindAll(0, 0)
+#6 C:\xampp\htdocs\ITE311-ROQUERO\app\Models\EnrollmentModel.php(76): CodeIgniter\BaseModel->findAll()
+#7 C:\xampp\htdocs\ITE311-ROQUERO\app\Controllers\Auth.php(244): App\Models\EnrollmentModel->getUserEnrollments('1')
+#8 C:\xampp\htdocs\ITE311-ROQUERO\system\CodeIgniter.php(933): App\Controllers\Auth->dashboard()
+#9 C:\xampp\htdocs\ITE311-ROQUERO\system\CodeIgniter.php(507): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Auth))
+#10 C:\xampp\htdocs\ITE311-ROQUERO\system\CodeIgniter.php(354): CodeIgniter\CodeIgniter->handleRequest(NULL, Object(Config\Cache), false)
+#11 C:\xampp\htdocs\ITE311-ROQUERO\system\Boot.php(363): CodeIgniter\CodeIgniter->run()
+#12 C:\xampp\htdocs\ITE311-ROQUERO\system\Boot.php(68): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+#13 C:\xampp\htdocs\ITE311-ROQUERO\public\index.php(59): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+#14 {main}
+ERROR - 2025-12-11 15:59:01 --> Error fetching student courses: Unknown column 'enrollments.user_id' in 'where clause'
+ERROR - 2025-12-11 15:59:13 --> mysqli_sql_exception: Unknown column 'enrollments.user_id' in 'where clause' in C:\xampp\htdocs\ITE311-ROQUERO\system\Database\MySQLi\Connection.php:327
+Stack trace:
+#0 C:\xampp\htdocs\ITE311-ROQUERO\system\Database\MySQLi\Connection.php(327): mysqli->query('SELECT `enrollm...', 0)
+#1 C:\xampp\htdocs\ITE311-ROQUERO\system\Database\BaseConnection.php(729): CodeIgniter\Database\MySQLi\Connection->execute('SELECT `enrollm...')
+#2 C:\xampp\htdocs\ITE311-ROQUERO\system\Database\BaseConnection.php(646): CodeIgniter\Database\BaseConnection->simpleQuery('SELECT `enrollm...')
+#3 C:\xampp\htdocs\ITE311-ROQUERO\system\Database\BaseBuilder.php(1649): CodeIgniter\Database\BaseConnection->query('SELECT `enrollm...', Array, false)
+#4 C:\xampp\htdocs\ITE311-ROQUERO\system\Model.php(286): CodeIgniter\Database\BaseBuilder->get()
+#5 C:\xampp\htdocs\ITE311-ROQUERO\system\BaseModel.php(677): CodeIgniter\Model->doFindAll(0, 0)
+#6 C:\xampp\htdocs\ITE311-ROQUERO\app\Models\EnrollmentModel.php(76): CodeIgniter\BaseModel->findAll()
+#7 C:\xampp\htdocs\ITE311-ROQUERO\app\Controllers\Auth.php(244): App\Models\EnrollmentModel->getUserEnrollments('1')
+#8 C:\xampp\htdocs\ITE311-ROQUERO\system\CodeIgniter.php(933): App\Controllers\Auth->dashboard()
+#9 C:\xampp\htdocs\ITE311-ROQUERO\system\CodeIgniter.php(507): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Auth))
+#10 C:\xampp\htdocs\ITE311-ROQUERO\system\CodeIgniter.php(354): CodeIgniter\CodeIgniter->handleRequest(NULL, Object(Config\Cache), false)
+#11 C:\xampp\htdocs\ITE311-ROQUERO\system\Boot.php(363): CodeIgniter\CodeIgniter->run()
+#12 C:\xampp\htdocs\ITE311-ROQUERO\system\Boot.php(68): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+#13 C:\xampp\htdocs\ITE311-ROQUERO\public\index.php(59): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+#14 {main}
+ERROR - 2025-12-11 15:59:13 --> Error fetching student courses: Unknown column 'enrollments.user_id' in 'where clause'
+ERROR - 2025-12-11 15:59:26 --> mysqli_sql_exception: Unknown column 'enrollments.user_id' in 'where clause' in C:\xampp\htdocs\ITE311-ROQUERO\system\Database\MySQLi\Connection.php:327
+Stack trace:
+#0 C:\xampp\htdocs\ITE311-ROQUERO\system\Database\MySQLi\Connection.php(327): mysqli->query('SELECT `enrollm...', 0)
+#1 C:\xampp\htdocs\ITE311-ROQUERO\system\Database\BaseConnection.php(729): CodeIgniter\Database\MySQLi\Connection->execute('SELECT `enrollm...')
+#2 C:\xampp\htdocs\ITE311-ROQUERO\system\Database\BaseConnection.php(646): CodeIgniter\Database\BaseConnection->simpleQuery('SELECT `enrollm...')
+#3 C:\xampp\htdocs\ITE311-ROQUERO\system\Database\BaseBuilder.php(1649): CodeIgniter\Database\BaseConnection->query('SELECT `enrollm...', Array, false)
+#4 C:\xampp\htdocs\ITE311-ROQUERO\system\Model.php(286): CodeIgniter\Database\BaseBuilder->get()
+#5 C:\xampp\htdocs\ITE311-ROQUERO\system\BaseModel.php(677): CodeIgniter\Model->doFindAll(0, 0)
+#6 C:\xampp\htdocs\ITE311-ROQUERO\app\Models\EnrollmentModel.php(76): CodeIgniter\BaseModel->findAll()
+#7 C:\xampp\htdocs\ITE311-ROQUERO\app\Controllers\Auth.php(244): App\Models\EnrollmentModel->getUserEnrollments('1')
+#8 C:\xampp\htdocs\ITE311-ROQUERO\system\CodeIgniter.php(933): App\Controllers\Auth->dashboard()
+#9 C:\xampp\htdocs\ITE311-ROQUERO\system\CodeIgniter.php(507): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Auth))
+#10 C:\xampp\htdocs\ITE311-ROQUERO\system\CodeIgniter.php(354): CodeIgniter\CodeIgniter->handleRequest(NULL, Object(Config\Cache), false)
+#11 C:\xampp\htdocs\ITE311-ROQUERO\system\Boot.php(363): CodeIgniter\CodeIgniter->run()
+#12 C:\xampp\htdocs\ITE311-ROQUERO\system\Boot.php(68): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+#13 C:\xampp\htdocs\ITE311-ROQUERO\public\index.php(59): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+#14 {main}
+ERROR - 2025-12-11 15:59:26 --> Error fetching student courses: Unknown column 'enrollments.user_id' in 'where clause'
+ERROR - 2025-12-11 15:59:59 --> mysqli_sql_exception: Unknown column 'enrollments.user_id' in 'where clause' in C:\xampp\htdocs\ITE311-ROQUERO\system\Database\MySQLi\Connection.php:327
+Stack trace:
+#0 C:\xampp\htdocs\ITE311-ROQUERO\system\Database\MySQLi\Connection.php(327): mysqli->query('SELECT `enrollm...', 0)
+#1 C:\xampp\htdocs\ITE311-ROQUERO\system\Database\BaseConnection.php(729): CodeIgniter\Database\MySQLi\Connection->execute('SELECT `enrollm...')
+#2 C:\xampp\htdocs\ITE311-ROQUERO\system\Database\BaseConnection.php(646): CodeIgniter\Database\BaseConnection->simpleQuery('SELECT `enrollm...')
+#3 C:\xampp\htdocs\ITE311-ROQUERO\system\Database\BaseBuilder.php(1649): CodeIgniter\Database\BaseConnection->query('SELECT `enrollm...', Array, false)
+#4 C:\xampp\htdocs\ITE311-ROQUERO\system\Model.php(286): CodeIgniter\Database\BaseBuilder->get()
+#5 C:\xampp\htdocs\ITE311-ROQUERO\system\BaseModel.php(677): CodeIgniter\Model->doFindAll(0, 0)
+#6 C:\xampp\htdocs\ITE311-ROQUERO\app\Models\EnrollmentModel.php(76): CodeIgniter\BaseModel->findAll()
+#7 C:\xampp\htdocs\ITE311-ROQUERO\app\Controllers\Auth.php(244): App\Models\EnrollmentModel->getUserEnrollments('1')
+#8 C:\xampp\htdocs\ITE311-ROQUERO\system\CodeIgniter.php(933): App\Controllers\Auth->dashboard()
+#9 C:\xampp\htdocs\ITE311-ROQUERO\system\CodeIgniter.php(507): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Auth))
+#10 C:\xampp\htdocs\ITE311-ROQUERO\system\CodeIgniter.php(354): CodeIgniter\CodeIgniter->handleRequest(NULL, Object(Config\Cache), false)
+#11 C:\xampp\htdocs\ITE311-ROQUERO\system\Boot.php(363): CodeIgniter\CodeIgniter->run()
+#12 C:\xampp\htdocs\ITE311-ROQUERO\system\Boot.php(68): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+#13 C:\xampp\htdocs\ITE311-ROQUERO\public\index.php(59): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+#14 {main}
+ERROR - 2025-12-11 15:59:59 --> Error fetching student courses: Unknown column 'enrollments.user_id' in 'where clause'
+CRITICAL - 2025-12-11 16:07:24 --> CodeIgniter\Security\Exceptions\SecurityException: The action you requested is not allowed.
+[Method: POST, Route: course/enroll]
+in SYSTEMPATH\Security\Security.php on line 262.
+ 1 SYSTEMPATH\Security\Security.php(262): CodeIgniter\Security\Exceptions\SecurityException::forDisallowedAction()
+ 2 SYSTEMPATH\Filters\CSRF.php(52): CodeIgniter\Security\Security->verify(Object(CodeIgniter\HTTP\IncomingRequest))
+ 3 SYSTEMPATH\Filters\Filters.php(241): CodeIgniter\Filters\CSRF->before(Object(CodeIgniter\HTTP\IncomingRequest), null)
+ 4 SYSTEMPATH\Filters\Filters.php(221): CodeIgniter\Filters\Filters->runBefore([...])
+ 5 SYSTEMPATH\CodeIgniter.php(479): CodeIgniter\Filters\Filters->run('course/enroll', 'before')
+ 6 SYSTEMPATH\CodeIgniter.php(354): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 7 SYSTEMPATH\Boot.php(363): CodeIgniter\CodeIgniter->run()
+ 8 SYSTEMPATH\Boot.php(68): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+ 9 FCPATH\index.php(59): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+CRITICAL - 2025-12-11 16:07:25 --> CodeIgniter\Security\Exceptions\SecurityException: The action you requested is not allowed.
+[Method: POST, Route: course/enroll]
+in SYSTEMPATH\Security\Security.php on line 262.
+ 1 SYSTEMPATH\Security\Security.php(262): CodeIgniter\Security\Exceptions\SecurityException::forDisallowedAction()
+ 2 SYSTEMPATH\Filters\CSRF.php(52): CodeIgniter\Security\Security->verify(Object(CodeIgniter\HTTP\IncomingRequest))
+ 3 SYSTEMPATH\Filters\Filters.php(241): CodeIgniter\Filters\CSRF->before(Object(CodeIgniter\HTTP\IncomingRequest), null)
+ 4 SYSTEMPATH\Filters\Filters.php(221): CodeIgniter\Filters\Filters->runBefore([...])
+ 5 SYSTEMPATH\CodeIgniter.php(479): CodeIgniter\Filters\Filters->run('course/enroll', 'before')
+ 6 SYSTEMPATH\CodeIgniter.php(354): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 7 SYSTEMPATH\Boot.php(363): CodeIgniter\CodeIgniter->run()
+ 8 SYSTEMPATH\Boot.php(68): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+ 9 FCPATH\index.php(59): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+CRITICAL - 2025-12-11 16:07:26 --> CodeIgniter\Security\Exceptions\SecurityException: The action you requested is not allowed.
+[Method: POST, Route: course/enroll]
+in SYSTEMPATH\Security\Security.php on line 262.
+ 1 SYSTEMPATH\Security\Security.php(262): CodeIgniter\Security\Exceptions\SecurityException::forDisallowedAction()
+ 2 SYSTEMPATH\Filters\CSRF.php(52): CodeIgniter\Security\Security->verify(Object(CodeIgniter\HTTP\IncomingRequest))
+ 3 SYSTEMPATH\Filters\Filters.php(241): CodeIgniter\Filters\CSRF->before(Object(CodeIgniter\HTTP\IncomingRequest), null)
+ 4 SYSTEMPATH\Filters\Filters.php(221): CodeIgniter\Filters\Filters->runBefore([...])
+ 5 SYSTEMPATH\CodeIgniter.php(479): CodeIgniter\Filters\Filters->run('course/enroll', 'before')
+ 6 SYSTEMPATH\CodeIgniter.php(354): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 7 SYSTEMPATH\Boot.php(363): CodeIgniter\CodeIgniter->run()
+ 8 SYSTEMPATH\Boot.php(68): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+ 9 FCPATH\index.php(59): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+CRITICAL - 2025-12-11 16:07:26 --> CodeIgniter\Security\Exceptions\SecurityException: The action you requested is not allowed.
+[Method: POST, Route: course/enroll]
+in SYSTEMPATH\Security\Security.php on line 262.
+ 1 SYSTEMPATH\Security\Security.php(262): CodeIgniter\Security\Exceptions\SecurityException::forDisallowedAction()
+ 2 SYSTEMPATH\Filters\CSRF.php(52): CodeIgniter\Security\Security->verify(Object(CodeIgniter\HTTP\IncomingRequest))
+ 3 SYSTEMPATH\Filters\Filters.php(241): CodeIgniter\Filters\CSRF->before(Object(CodeIgniter\HTTP\IncomingRequest), null)
+ 4 SYSTEMPATH\Filters\Filters.php(221): CodeIgniter\Filters\Filters->runBefore([...])
+ 5 SYSTEMPATH\CodeIgniter.php(479): CodeIgniter\Filters\Filters->run('course/enroll', 'before')
+ 6 SYSTEMPATH\CodeIgniter.php(354): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 7 SYSTEMPATH\Boot.php(363): CodeIgniter\CodeIgniter->run()
+ 8 SYSTEMPATH\Boot.php(68): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+ 9 FCPATH\index.php(59): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+CRITICAL - 2025-12-11 16:07:29 --> CodeIgniter\Security\Exceptions\SecurityException: The action you requested is not allowed.
+[Method: POST, Route: course/enroll]
+in SYSTEMPATH\Security\Security.php on line 262.
+ 1 SYSTEMPATH\Security\Security.php(262): CodeIgniter\Security\Exceptions\SecurityException::forDisallowedAction()
+ 2 SYSTEMPATH\Filters\CSRF.php(52): CodeIgniter\Security\Security->verify(Object(CodeIgniter\HTTP\IncomingRequest))
+ 3 SYSTEMPATH\Filters\Filters.php(241): CodeIgniter\Filters\CSRF->before(Object(CodeIgniter\HTTP\IncomingRequest), null)
+ 4 SYSTEMPATH\Filters\Filters.php(221): CodeIgniter\Filters\Filters->runBefore([...])
+ 5 SYSTEMPATH\CodeIgniter.php(479): CodeIgniter\Filters\Filters->run('course/enroll', 'before')
+ 6 SYSTEMPATH\CodeIgniter.php(354): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 7 SYSTEMPATH\Boot.php(363): CodeIgniter\CodeIgniter->run()
+ 8 SYSTEMPATH\Boot.php(68): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+ 9 FCPATH\index.php(59): CodeIgniter\Boot::bootWeb(Object(Config\Paths))

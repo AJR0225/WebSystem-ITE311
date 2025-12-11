@@ -239,26 +239,50 @@ class Auth extends Controller
                 $roleSpecificData['can_submit_assignments'] = true;
                 $roleSpecificData['can_view_grades'] = true;
                 
-                // Fetch enrolled courses for this student
-                $databaseData['enrolled_courses'] = $enrollmentModel->select('enrollments.*, courses.title, courses.description, courses.status as course_status, users.name as instructor_name')
-                    ->join('courses', 'courses.id = enrollments.course_id')
-                    ->join('users', 'users.id = courses.instructor_id')
-                    ->where('enrollments.student_id', $userId)
-                    ->where('enrollments.status', 'enrolled')
-                    ->orderBy('enrollments.enrollment_date', 'DESC')
-                    ->findAll();
-                $databaseData['total_enrolled_courses'] = count($databaseData['enrolled_courses']);
-                
-                // Fetch available courses (not enrolled)
-                $enrolledCourseIds = array_column($databaseData['enrolled_courses'], 'course_id');
-                $availableCoursesQuery = $courseModel->where('status', 'published');
-                if (!empty($enrolledCourseIds)) {
-                    $availableCoursesQuery->whereNotIn('id', $enrolledCourseIds);
+                // Fetch enrolled courses for this student using EnrollmentModel::getUserEnrollments()
+                try {
+                    $databaseData['enrolled_courses'] = $enrollmentModel->getUserEnrollments($userId);
+                    if (!is_array($databaseData['enrolled_courses'])) {
+                        $databaseData['enrolled_courses'] = [];
+                    }
+                    $databaseData['total_enrolled_courses'] = count($databaseData['enrolled_courses']);
+                    
+                    // Fetch available courses (not enrolled)
+                    $enrolledCourseIds = [];
+                    if (!empty($databaseData['enrolled_courses'])) {
+                        foreach ($databaseData['enrolled_courses'] as $enrollment) {
+                            if (isset($enrollment['course_id']) && !empty($enrollment['course_id'])) {
+                                $enrolledCourseIds[] = (int) $enrollment['course_id'];
+                            }
+                        }
+                    }
+                    
+                    // Fetch available courses (not enrolled)
+                    // Use direct database query to ensure we get the data
+                    $db = \Config\Database::connect();
+                    $builder = $db->table('courses');
+                    $builder->where('status', 'published');
+                    if (!empty($enrolledCourseIds)) {
+                        $builder->whereNotIn('id', $enrolledCourseIds);
+                    }
+                    $builder->orderBy('created_at', 'DESC');
+                    $builder->limit(10);
+                    $query = $builder->get();
+                    $databaseData['available_courses'] = $query->getResultArray();
+                    
+                    if (!is_array($databaseData['available_courses'])) {
+                        $databaseData['available_courses'] = [];
+                    }
+                    $databaseData['total_available_courses'] = count($databaseData['available_courses']);
+                } catch (\Exception $e) {
+                    // Log the error for debugging
+                    log_message('error', 'Error fetching student courses: ' . $e->getMessage());
+                    // If there's an error, set empty arrays
+                    $databaseData['enrolled_courses'] = [];
+                    $databaseData['total_enrolled_courses'] = 0;
+                    $databaseData['available_courses'] = [];
+                    $databaseData['total_available_courses'] = 0;
                 }
-                $databaseData['available_courses'] = $availableCoursesQuery->orderBy('created_at', 'DESC')
-                    ->limit(10)
-                    ->findAll();
-                $databaseData['total_available_courses'] = count($databaseData['available_courses']);
                 
                 break;
         }

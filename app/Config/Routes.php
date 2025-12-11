@@ -67,6 +67,11 @@ $routes->group('student', function($routes) {
 $routes->get('profile', 'Auth::dashboard'); // Placeholder - redirects to dashboard
 
 // ============================================
+// COURSE ROUTES
+// ============================================
+$routes->post('/course/enroll', 'Course::enroll'); // AJAX enrollment endpoint
+
+// ============================================
 // AUTO ROUTING (Enable for development)
 // ============================================
 $routes->setAutoRoute(true);
