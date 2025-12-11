@@ -25,6 +25,20 @@
             </div>
         <?php endif; ?>
 
+        <!-- Search Form -->
+        <div class="row mb-4" style="margin-bottom: 20px;">
+            <div class="col-md-6">
+                <form id="searchForm" class="d-flex" action="<?= base_url('course/search') ?>" method="GET">
+                    <div class="input-group">
+                        <input type="text" id="searchInput" class="form-control" placeholder="Search courses..." name="search_term" value="<?= esc($search_term ?? '') ?>" style="background: #1a1a1a; border: 1px solid rgba(255, 102, 0, 0.3); color: #ffffff;">
+                        <button class="btn btn-outline-primary" type="submit" style="border-color: rgba(255, 102, 0, 0.5); color: #ff6600;">
+                            <i class="bi bi-search"></i> Search
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+
         <!-- Courses Table -->
         <div class="table-container">
             <table class="data-table">
@@ -45,7 +59,7 @@
                 <tbody>
                     <?php if (!empty($courses)): ?>
                         <?php foreach ($courses as $course): ?>
-                            <tr>
+                            <tr class="course-row" data-course-title="<?= esc(strtolower($course['title'])) ?>" data-course-description="<?= esc(strtolower($course['description'] ?? '')) ?>" data-instructor="<?= esc(strtolower($course['instructor_name'] ?? '')) ?>">
                                 <td><?= esc($course['id']) ?></td>
                                 <td>
                                     <strong><?= esc($course['title']) ?></strong>
@@ -426,6 +440,80 @@ window.onclick = function(event) {
         deleteModal.style.display = 'none';
     }
 }
+
+// Client-side filtering - Instant filtering as user types
+$(document).ready(function() {
+    $('#searchInput').on('keyup', function() {
+        const value = $(this).val().toLowerCase();
+        
+        // Filter course table rows
+        $('.course-row').each(function() {
+            const title = $(this).data('course-title') || '';
+            const description = $(this).data('course-description') || '';
+            const instructor = $(this).data('instructor') || '';
+            const rowText = title + ' ' + description + ' ' + instructor;
+            
+            $(this).toggle(rowText.indexOf(value) > -1);
+        });
+        
+        // Show "no results" message if all rows are hidden and search term is not empty
+        if (value.length > 0) {
+            const visibleRows = $('.course-row:visible').length;
+            
+            if (visibleRows === 0) {
+                // Check if no-results message already exists
+                if ($('#no-results-message').length === 0) {
+                    $('.table-container').after(`
+                        <div id="no-results-message" class="alert alert-info mt-3" style="background: rgba(255, 102, 0, 0.1); border: 1px solid rgba(255, 102, 0, 0.3); color: #d0d0d0; padding: 20px; border-radius: 8px;">
+                            <i class="bi bi-info-circle"></i> No courses found matching "${value}".
+                        </div>
+                    `);
+                }
+            } else {
+                $('#no-results-message').remove();
+            }
+        } else {
+            // Clear search - show all rows
+            $('.course-row').show();
+            $('#no-results-message').remove();
+        }
+    });
+    
+    // Server-side search with AJAX (optional - for full database search)
+    $('#searchForm').on('submit', function(e) {
+        e.preventDefault();
+        
+        const searchTerm = $('#searchInput').val().trim();
+        const $form = $(this);
+        const $button = $form.find('button[type="submit"]');
+        const originalButtonText = $button.html();
+        
+        // Show loading state
+        $button.prop('disabled', true);
+        $button.html('<i class="bi bi-hourglass-split"></i> Searching...');
+        
+        // Send AJAX GET request
+        $.get('<?= base_url('course/search') ?>', {
+            search_term: searchTerm
+        })
+        .done(function(data) {
+            if (data.success && data.courses) {
+                // Reload page with search results or update table dynamically
+                // For simplicity, we'll just use client-side filtering
+                // If you want full server-side search, you can reload the page with search parameter
+                window.location.href = '<?= base_url('admin/courses') ?>?search_term=' + encodeURIComponent(searchTerm);
+            }
+        })
+        .fail(function(xhr, status, error) {
+            console.error('Search error:', error);
+        })
+        .always(function() {
+            // Restore button state
+            $button.prop('disabled', false);
+            $button.html(originalButtonText);
+        });
+    });
+});
 </script>
 <?= $this->endSection() ?>
 

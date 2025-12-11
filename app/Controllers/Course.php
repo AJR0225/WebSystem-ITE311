@@ -4,15 +4,18 @@ namespace App\Controllers;
 
 use App\Models\EnrollmentModel;
 use App\Models\NotificationModel;
+use App\Models\CourseModel;
 use CodeIgniter\Controller;
 
 class Course extends Controller
 {
     protected $enrollmentModel;
+    protected $courseModel;
 
     public function __construct()
     {
         $this->enrollmentModel = new EnrollmentModel();
+        $this->courseModel = new CourseModel();
     }
 
     /**
@@ -182,6 +185,55 @@ class Course extends Controller
                 'message' => 'Failed to enroll in the course. Please try again.'
             ]);
         }
+    }
+
+    /**
+     * Search courses by title or description
+     * 
+     * @return \CodeIgniter\HTTP\ResponseInterface JSON response or view
+     */
+    public function search()
+    {
+        // Retrieve the search term from GET or POST request
+        $searchTerm = $this->request->getGet('search_term') ?? $this->request->getPost('search_term');
+        
+        // Check if the search term is not empty
+        if (!empty($searchTerm)) {
+            // Apply a LIKE condition to search 'title'
+            $this->courseModel->like('title', $searchTerm);
+            // Apply an OR LIKE condition to search 'description'
+            $this->courseModel->orLike('description', $searchTerm);
+        }
+        
+        // Only show published courses
+        $this->courseModel->where('status', 'published');
+        
+        // Fetch all courses that match the applied conditions (or all if no search term)
+        $courses = $this->courseModel->findAll();
+        
+        // Check if the request is an AJAX request
+        if ($this->request->isAJAX()) {
+            // Return the courses as a JSON response
+            return $this->response->setJSON([
+                'success' => true,
+                'courses' => $courses,
+                'search_term' => $searchTerm
+            ]);
+        }
+        
+        // For regular requests, render the search results view
+        // Pass the fetched courses and the search term to the view
+        $data = [
+            'title' => 'Search Results - Learning Management System',
+            'page_title' => 'Search Results',
+            'body_class' => 'dashboard-page',
+            'hide_header' => false,
+            'hide_footer' => true,
+            'courses' => $courses,
+            'search_term' => $searchTerm
+        ];
+        
+        return view('courses/search_results', $data);
     }
 }
 

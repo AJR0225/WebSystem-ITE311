@@ -78,6 +78,8 @@ $routes->get('profile', 'Auth::dashboard'); // Placeholder - redirects to dashbo
 // COURSE ROUTES
 // ============================================
 $routes->post('/course/enroll', 'Course::enroll'); // AJAX enrollment endpoint
+$routes->get('/course/search', 'Course::search'); // Search courses (GET)
+$routes->post('/course/search', 'Course::search'); // Search courses (POST)
 
 // ============================================
 // MATERIALS ROUTES

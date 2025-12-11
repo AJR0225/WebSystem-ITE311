@@ -327,10 +327,57 @@ if ($userRole === 'teacher') {
 
 <?= $this->endSection() ?>
 
-<?php if ($userRole === 'student' || $userRole === ''): ?>
 <?= $this->section('scripts') ?>
 <script>
 $(document).ready(function() {
+    // Client-side filtering - Instant filtering as user types (works for all roles)
+    $('#searchInput').on('keyup', function() {
+        const value = $(this).val().toLowerCase();
+        
+        // Filter available course cards (for students)
+        $('.available-course-card').each(function() {
+            const cardText = $(this).text().toLowerCase();
+            $(this).toggle(cardText.indexOf(value) > -1);
+        });
+        
+        // Filter enrolled course items (for students)
+        $('.enrolled-course-item').each(function() {
+            const itemText = $(this).text().toLowerCase();
+            $(this).toggle(itemText.indexOf(value) > -1);
+        });
+        
+        // Filter instructor course items (for instructors)
+        $('.data-item').each(function() {
+            const itemText = $(this).text().toLowerCase();
+            $(this).toggle(itemText.indexOf(value) > -1);
+        });
+        
+        // Show "no results" message if all items are hidden and search term is not empty
+        if (value.length > 0) {
+            const visibleCards = $('.available-course-card:visible').length;
+            const visibleEnrolled = $('.enrolled-course-item:visible').length;
+            const visibleDataItems = $('.data-item:visible').length;
+            
+            if (visibleCards === 0 && visibleEnrolled === 0 && visibleDataItems === 0) {
+                // Check if no-results message already exists
+                if ($('#no-results-message').length === 0) {
+                    $('.dashboard-content-area').append(`
+                        <div id="no-results-message" class="alert alert-info mt-3" style="background: rgba(255, 102, 0, 0.1); border: 1px solid rgba(255, 102, 0, 0.3); color: #d0d0d0; padding: 20px; border-radius: 8px;">
+                            <i class="bi bi-info-circle"></i> No courses found matching "${value}".
+                        </div>
+                    `);
+                }
+            } else {
+                $('#no-results-message').remove();
+            }
+        } else {
+            // Clear search - show all items
+            $('.available-course-card, .enrolled-course-item, .data-item').show();
+            $('#no-results-message').remove();
+        }
+    });
+    
+<?php if ($userRole === 'student' || $userRole === ''): ?>
     // Function to show Bootstrap alert
     function showAlert(message, type) {
         const alertHtml = `
@@ -488,8 +535,159 @@ $(document).ready(function() {
             $button.html(originalText);
         });
     });
+    
+    // Search Form AJAX Handler - Available for all roles
+    $('#searchForm').on('submit', function(e) {
+        e.preventDefault(); // Prevent default form submission
+        
+        const searchTerm = $('#searchInput').val().trim();
+        const $form = $(this);
+        const $button = $form.find('button[type="submit"]');
+        const originalButtonText = $button.html();
+        
+        // Show loading state
+        $button.prop('disabled', true);
+        $button.html('<i class="bi bi-hourglass-split"></i> Searching...');
+        
+        // Send AJAX GET request
+        $.get('<?= base_url('course/search') ?>', {
+            search_term: searchTerm
+        })
+        .done(function(data) {
+            if (data.success && data.courses) {
+                // Display search results
+                displaySearchResults(data.courses, searchTerm);
+            } else {
+                // No results
+                displaySearchResults([], searchTerm);
+            }
+        })
+        .fail(function(xhr, status, error) {
+            console.error('Search error:', error);
+            showAlert('An error occurred while searching. Please try again.', 'danger');
+        })
+        .always(function() {
+            // Restore button state
+            $button.prop('disabled', false);
+            $button.html(originalButtonText);
+        });
+    });
+    
+    // Function to display search results
+    function displaySearchResults(courses, searchTerm) {
+        const $availableContainer = $('#available-courses-container');
+        const $availableList = $('#available-courses-list');
+        
+        if (courses.length === 0) {
+            $availableContainer.html(`
+                <div class="alert alert-info" style="background: rgba(255, 102, 0, 0.1); border: 1px solid rgba(255, 102, 0, 0.3); color: #d0d0d0; padding: 20px; border-radius: 8px;">
+                    <i class="bi bi-info-circle"></i> No courses found${searchTerm ? ' for "' + searchTerm + '"' : ''}.
+                </div>
+            `);
+            return;
+        }
+        
+        // Build courses HTML
+        let coursesHtml = '<div class="row g-3" id="available-courses-list">';
+        courses.forEach(function(course) {
+            const courseId = course.id || course.course_id;
+            const courseTitle = course.title || 'Untitled Course';
+            const courseDescription = course.description || 'No description available';
+            const createdDate = course.created_at ? new Date(course.created_at).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' }) : 'N/A';
+            
+            coursesHtml += `
+                <div class="col-md-6 col-lg-4 available-course-card" data-course-id="${courseId}">
+                    <div class="card h-100" style="background: linear-gradient(145deg, #0f0f0f 0%, #1a1a1a 100%); border: 1px solid rgba(255, 102, 0, 0.2); border-radius: 10px;">
+                        <div class="card-body d-flex flex-column">
+                            <h5 class="card-title" style="color: #ffffff; font-weight: 600; margin-bottom: 12px;">
+                                ${courseTitle}
+                            </h5>
+                            <p class="card-text flex-grow-1" style="color: #d0d0d0; font-size: 0.9rem; margin-bottom: 15px;">
+                                ${courseDescription.substring(0, 100)}${courseDescription.length > 100 ? '...' : ''}
+                            </p>
+                            <div class="mb-3">
+                                <small class="text-muted" style="color: #888888;">
+                                    <i class="bi bi-calendar"></i> Created: ${createdDate}
+                                </small>
+                            </div>
+                            <button 
+                                type="button"
+                                class="btn btn-primary enroll-btn w-100" 
+                                data-course-id="${courseId}"
+                                data-course-title="${courseTitle}"
+                                data-course-description="${courseDescription}"
+                                style="background: linear-gradient(135deg, #ff6600 0%, #e55a00 100%); border: none; color: #ffffff; font-weight: 600; padding: 10px; border-radius: 6px; transition: all 0.3s ease;"
+                                onmouseover="this.style.transform='translateY(-2px)'; this.style.boxShadow='0 4px 15px rgba(255, 102, 0, 0.4)'"
+                                onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='none'">
+                                <i class="bi bi-plus-circle"></i> Enroll
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            `;
+        });
+        coursesHtml += '</div>';
+        
+        $availableContainer.html(coursesHtml);
+        
+        // Re-bind enroll button click handlers for dynamically added buttons
+        $('.enroll-btn').off('click').on('click', function(e) {
+            e.preventDefault();
+            
+            const $button = $(this);
+            const courseId = $button.data('course-id');
+            const courseTitle = $button.data('course-title') || 'Untitled Course';
+            const courseDescription = $button.data('course-description') || 'No description available';
+            const originalText = $button.html();
+            const $courseCard = $button.closest('.available-course-card');
+            
+            $button.prop('disabled', true);
+            $button.html('<i class="bi bi-hourglass-split"></i> Enrolling...');
+            
+            $.post('<?= base_url('course/enroll') ?>', {
+                course_id: courseId
+            })
+            .done(function(data) {
+                if (data.success) {
+                    showAlert(data.message || 'Successfully enrolled in the course!', 'success');
+                    $button.html('<i class="bi bi-check-circle"></i> Enrolled').prop('disabled', true);
+                    $button.css({
+                        'background': 'linear-gradient(135deg, #28a745 0%, #20c997 100%)',
+                        'cursor': 'not-allowed'
+                    });
+                    
+                    if (data.course) {
+                        addEnrolledCourse(data.course);
+                    }
+                    
+                    setTimeout(function() {
+                        $courseCard.fadeOut(300, function() {
+                            $(this).remove();
+                            if ($('#available-courses-list .available-course-card').length === 0) {
+                                $('#available-courses-container').html(`
+                                    <div class="alert alert-info" style="background: rgba(255, 102, 0, 0.1); border: 1px solid rgba(255, 102, 0, 0.3); color: #d0d0d0; padding: 20px; border-radius: 8px;">
+                                        <i class="bi bi-info-circle"></i> No available courses at the moment.
+                                    </div>
+                                `);
+                            }
+                        });
+                    }, 1000);
+                } else {
+                    showAlert(data.message || 'Failed to enroll in the course. Please try again.', 'danger');
+                    $button.prop('disabled', false);
+                    $button.html(originalText);
+                }
+            })
+            .fail(function(xhr, status, error) {
+                console.error('Error:', error);
+                showAlert('An error occurred. Please try again.', 'danger');
+                $button.prop('disabled', false);
+                $button.html(originalText);
+            });
+        });
+    }
 });
 </script>
-<?= $this->endSection() ?>
 <?php endif; ?>
+<?= $this->endSection() ?>
 

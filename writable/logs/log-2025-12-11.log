@@ -1330,3 +1330,51 @@ in SYSTEMPATH\Security\Security.php on line 262.
  7 SYSTEMPATH\Boot.php(363): CodeIgniter\CodeIgniter->run()
  8 SYSTEMPATH\Boot.php(68): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
  9 FCPATH\index.php(59): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+CRITICAL - 2025-12-11 19:02:11 --> CodeIgniter\View\Exceptions\ViewException: Invalid file: "courses/search_results.php"
+[Method: GET, Route: course/search]
+in SYSTEMPATH\Exceptions\FrameworkException.php on line 39.
+ 1 SYSTEMPATH\View\View.php(214): CodeIgniter\Exceptions\FrameworkException::forInvalidFile('courses/search_results.php')
+ 2 SYSTEMPATH\Common.php(1167): CodeIgniter\View\View->render('courses/search_results', [], true)
+ 3 APPPATH\Controllers\Course.php(236): view('courses/search_results', [...])
+ 4 SYSTEMPATH\CodeIgniter.php(933): App\Controllers\Course->search()
+ 5 SYSTEMPATH\CodeIgniter.php(507): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Course))
+ 6 SYSTEMPATH\CodeIgniter.php(354): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 7 SYSTEMPATH\Boot.php(363): CodeIgniter\CodeIgniter->run()
+ 8 SYSTEMPATH\Boot.php(68): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+ 9 FCPATH\index.php(59): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+CRITICAL - 2025-12-11 19:03:07 --> CodeIgniter\View\Exceptions\ViewException: Invalid file: "courses/search_results.php"
+[Method: GET, Route: course/search]
+in SYSTEMPATH\Exceptions\FrameworkException.php on line 39.
+ 1 SYSTEMPATH\View\View.php(214): CodeIgniter\Exceptions\FrameworkException::forInvalidFile('courses/search_results.php')
+ 2 SYSTEMPATH\Common.php(1167): CodeIgniter\View\View->render('courses/search_results', [], true)
+ 3 APPPATH\Controllers\Course.php(236): view('courses/search_results', [...])
+ 4 SYSTEMPATH\CodeIgniter.php(933): App\Controllers\Course->search()
+ 5 SYSTEMPATH\CodeIgniter.php(507): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Course))
+ 6 SYSTEMPATH\CodeIgniter.php(354): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 7 SYSTEMPATH\Boot.php(363): CodeIgniter\CodeIgniter->run()
+ 8 SYSTEMPATH\Boot.php(68): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+ 9 FCPATH\index.php(59): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+CRITICAL - 2025-12-11 19:05:34 --> CodeIgniter\View\Exceptions\ViewException: Invalid file: "courses/search_results.php"
+[Method: GET, Route: course/search]
+in SYSTEMPATH\Exceptions\FrameworkException.php on line 39.
+ 1 SYSTEMPATH\View\View.php(214): CodeIgniter\Exceptions\FrameworkException::forInvalidFile('courses/search_results.php')
+ 2 SYSTEMPATH\Common.php(1167): CodeIgniter\View\View->render('courses/search_results', [], true)
+ 3 APPPATH\Controllers\Course.php(236): view('courses/search_results', [...])
+ 4 SYSTEMPATH\CodeIgniter.php(933): App\Controllers\Course->search()
+ 5 SYSTEMPATH\CodeIgniter.php(507): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Course))
+ 6 SYSTEMPATH\CodeIgniter.php(354): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 7 SYSTEMPATH\Boot.php(363): CodeIgniter\CodeIgniter->run()
+ 8 SYSTEMPATH\Boot.php(68): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+ 9 FCPATH\index.php(59): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+CRITICAL - 2025-12-11 19:06:01 --> CodeIgniter\View\Exceptions\ViewException: Invalid file: "courses/search_results.php"
+[Method: GET, Route: course/search]
+in SYSTEMPATH\Exceptions\FrameworkException.php on line 39.
+ 1 SYSTEMPATH\View\View.php(214): CodeIgniter\Exceptions\FrameworkException::forInvalidFile('courses/search_results.php')
+ 2 SYSTEMPATH\Common.php(1167): CodeIgniter\View\View->render('courses/search_results', [], true)
+ 3 APPPATH\Controllers\Course.php(236): view('courses/search_results', [...])
+ 4 SYSTEMPATH\CodeIgniter.php(933): App\Controllers\Course->search()
+ 5 SYSTEMPATH\CodeIgniter.php(507): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Course))
+ 6 SYSTEMPATH\CodeIgniter.php(354): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 7 SYSTEMPATH\Boot.php(363): CodeIgniter\CodeIgniter->run()
+ 8 SYSTEMPATH\Boot.php(68): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+ 9 FCPATH\index.php(59): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
